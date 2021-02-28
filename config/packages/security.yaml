@@ -1,15 +1,29 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
+        customer_users:
+            entity:
+                class: App\Entity\Customer
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern:            /
             anonymous: true
-            lazy: true
-            provider: users_in_memory
+            provider:       customer_users
+            logout:
+                path: /logout
+                target: /login
+            form_login:
+                login_path:     /login
+                check_path:     login
+                default_target_path: home
+            remember_me:
+                secret: '%env(APP_SECRET)%'
+                lifetime: 1209600 # 2 weeks in seconds
+            user_checker: App\Security\CustomerEnableChecker
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -22,3 +36,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    encoders:
+        App\Entity\Customer:
+            algorithm: bcrypt
+            cost: 12

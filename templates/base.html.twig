@@ -31,23 +31,23 @@
                         Help & FAQs
                     </a>
 
-{#                    <a href="{{ path('register') }}" class="flex-c-m trans-04 p-lr-25">#}
-{#                        My Account#}
-{#                    </a>#}
+                    <a href="{{ path('register') }}" class="flex-c-m trans-04 p-lr-25">
+                        My Account
+                    </a>
 
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         EN
                     </a>
 
-{#                    {% if app.user %}#}
-{#                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">#}
-{#                            <i class="fa fa-sign-out"></i>#}
-{#                        </a>#}
-{#                    {% else %}#}
-{#                        <a href="{{ path('login') }}" class="flex-c-m p-lr-10 trans-04">#}
-{#                            <i class="fa fa-sign-in"></i>#}
-{#                        </a>#}
-{#                    {% endif %}#}
+                    {% if app.user %}
+                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
+                            <i class="fa fa-sign-out"></i>
+                        </a>
+                    {% else %}
+                        <a href="{{ path('login') }}" class="flex-c-m p-lr-10 trans-04">
+                            <i class="fa fa-sign-in"></i>
+                        </a>
+                    {% endif %}
 
                 </div>
             </div>

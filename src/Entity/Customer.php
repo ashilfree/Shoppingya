@@ -13,6 +13,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Customer implements UserInterface
 {
+    const ROLE_CUSTOMER = 'ROLE_CUSTOMER';
+    const DEFAULT_ROLES = [self::ROLE_CUSTOMER];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -39,27 +41,44 @@ class Customer implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $firstname;
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $lastname;
+    private $fullName;
 
     /**
-     * @ORM\OneToMany(targetEntity=Address::class, mappedBy="user")
+     * @ORM\Column(type="string", length=255)
      */
-    private $addresses;
+    private $phone;
 
     /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user")
+     * @ORM\Column(type="boolean")
      */
+    private $enabled;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $confirmationToken;
+
+//    /**
+//     * @ORM\OneToMany(targetEntity=Address::class, mappedBy="user")
+//     */
+//    private $addresses;
+//
+//    /**
+//     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user")
+//     */
     private $orders;
 
     public function __construct()
     {
-        $this->addresses = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->roles = self::DEFAULT_ROLES;
+        $this->enabled = false;
+//        $this->addresses = new ArrayCollection();
+//        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,21 +96,6 @@ class Customer implements UserInterface
         $this->email = $email;
 
         return $this;
-    }
-
-	public function getFullName(): string
-	{
-		return $this->getFirstname().' '.$this->getLastname();
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
     }
 
     /**
@@ -145,87 +149,119 @@ class Customer implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstname(): ?string
+    public function getUsername(): ?string
     {
-        return $this->firstname;
+        return $this->username;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setUsername(string $username): self
     {
-        $this->firstname = $firstname;
+        $this->username = $username;
 
         return $this;
     }
 
-    public function getLastname(): ?string
+    public function getFullName(): ?string
     {
-        return $this->lastname;
+        return $this->fullName;
     }
 
-    public function setLastname(string $lastname): self
+    public function setFullName(string $fullName): self
     {
-        $this->lastname = $lastname;
+        $this->fullName = $fullName;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Address[]
-     */
-    public function getAddresses(): Collection
+    public function getPhone(): ?string
     {
-        return $this->addresses;
+        return $this->phone;
     }
 
-    public function addAddress(Address $address): self
+    public function setPhone(string $phone): self
     {
-        if (!$this->addresses->contains($address)) {
-            $this->addresses[] = $address;
-            $address->setUser($this);
-        }
+        $this->phone = $phone;
 
         return $this;
     }
 
-    public function removeAddress(Address $address): self
+    public function isEnabled(): bool
     {
-        if ($this->addresses->removeElement($address)) {
-            // set the owning side to null (unless already changed)
-            if ($address->getUser() === $this) {
-                $address->setUser(null);
-            }
-        }
-
-        return $this;
+        return $this->enabled;
     }
 
-    /**
-     * @return Collection|Order[]
-     */
-    public function getOrders(): Collection
+    public function setEnabled(bool $enabled): void
     {
-        return $this->orders;
+        $this->enabled = $enabled;
     }
 
-    public function addOrder(Order $order): self
+    public function getConfirmationToken()
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setUser($this);
-        }
-
-        return $this;
+        return $this->confirmationToken;
     }
 
-    public function removeOrder(Order $order): self
+    public function setConfirmationToken($confirmationToken): void
     {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
-        }
-
-        return $this;
+        $this->confirmationToken = $confirmationToken;
     }
+
+//    /**
+//     * @return Collection|Address[]
+//     */
+//    public function getAddresses(): Collection
+//    {
+//        return $this->addresses;
+//    }
+//
+//    public function addAddress(Address $address): self
+//    {
+//        if (!$this->addresses->contains($address)) {
+//            $this->addresses[] = $address;
+//            $address->setUser($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeAddress(Address $address): self
+//    {
+//        if ($this->addresses->removeElement($address)) {
+//            // set the owning side to null (unless already changed)
+//            if ($address->getUser() === $this) {
+//                $address->setUser(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection|Order[]
+//     */
+//    public function getOrders(): Collection
+//    {
+//        return $this->orders;
+//    }
+//
+//    public function addOrder(Order $order): self
+//    {
+//        if (!$this->orders->contains($order)) {
+//            $this->orders[] = $order;
+//            $order->setUser($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeOrder(Order $order): self
+//    {
+//        if ($this->orders->removeElement($order)) {
+//            // set the owning side to null (unless already changed)
+//            if ($order->getUser() === $this) {
+//                $order->setUser(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }
