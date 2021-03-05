@@ -1,0 +1,41 @@
+# See dos how to configure the bundle: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
+liip_imagine:
+  driver: "gd"
+  # your filter sets are defined here
+  filter_sets:
+    Extra_large:
+      quality: 75
+      filters:
+        thumbnail:
+          size: [ 1920,930 ]
+          mode: outbound
+    very_large:
+      quality: 75
+      filters:
+        thumbnail:
+          size: [ 518,642 ]
+          mode: outbound
+    large:
+      quality: 75
+      filters:
+        thumbnail:
+          size: [ 513, 635 ]
+          mode: outbound
+    medium:
+      quality: 75
+      filters:
+        thumbnail:
+          size: [ 270,334 ]
+          mode: outbound
+    small:
+      quality: 75
+      filters:
+        thumbnail:
+          size: [ 68, 85 ]
+          mode: outbound
+    very_small:
+      quality: 75
+      filters:
+        thumbnail:
+          size: [ 50, 50 ]
+          mode: outbound

@@ -33,56 +33,56 @@ export default class Global {
     }
 
     bindEvents() {
-        if(this.addWish){
-            this.addWish.querySelectorAll('.js-addwish-b2').forEach(a => {
-                a.addEventListener('click', e => {
-                    e.preventDefault();
-                    this.loadUrl(a);
-                })
-            });
-        }
-        if(this.iconWishModal){
-            this.iconWishModal.querySelectorAll('a').forEach(a => {
-                a.addEventListener('click', e =>{
-                    e.preventDefault();
-                    this.loadUrl(a);
-                })
-            });
-        }
-        if(this.addCart){
-            let addCart = this.addCart.querySelector('#cart-add-button');
-            if(addCart){
-                addCart.addEventListener('click', e =>{
-                    e.preventDefault();
-                    console.log('POST');
-                    this.loadUrl(addCart, 'POST');
-                })
-            }
-        }
-        this.wishList.querySelectorAll('[data-delete]').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                this.loadUrl(a, 'DELETE');
-            })
-        });
-        this.clearWishList.querySelectorAll('a').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                this.loadUrl(a, 'DELETE', true);
-            })
-        });
-        this.clearCart.querySelectorAll('[data-token]').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-               this.loadUrl(a, 'DELETE', true);
-            })
-        });
-        this.cart.querySelectorAll('[data-delete]').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                this.loadUrl(a, 'DELETE');
-            })
-        });
+        // if(this.addWish){
+        //     this.addWish.querySelectorAll('.js-addwish-b2').forEach(a => {
+        //         a.addEventListener('click', e => {
+        //             e.preventDefault();
+        //             this.loadUrl(a);
+        //         })
+        //     });
+        // }
+        // if(this.iconWishModal){
+        //     this.iconWishModal.querySelectorAll('a').forEach(a => {
+        //         a.addEventListener('click', e =>{
+        //             e.preventDefault();
+        //             this.loadUrl(a);
+        //         })
+        //     });
+        // }
+        // if(this.addCart){
+        //     let addCart = this.addCart.querySelector('#cart-add-button');
+        //     if(addCart){
+        //         addCart.addEventListener('click', e =>{
+        //             e.preventDefault();
+        //             console.log('POST');
+        //             this.loadUrl(addCart, 'POST');
+        //         })
+        //     }
+        // }
+        // this.wishList.querySelectorAll('[data-delete]').forEach(a => {
+        //     a.addEventListener('click', e => {
+        //         e.preventDefault();
+        //         this.loadUrl(a, 'DELETE');
+        //     })
+        // });
+        // this.clearWishList.querySelectorAll('a').forEach(a => {
+        //     a.addEventListener('click', e => {
+        //         e.preventDefault();
+        //         this.loadUrl(a, 'DELETE', true);
+        //     })
+        // });
+        // this.clearCart.querySelectorAll('[data-token]').forEach(a => {
+        //     a.addEventListener('click', e => {
+        //         e.preventDefault();
+        //        this.loadUrl(a, 'DELETE', true);
+        //     })
+        // });
+        // this.cart.querySelectorAll('[data-delete]').forEach(a => {
+        //     a.addEventListener('click', e => {
+        //         e.preventDefault();
+        //         this.loadUrl(a, 'DELETE');
+        //     })
+        // });
     }
     async loadUrl(a, method = 'GET', clear = false) {
         let init = {

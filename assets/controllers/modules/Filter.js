@@ -27,12 +27,12 @@ export default class Filter {
 
         this.pagination = document.querySelector('.js-filter-pagination');
         this.content = document.querySelector('.js-filter-content');
-        this.sorting = document.querySelector('.js-filter-sorting');
+        // this.sorting = document.querySelector('.js-filter-sorting');
         this.overlay = document.querySelector('.js-overlay');
-        this.form = document.querySelector('.js-filter-form');
+        // this.form = document.querySelector('.js-filter-form');
         this.search = document.querySelector('.js-filter-search');
         this.page = parseInt(new URLSearchParams(window.location.search).get('page') || 1);
-        this.moreNav = this.page === 1;
+        // this.moreNav = this.page === 1;
         this.bindEvents();
     }
 
@@ -44,21 +44,21 @@ export default class Filter {
                 this.loadUrl(e.target.getAttribute('href'))
             }
         };
-        this.sorting.addEventListener('click', e => {
-            aClickListener(e);
-            this.page = 1;
-        });
-        if (this.moreNav) {
-            this.pagination.innerHTML = '<button  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> Load More </button>';
-            this.pagination.querySelector('button').addEventListener('click', this.loadMore.bind(this))
-        } else {
-            this.pagination.addEventListener('click', aClickListener)
-        }
-        this.form.querySelector('select').addEventListener('change', this.loadForm.bind(this));
+        // this.sorting.addEventListener('click', e => {
+        //     aClickListener(e);
+        //     this.page = 1;
+        // });
+        // if (this.moreNav) {
+        //     this.pagination.innerHTML = '<button  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> Load More </button>';
+        //     this.pagination.querySelector('button').addEventListener('click', this.loadMore.bind(this))
+        // } else {
+        //     this.pagination.addEventListener('click', aClickListener)
+        // }
+        // this.form.querySelector('select').addEventListener('change', this.loadForm.bind(this));
         this.search.querySelector('a').addEventListener('click', this.loadSearch.bind(this));
-        this.form.querySelectorAll('input:not(#address)').forEach(input => {
-            input.addEventListener('change', this.loadForm.bind(this))
-        });
+        // this.form.querySelectorAll('input:not(#address)').forEach(input => {
+        //     input.addEventListener('change', this.loadForm.bind(this))
+        // });
     }
 
     async loadMore() {
@@ -193,32 +193,32 @@ export default class Filter {
     reinitializeModal() {
         $('.js-show-modal1').on('click',function(e){
             e.preventDefault();
-            $('#title').text($(this).data('title'));
+            $('#name').text($(this).data('name'));
             $('#price').text($(this).data('price'));
             $('#description').text($(this).data('description'));
-            $('#quantity').attr('max', $(this).data('quantity'));
-            $('#wich-icon a').attr('href', $(this).data('href')).attr('id', $(this).data('id')).addClass($(this).data('disabled'));
-            $('#cart-add-button').attr('href', $(this).data('href-a'));
+            // $('#quantity').attr('max', $(this).data('quantity'));
+            // $('#wich-icon a').attr('href', $(this).data('href')).attr('id', $(this).data('id')).addClass($(this).data('disabled'));
+            // $('#cart-add-button').attr('href', $(this).data('href-a'));
             debugger
 
             var i = 1;
             var access = true;
-            $('#product_cart_size').empty();
-            $('#product_cart_size').append("<option value selected>Choose an option</option>");
+            // $('#product_cart_size').empty();
+            // $('#product_cart_size').append("<option value selected>Choose an option</option>");
 
 
-            while (access){
-
-                var size = $(this).data('size' + i);
-                if(!size)
-                    break;
-
-                $('#product_cart_size').append("<option value='" + i + "' > Size " + size + "</option>");
-                i++;
-            }
-
-
-            $('#product_cart_color').append("<option value='1'>Red</option>");
+            // while (access){
+            //
+            //     var size = $(this).data('size' + i);
+            //     if(!size)
+            //         break;
+            //
+            //     $('#product_cart_size').append("<option value='" + i + "' > Size " + size + "</option>");
+            //     i++;
+            // }
+            //
+            //
+            // $('#product_cart_color').append("<option value='1'>Red</option>");
 
 
 
