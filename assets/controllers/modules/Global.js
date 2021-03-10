@@ -60,7 +60,7 @@ export default class Global {
                  addCart.addEventListener('click', e => {
 
                     if (selectedSize.value > 0) {
-                        addCart.href = addCart.getAttribute('href') + '-' + selectedSize.value
+                        addCart.href = addCart.getAttribute('href') + '/' + selectedSize.value
                        // swal(nameProduct.innerHTML, "is added to cart !", "success");
                        //  e.returnValue = true
                     }else{

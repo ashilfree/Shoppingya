@@ -54,17 +54,16 @@
                                         {% for cartItem in cart %}
                                             <tr class="table_row">
                                                 <td class="column-1">
-                                                    <a href="{{ path('delete.cart', {id: cartItem.product.id, catalog:cartItem.catalog.id, route:page}) }}">
+                                                    <a href="{{ path('delete.cart', {id: cartItem.catalog.id, route:page}) }}">
                                                         <div class="how-itemcart1">
-                                                            <img src="{{ vich_uploader_asset(cartItem.product.images.first, 'imageFile') | imagine_filter('small') }} "
-                                                                 alt="{{ cartItem.product.name }}">
+                                                            <img src="{{ vich_uploader_asset(cartItem.catalog.product.images.first, 'imageFile') | imagine_filter('small') }} "
+                                                                 alt="{{ cartItem.catalog.product.name }}">
                                                         </div>
                                                     </a>
                                                 </td>
-                                                <td class="column-2">{{ cartItem.product.name|upper }}</td>
-                                                <td class="column-3">{{ (cartItem.product.price / 100) |number_format(2, '.', ',') }} {{ currency }}</td>
+                                                <td class="column-2">{{ cartItem.catalog.product.name|upper }} <br> Size {{ cartItem.catalog.size }} </td>
+                                                <td class="column-3">{{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} {{ currency }}</td>
                                                 <td class="column-4">
-                                                    <input type="hidden" name="product-{{ loop.index }}" value="{{ cartItem.product.id }}">
                                                     <input type="hidden" name="catalog-{{ loop.index }}" value="{{ cartItem.catalog.id }}">
                                                     <div class="wrap-num-product flex-w m-l-auto m-r-0">
                                                         <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
@@ -80,10 +79,10 @@
                                                     </div>
                                                 </td>
                                                 <td class="column-5">
-                                                    <span>{{ (cartItem.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                                    <span>{{ (cartItem.catalog.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
                                                 </td>
                                             </tr>
-                                            {% set total = total + ((cartItem.quantity * cartItem.product.price)/100) %}
+                                            {% set total = total + ((cartItem.quantity * cartItem.catalog.product.price)/100) %}
                                         {% endfor %}
                                     {% endif %}
 
@@ -179,7 +178,11 @@
 
                             <div class="size-209 p-t-1">
 								<span id="total" class="mtext-110 cl2">
+                                    {% if delivery is defined %}
+                                        {{ (total+ (delivery/100))|number_format(2, '.', ',') }}
+                                    {% else %}
 									{{ total|number_format(2, '.', ',') }}
+                                    {% endif %}
 								</span>
                                 {{ currency }}
                             </div>

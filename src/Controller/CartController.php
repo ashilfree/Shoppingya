@@ -48,15 +48,13 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart/add/{id}-{catalog}-{quantity}", name="add.cart", defaults={"catalog"=0, "quantity"=1})
+     * @Route("/cart/add/{id}", name="add.cart", defaults={"id"=0})
      * @param $id
-     * @param $catalog
-     * @param $quantity
      * @return Response
      */
-    public function add($id, $catalog, $quantity): Response
+    public function add($id): Response
     {
-        $this->cart->add($id, $catalog, $quantity);
+        $this->cart->add($id);
         return $this->redirectToRoute('products');
     }
 
@@ -68,7 +66,6 @@ class CartController extends AbstractController
     public function update(Request $request): Response
     {
         $this->cart->update($request->query->all());
-       // dd($this->cart->getDelivery());
         return $this->redirectToRoute('cart', [
             'delivery' => $this->cart->getDelivery()
         ]);
@@ -86,26 +83,14 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart/delete/{id}-{catalog}-{route}", name="delete.cart")
+     * @Route("/cart/delete/{id}-{route}", name="delete.cart")
      * @param $id
-     * @param $catalog
      * @param $route
      * @return Response
      */
-    public function delete($id, $catalog, $route): Response
+    public function delete($id, $route): Response
     {
-        $this->cart->delete($id, $catalog);
+        $this->cart->delete($id);
         return $this->redirectToRoute($route);
-    }
-
-    /**
-     * @Route("/cart/decrease/{id}", name="decrease.cart")
-     * @param $id
-     * @return Response
-     */
-    public function decrease($id): Response
-    {
-        $this->cart->decrease($id);
-        return $this->redirectToRoute('cart');
     }
 }

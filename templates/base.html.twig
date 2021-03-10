@@ -206,24 +206,24 @@
                 <ul class="header-cart-wrapitem w-full">
                     {% for cartItem in cart %}
                         <li class="header-cart-item flex-w flex-t m-b-12">
-                            <a class="header-cart-item-img" href="{{ path('delete.cart', {id: cartItem.product.id, catalog:cartItem.catalog.id, route:page}) }}">
-                                <img src="{{ vich_uploader_asset(cartItem.product.images.first, 'imageFile') | imagine_filter('small') }} "
-                                     alt="{{ cartItem.product.name }}">
+                            <a class="header-cart-item-img" href="{{ path('delete.cart', {id: cartItem.catalog.id, route:page}) }}">
+                                <img src="{{ vich_uploader_asset(cartItem.catalog.product.images.first, 'imageFile') | imagine_filter('small') }} "
+                                     alt="{{ cartItem.catalog.product.name }}">
                             </a>
 
                             <div class="header-cart-item-txt p-t-8">
                                 <a href="#" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
-                                    {{ cartItem.product.name|upper }}
+                                    {{ cartItem.catalog.product.name|upper }}
                                 </a>
                                 <span class="header-cart-item-info">
-								{{ cartItem.quantity }} x {{ (cartItem.product.price / 100) |number_format(2, '.', ',') }} KWD
+								{{ cartItem.quantity }} x {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} KWD
 							</span>
                                 <span class="header-cart-item-info">
 								Size: <b>{{ cartItem.catalog.size }}</b>
 							</span>
                             </div>
                         </li>
-                        {% set total = total + (cartItem.quantity * cartItem.product.price) %}
+                        {% set total = total + (cartItem.quantity * cartItem.catalog.product.price) %}
                     {% endfor %}
                 </ul>
             {% else %}
