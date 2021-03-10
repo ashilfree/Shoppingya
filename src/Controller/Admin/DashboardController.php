@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Catalog;
 use App\Entity\Category;
 use App\Entity\Customer;
+use App\Entity\Governorate;
 use App\Entity\Product;
 use App\Entity\Slide;
 use App\Entity\User;
@@ -39,5 +40,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Slide', 'fa fa-desktop', Slide::class);
         yield MenuItem::linkToCrud('Product', 'fa fa-product', Product::class);
         yield MenuItem::linkToCrud('Catalog', 'fa fa-catalog', Catalog::class);
+        yield MenuItem::linkToCrud('Governorate', 'fa fa-catalog', Governorate::class);
     }
 }

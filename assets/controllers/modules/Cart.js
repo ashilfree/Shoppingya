@@ -34,31 +34,31 @@ export default class Cart {
 
 
     bindEvents() {
-        this.updateCart.querySelectorAll('a').forEach(a =>{
-                a.addEventListener('click', e => {
-                    console.log('Cart');
-                e.preventDefault();
-                let data = {};
-                this.table.querySelectorAll('.table_row').forEach(tr =>{
-                    data[tr.querySelector('input[type="hidden"]').value] = tr.querySelector('input[type="number"]').value;
-                });
-                    this.loadUrl(a, 'POST', data);
-            })
-        });
+        // this.updateCart.querySelectorAll('a').forEach(a =>{
+        //         a.addEventListener('click', e => {
+        //             console.log('Cart');
+        //         e.preventDefault();
+        //         let data = {};
+        //         this.table.querySelectorAll('.table_row').forEach(tr =>{
+        //             data[tr.querySelector('input[type="hidden"]').value] = tr.querySelector('input[type="number"]').value;
+        //         });
+        //             this.loadUrl(a, 'POST', data);
+        //     })
+        // });
+        //
+        // this.table.querySelectorAll('[data-delete]').forEach(a => {
+        //         a.addEventListener('click', e => {
+        //         e.preventDefault();
+        //         console.log('DELETE');
+        //         this.loadUrl(a, 'DELETE');
+        //     })
+        // });
 
-        this.table.querySelectorAll('[data-delete]').forEach(a => {
-                a.addEventListener('click', e => {
-                e.preventDefault();
-                console.log('DELETE');
-                this.loadUrl(a, 'DELETE');
-            })
-        });
-
-        this.updateTotals.addEventListener('click', e =>{
-            e.preventDefault();
-            console.log('Update');
-            this.loadUrl(this.updateTotals, 'POST', {'shipping': this.select.value})
-        });
+        // this.updateTotals.addEventListener('click', e =>{
+        //     e.preventDefault();
+        //     console.log('Update');
+        //     this.loadUrl(this.updateTotals, 'POST', {'shipping': this.select.value})
+        // });
     }
 
     async loadUrl(a, method = 'GET', data = null) {

@@ -146,9 +146,9 @@
     text-transform: uppercase;
     letter-spacing: 1px; }
 .process.active p {
-    border: 2px solid #f0f0f0; }
+    border: 2px solid #D97591; }
 .process.active p span {
-    color: #717fe0; }
+    color: #D97591; }
 .icon-handbag:before {
     content: "\e035";
 }

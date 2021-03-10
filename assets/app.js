@@ -61,9 +61,9 @@ $('.js-addwish-b2').on('click', function (e) {
     e.preventDefault();
 });
 
-$('.header-cart-item-img').on('click', function (e) {
-    e.preventDefault();
-});
+// $('.header-cart-item-img').on('click', function (e) {
+//     e.preventDefault();
+// });
 
 $('.js-addwish-b2').each(function () {
     var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
@@ -90,12 +90,9 @@ $('.js-addwish-detail').each(function () {
 
 /*---------------------------------------------*/
 
-$('.js-addcart-detail').each(function () {
-    var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-    $(this).on('click', function () {
-        swal(nameProduct, "is added to cart !", "success");
-    });
-});
+// $('.js-addcart-detail').each(function () {
+//
+// });
 
 import PerfectScrollbar from './controllers/js/perfect-scrollbar.min';
 

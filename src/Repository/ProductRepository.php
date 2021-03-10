@@ -2,9 +2,14 @@
 
 namespace App\Repository;
 
+use App\Classes\Filter;
+use App\Classes\Search;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +19,78 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Product::class);
+        $this->paginator = $paginator;
+    }
+
+    /**
+     * @param Filter $filter
+     * @param Search $search
+     * @param int $pages
+     * @return PaginationInterface
+     */
+    public function findSearch(Filter $filter, Search $search, int $pages):PaginationInterface
+    {
+        $query = $this->getSearchQuery($filter);
+        if (!empty($search->string)){
+            $query = $query
+                ->andWhere('p.name LIKE :string')
+                ->setParameter('string', "%{$search->string}%");
+        }
+
+        $query = $query->getQuery();
+        return $this->paginator->paginate(
+            $query,
+            $filter->page,
+            $pages
+        );
+    }
+
+    /**
+     * @param Filter $filter
+     * @return integer[]
+     */
+    public function findMinMax(Filter $filter): array
+    {
+        $results = $this->getSearchQuery($filter, true)
+            ->select('MIN(p.price) as min, MAX(p.price) as max')
+            ->getQuery()
+            ->getScalarResult();
+
+        return [$results[0]['min'], $results[0]['max']];
+    }
+
+    private function getSearchQuery(Filter $filter, $ignorePrice = false):QueryBuilder
+    {
+        $query = $this->createQueryBuilder('p');
+//            ->select('p','t')
+//            ->join('p.tags', 't');
+
+
+        if (!empty($filter->min) && $ignorePrice === false){
+            $query = $query
+                ->andWhere('p.price >= :min')
+                ->setParameter('min', $filter->min);
+        }
+
+        if (!empty($filter->max) && $ignorePrice === false){
+            $query = $query
+                ->andWhere('p.price <= :max')
+                ->setParameter('max', $filter->max);
+        }
+
+        if (!empty($filter->tags)){
+            $query = $query
+                ->andWhere('p.tags.id IN (:tags) ')
+                ->setParameter('tags', $filter->tags);
+        }
+        return $query;
     }
 
     // /**

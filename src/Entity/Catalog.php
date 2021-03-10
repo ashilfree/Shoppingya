@@ -17,8 +17,6 @@ class Catalog
      */
     private $id;
 
-
-
     /**
      * @ORM\Column(type="integer")
      */
@@ -31,9 +29,9 @@ class Catalog
     private $product;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Size::class, inversedBy="catalogs")
      */
-    private $color;
+    private $size;
 
     public function getId(): ?int
     {
@@ -64,14 +62,14 @@ class Catalog
         return $this;
     }
 
-    public function getColor(): ?string
+    public function getSize(): ?Size
     {
-        return $this->color;
+        return $this->size;
     }
 
-    public function setColor(string $color): self
+    public function setSize(Size $size): self
     {
-        $this->color = $color;
+        $this->size = $size;
 
         return $this;
     }

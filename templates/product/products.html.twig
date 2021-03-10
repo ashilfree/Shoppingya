@@ -11,11 +11,12 @@
                    class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
                    data-id="{{ product.id }}"
                    data-name="{{ product.name }}"
-                   data-description="{{ product.description }}"
-                   data-price="{{ product.price }}"
-                   {% for size in  product.category.sizes %} data-size{{ loop.index }}="{{ size }}" {% endfor %}
-                   {% for catalog in  product.catalogs %} data-quantity{{ loop.index }}="{{ catalog.quantity }}" data-color{{ loop.index }}="{{ catalog.color }}" {% endfor %}
+                   data-description="{{ product.description|raw }}"
+                   data-price="{{ (product.price / 100) |number_format(2, '.', ',') }} KWD"
+                   {% for catalog in  product.catalogs %} data-catalog{{ loop.index }}="{{ catalog.id }}" {% endfor %}
+                   {% for catalog in  product.catalogs %} data-size{{ loop.index }}="{{ catalog.size }}" {% endfor %}
                    {% for image in  product.images %} data-image{{ loop.index }}="{{ image }}" {% endfor %}
+                   data-href-a ="{{ path('add.cart',{id: product.id}) }}"
                 >
                     Quick View
                 </a>
@@ -25,7 +26,7 @@
                 <div class="block2-txt-child1 flex-col-l ">
                     <a href="{{ path('product', {'slug': product.slug }) }}"
                        class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                        {{ product.name }}
+                        {{ product.name|upper }}
                     </a>
 
                     <span class="stext-105 cl3">

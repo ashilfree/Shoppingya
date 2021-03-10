@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\Cart;
 use App\Classes\Contact;
 use App\Form\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,16 +17,23 @@ class ContactController extends AbstractController
      * @var \Swift_Mailer
      */
     private $mailer;
+    /**
+     * @var Cart
+     */
+    private $cart;
 
     /**
      * ContactController constructor.
      * @param \Swift_Mailer $mailer
+     * @param Cart $cart
      */
     public function __construct(
-        \Swift_Mailer $mailer
+        \Swift_Mailer $mailer,
+         Cart $cart
     )
     {
         $this->mailer = $mailer;
+        $this->cart = $cart;
     }
 
     /**
@@ -47,7 +55,8 @@ class ContactController extends AbstractController
 
         return $this->render('contact/index.html.twig', [
             'form' => $form->createView(),
-            'page' => 'contact'
+            'page' => 'contact.us',
+            'cart' => $this->cart->getFull(),
         ]);
     }
 

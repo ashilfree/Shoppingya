@@ -1,0 +1,14 @@
+<a{% for attr, value  in options | merge({class: 'btn btn-default m-l-10 '}) %} {{ attr }}="{{ value }}"{% endfor %}>
+<span class="float-right m-r-5">
+        {% if app.request.get('sort') == key %}
+          {% if app.request.get('direction') == 'desc' %}
+            <i class="fa fa-sort-down"></i>
+            {% else %}
+            <i class="fa fa-sort-up"></i>
+          {% endif %}
+        {% else %}
+          <i class="fa fa-sort"></i>
+        {% endif %}
+    </span>
+{% if title == 'Price' %}{% if app.request.get('direction') == 'desc' %} {{title~":" ~ "High to Low" }} {% else %} {{ title~":" ~ "Low to High"  }} {% endif %}{% else %}{{ title }}{% endif %}
+</a>

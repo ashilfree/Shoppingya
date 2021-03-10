@@ -3,11 +3,19 @@
 namespace App\Controller;
 
 use App\Classes\Cart;
+use App\Classes\CartItem;
+use App\Classes\Filter;
+use App\Classes\Search;
 use App\Entity\Product;
+use App\Form\CartType;
+use App\Form\FilterType;
+use App\Form\ProductCartType;
+use App\Form\SearchType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,11 +50,37 @@ class ProductController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $filter = new Filter();
+        $search = new Search();
+        $filter->page = $request->get('page',1);
+        $filterType = $this->createForm(FilterType::class, $filter);
+        $searchType = $this->createForm(SearchType::class, $search);
+        $filterType->handleRequest($request);
+        $searchType->handleRequest($request);
+        $products = $this->productRepository->findSearch($filter, $search, 16);
+      //  dd($products);
+        [$min , $max] = $this->productRepository->findMinMax($filter);
+
+        if($request->get('ajax')){
+            return new JsonResponse([
+                "content" => $this->renderView('product/products.html.twig', ['products' => $products]),
+                'sorting' => $this->renderView('product/_sorting.html.twig', ['products' => $products]),
+                'pagination' => $this->renderView('product/_more.html.twig', ['products' => $products]),
+                'pages' => ceil($products->getTotalItemCount() / $products->getItemNumberPerPage()),
+                'min' => $min,
+                'max' => $max
+            ]);
+        }
+
         return $this->render('product/index.html.twig', [
             'page' => 'products',
             'categories' => $this->categoryRepository->findAll(),
-            'products' => $this->productRepository->findAll(),
-            'cart' => $this->cart->getFull()
+            'products' => $products,
+            'filter_form' => $filterType->createView(),
+            'search_form' => $searchType->createView(),
+            'cart' => $this->cart->getFull(),
+            'min' => $min,
+            'max' => $max
         ]);
     }
 

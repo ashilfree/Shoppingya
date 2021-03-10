@@ -27,12 +27,12 @@ export default class Filter {
 
         this.pagination = document.querySelector('.js-filter-pagination');
         this.content = document.querySelector('.js-filter-content');
-        // this.sorting = document.querySelector('.js-filter-sorting');
+        this.sorting = document.querySelector('.js-filter-sorting');
         this.overlay = document.querySelector('.js-overlay');
-        // this.form = document.querySelector('.js-filter-form');
+        this.form = document.querySelector('.js-filter-form');
         this.search = document.querySelector('.js-filter-search');
         this.page = parseInt(new URLSearchParams(window.location.search).get('page') || 1);
-        // this.moreNav = this.page === 1;
+        this.moreNav = this.page === 1;
         this.bindEvents();
     }
 
@@ -44,21 +44,22 @@ export default class Filter {
                 this.loadUrl(e.target.getAttribute('href'))
             }
         };
-        // this.sorting.addEventListener('click', e => {
-        //     aClickListener(e);
-        //     this.page = 1;
-        // });
-        // if (this.moreNav) {
-        //     this.pagination.innerHTML = '<button  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> Load More </button>';
-        //     this.pagination.querySelector('button').addEventListener('click', this.loadMore.bind(this))
-        // } else {
-        //     this.pagination.addEventListener('click', aClickListener)
-        // }
-        // this.form.querySelector('select').addEventListener('change', this.loadForm.bind(this));
+        this.sorting.addEventListener('click', e => {
+            aClickListener(e);
+            this.page = 1;
+        });
+        if (this.moreNav) {
+            this.pagination.innerHTML = '<button  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> Load More </button>';
+            this.pagination.querySelector('button').addEventListener('click', this.loadMore.bind(this))
+        } else {
+            this.pagination.addEventListener('click', aClickListener)
+        }
+     //   this.form.querySelector('select').addEventListener('change', this.loadForm.bind(this));
         this.search.querySelector('a').addEventListener('click', this.loadSearch.bind(this));
-        // this.form.querySelectorAll('input:not(#address)').forEach(input => {
-        //     input.addEventListener('change', this.loadForm.bind(this))
-        // });
+        this.form.querySelectorAll('input:not(#address)').forEach(input => {
+            input.addEventListener('change', this.loadForm.bind(this))
+        });
+        this.reinitializeModal();
     }
 
     async loadMore() {
@@ -198,24 +199,25 @@ export default class Filter {
             $('#description').text($(this).data('description'));
             // $('#quantity').attr('max', $(this).data('quantity'));
             // $('#wich-icon a').attr('href', $(this).data('href')).attr('id', $(this).data('id')).addClass($(this).data('disabled'));
-            // $('#cart-add-button').attr('href', $(this).data('href-a'));
-            debugger
+            $('#cart-add-button').attr('href', $(this).data('href-a'));
 
             var i = 1;
             var access = true;
             // $('#product_cart_size').empty();
             // $('#product_cart_size').append("<option value selected>Choose an option</option>");
 
+            $('.js-select2').empty();
+            $('.js-select2').append('<option value="-1">Choose an option</option>');
+            while (access){
 
-            // while (access){
-            //
-            //     var size = $(this).data('size' + i);
-            //     if(!size)
-            //         break;
-            //
-            //     $('#product_cart_size').append("<option value='" + i + "' > Size " + size + "</option>");
-            //     i++;
-            // }
+                var size = $(this).data('size' + i);
+                var catalog = $(this).data('catalog' + i);
+                if(!size)
+                    break;
+
+                $('.js-select2').append("<option value='" + catalog + "' > Size " + size + "</option>");
+                i++;
+            }
             //
             //
             // $('#product_cart_color').append("<option value='1'>Red</option>");
@@ -225,16 +227,18 @@ export default class Filter {
 
 
             i = 1;
-
+            $('.slick3.gallery-lb').empty();
+            $('.slick3').slick('removeSlide', null, null, true);
             while (access){
 
-                var picture = $(this).data('pictures' + i);
+                var picture = $(this).data('image' + i);
                 if(!picture)
                     break;
-                var picturePath = "/media/products/"+picture;
-                $('div.img'+i).data('thumb', picturePath);
-                $('img.img'+i).attr('src', picturePath);
-                $('a.img'+i).attr('href', picturePath);
+                var picturePath = "/media/images/product/"+picture;
+                $('.slick3.gallery-lb').append('<div class="item-slick3" data-thumb=" ' + picturePath +' "><div class="wrap-pic-w pos-relative"><img src=" ' + picturePath + ' " alt="IMG-PRODUCT"><a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href=" ' + picturePath + ' "><i class="fa fa-expand"></i></a></div></div>')
+                // $('div.img'+i).data('thumb', picturePath);
+                // $('img.img'+i).attr('src', picturePath);
+                // $('a.img'+i).attr('href', picturePath);
                 i++;
             }
             $('.slick3').slick('refresh');

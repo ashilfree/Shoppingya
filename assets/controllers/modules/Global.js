@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 /**
  * @property {HTMLElement} cart
  * @property {HTMLElement} removeWish
@@ -49,16 +51,27 @@ export default class Global {
         //         })
         //     });
         // }
-        // if(this.addCart){
-        //     let addCart = this.addCart.querySelector('#cart-add-button');
-        //     if(addCart){
-        //         addCart.addEventListener('click', e =>{
-        //             e.preventDefault();
-        //             console.log('POST');
-        //             this.loadUrl(addCart, 'POST');
-        //         })
-        //     }
-        // }
+        if (this.addCart) {
+            let addCart = this.addCart.querySelector('#cart-add-button');
+            let selectedSize = this.addCart.querySelector('.js-select2');
+            let nameProduct = this.addCart.querySelector('.js-name-detail');
+
+            if (addCart) {
+                 addCart.addEventListener('click', e => {
+
+                    if (selectedSize.value > 0) {
+                        addCart.href = addCart.getAttribute('href') + '-' + selectedSize.value
+                       // swal(nameProduct.innerHTML, "is added to cart !", "success");
+                       //  e.returnValue = true
+                    }else{
+                        e.preventDefault();
+                        swal("PLZ", "Select a size !", "info");
+                    }
+                    //  console.log(addCart.getAttribute('href'));
+                    //   this.loadUrl(addCart, 'POST');
+                })
+            }
+        }
         // this.wishList.querySelectorAll('[data-delete]').forEach(a => {
         //     a.addEventListener('click', e => {
         //         e.preventDefault();
@@ -84,13 +97,14 @@ export default class Global {
         //     })
         // });
     }
+
     async loadUrl(a, method = 'GET', clear = false) {
         let init = {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         };
-        if (method === 'DELETE'){
+        if (method === 'DELETE') {
             init = {
                 method: 'DELETE',
                 headers: {
@@ -100,11 +114,11 @@ export default class Global {
                 body: JSON.stringify({'token': a.dataset.token})
             };
         }
-        if (method === 'POST'){
+        if (method === 'POST') {
             const form = new FormData(this.addCart.querySelector('form'));
-            let data ={};
+            let data = {};
             form.forEach((value, key) => {
-               data[key] = value;
+                data[key] = value;
             });
             init = {
                 method: 'POST',
@@ -117,29 +131,26 @@ export default class Global {
         }
         const request = new Request(a.getAttribute('href'), init);
         const response = await fetch(request);
-        if (response.status >= 200 && response.status < 300)
-        {
+        if (response.status >= 200 && response.status < 300) {
             const data = await response.json();
-            if(data.type === 'cart'){
+            if (data.type === 'cart') {
                 this.iconCart.dataset.notify = data.countItemsCart;
                 this.cart.querySelector('#sumItemsCart').textContent = data.sumItemsCart;
-                if(request.method === 'DELETE'){
-                    if(clear) {
+                if (request.method === 'DELETE') {
+                    if (clear) {
                         this.cart.querySelector('ul').innerHTML = data.cart;
                         this.cart.querySelector('div.notEmpty').style.display = 'none';
                         this.cart.querySelector('div.empty').removeAttribute('style');
-                    }else {
+                    } else {
                         a.parentNode.parentNode.removeChild(a.parentNode);
-                        if(data.countItemsCart === 0){
+                        if (data.countItemsCart === 0) {
                             this.cart.querySelector('div.notEmpty').style.display = 'none';
                             this.cart.querySelector('div.empty').removeAttribute('style');
                         }
                     }
-                }
-                else
-                {
+                } else {
                     this.cart.querySelector('ul').innerHTML += data.cart;
-                    if(data.countItemsCart === 1){
+                    if (data.countItemsCart === 1) {
                         this.cart.querySelector('div.empty').style.display = 'none';
                         this.cart.querySelector('div.notEmpty').removeAttribute('style');
                     }
@@ -150,11 +161,11 @@ export default class Global {
                         })
                     });
                 }
-            }else {
+            } else {
                 this.iconWish.dataset.notify = data.countItemsWishList
                 this.wishList.querySelector('#sumItemsWishList').textContent = data.sumItemsWishList;
-                if(request.method === 'DELETE'){
-                    if(clear) {
+                if (request.method === 'DELETE') {
+                    if (clear) {
                         this.wishList.querySelector('ul').innerHTML = data.wishList;
                         this.addWish.querySelectorAll('.js-addwish-b2').forEach(a => {
                             a.classList.remove('js-addedwish-b2');
@@ -162,20 +173,18 @@ export default class Global {
                             this.wishList.querySelector('div.notEmpty').style.display = 'none';
                             this.wishList.querySelector('div.empty').removeAttribute('style');
                         });
-                    }else {
+                    } else {
                         a.parentNode.parentNode.removeChild(a.parentNode);
                         this.addWish.querySelector('#product-' + a.dataset.id).querySelector('.js-addwish-b2').classList.remove('js-addedwish-b2');
                         this.addWish.querySelector('#product-' + a.dataset.id).querySelector('.js-addwish-b2').classList.remove('disabled');
-                        if(data.countItemsWishList === 0){
+                        if (data.countItemsWishList === 0) {
                             this.wishList.querySelector('div.notEmpty').style.display = 'none';
                             this.wishList.querySelector('div.empty').removeAttribute('style');
                         }
                     }
-                }
-                else
-                {
+                } else {
                     this.wishList.querySelector('ul').innerHTML += data.wishList;
-                    if(data.countItemsWishList === 1){
+                    if (data.countItemsWishList === 1) {
                         this.wishList.querySelector('div.empty').style.display = 'none';
                         this.wishList.querySelector('div.notEmpty').removeAttribute('style');
                     }
@@ -187,7 +196,7 @@ export default class Global {
                     });
                 }
             }
-        }else {
+        } else {
             console.error(response);
         }
     }
