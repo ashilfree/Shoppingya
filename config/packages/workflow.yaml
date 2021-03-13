@@ -1,0 +1,44 @@
+framework:
+    workflows:
+        order:
+            type: state_machine
+            marking_store:
+                type: method
+            supports:
+                - App\Entity\Order
+            initial_marking: created
+            places:
+                - created
+                - waiting
+                - in_payment
+                - paid
+                - checkout_canceled
+                - in_preparation
+                - in_delivering
+                - delivered
+                - canceled
+            transitions:
+                create_order:
+                    from: created
+                    to: waiting
+                proceed_checkout:
+                    from: waiting
+                    to: in_payment
+                checkout:
+                    from: in_payment
+                    to: paid
+                checkout_canceled:
+                    from: in_payment
+                    to: checkout_canceled
+                in_preparation:
+                    from: paid
+                    to: in_preparation
+                in_delivering:
+                    from: in_preparation
+                    to: in_delivering
+                delivery_done:
+                    from: in_delivering
+                    to: delivered
+                order_canceled:
+                    from: waiting
+                    to: canceled

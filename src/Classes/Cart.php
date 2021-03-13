@@ -3,9 +3,7 @@
 
 namespace App\Classes;
 
-
 use App\Repository\CatalogRepository;
-use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
@@ -41,16 +39,26 @@ class Cart
         return $this->session->get('cart');
     }
 
+    public function getCart2Order()
+    {
+        return $this->session->get('cart2order');
+    }
+
     public function getDelivery()
     {
         return $this->session->get('delivery');
     }
 
-    public function getFull()
+    public function getDelivery2Order()
+    {
+        return $this->session->get('delivery2order');
+    }
+
+    public function getFull($cart)
     {
         $cartComplete = [];
-        if (!empty($this->get())) {
-            foreach ($this->get() as $id => $quantity) {
+        if (!empty($cart)) {
+            foreach ($cart as $id => $quantity) {
                 $cartCatalog = $this->catalogRepository->find($id);
                 if (!$cartCatalog) {
                     $this->delete($id);
@@ -70,6 +78,12 @@ class Cart
     {
         $this->session->remove('cart');
         $this->session->remove('delivery');
+    }
+
+    public function remove2Order()
+    {
+        $this->session->remove('cart2order');
+        $this->session->remove('delivery2order');
     }
 
     public function delete($id)
@@ -96,6 +110,15 @@ class Cart
         }
         $this->session->set('cart', $cart);
         $this->session->set('delivery', $all['delivery']);
+    }
+
+    public function switch()
+    {
+        $cart = $this->get();
+        $delivery = $this->getDelivery();
+        $this->session->set('cart2order', $cart);
+        $this->session->set('delivery2order', $delivery);
+        $this->remove();
     }
 
 }

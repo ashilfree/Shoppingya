@@ -33,7 +33,7 @@ class CartController extends AbstractController
      */
     public function index(): Response
     {
-        $cart = $this->cart->getFull();
+        $cart = $this->cart->getFull($this->cart->get());
         if (empty($cart))
             return $this->render('cart/empty-cart.html.twig', [
                 'cart' => $cart

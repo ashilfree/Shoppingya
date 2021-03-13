@@ -4,11 +4,9 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\Transaction;
-use App\Entity\Address;
-use App\Entity\Carrier;
+use App\Entity\Customer;
 use App\Entity\Order;
 use App\Entity\OrderDetails;
-use App\Entity\User;
 use App\Form\OrderType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,116 +22,112 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+    /**
+     * @var Cart
+     */
+    private $cart;
 
-	public function __construct
-	(
-		EntityManagerInterface $entityManager
-	)
-	{
-		$this->entityManager = $entityManager;
-	}
+    public function __construct
+    (
+        EntityManagerInterface $entityManager,
+        Cart $cart
+    )
+    {
+        $this->entityManager = $entityManager;
+        $this->cart = $cart;
+    }
 
-	/**
-	 * @Route("/", name="order")
-	 * @param Cart $cart
-	 * @param Request $request
-	 * @return Response
-	 */
-	public function index(Cart $cart, Request $request): Response
-	{
-		if (!$this->getUser()->getAddresses()->getValues())
-			return $this->redirectToRoute('account.address.add');
+    /**
+     * @Route("/", name="order")
+     * @param Request $request
+     * @return Response
+     */
+    public function index(Request $request): Response
+    {
+        if (!$this->getUser())
+            return $this->redirectToRoute('login');
+        if(!empty($this->cart->get())){
+            $this->cart->switch();
+        }
+        if (empty($request->request->all())) {
+            $order = new Order();
+        } else {
+            $id = $request->request->get('order')["id"];
+            $order = $this->entityManager->getRepository(Order::class)->find($id);
+        }
+        $form = $this->createForm(OrderType::class, $order);
 
-		$form = $this->createForm(OrderType::class, null, [
-			'user' => $this->getUser()
-		]);
+        return $this->render('order/checkout.html.twig', [
+            'form' => $form->createView(),
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
+            'delivery' => $this->cart->getDelivery(),
+            'delivery2order' => $this->cart->getDelivery2Order(),
+            'page' => 'checkout'
+        ]);
+    }
 
-		$form->handleRequest($request);
+    /**
+     * @Route("/recap/", name="order.recap", methods={"POST"})
+     * @param Request $request
+     * @param Transaction $transaction
+     * @return Response
+     */
+    public function add(Request $request, Transaction $transaction): Response
+    {
 
-		if ($form->isSubmitted() && $form->isValid()) {
-			dd($form->getData());
-		}
+        $id = $request->request->get('order')["id"];
+        if ($id == "") {
+            $order = new Order();
+        } else {
+            $order = $this->entityManager->getRepository(Order::class)->find($id);
+        }
+        $form = $this->createForm(OrderType::class, $order);
 
-		return $this->render('order/index.html.twig', [
-			'form' => $form->createView(),
-			'cart' => $cart->getFull()
-		]);
-	}
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-	/**
-	 * @Route("/recap", name="order.recap", methods={"POST"})
-	 * @param Cart $cart
-	 * @param Request $request
-	 * @param Transaction $transaction
-	 * @return Response
-	 */
-	public function add(Cart $cart, Request $request, Transaction $transaction): Response
-	{
+            if ($order->getId() == null) {
+                $date = new \DateTime();
+                /** @var Customer $user */
+                $user = $this->getUser();
+                $reference = $date->format('Ymd') . '-' . uniqid();
+                $order->setReference($reference);
+                $order->setCustomer($user);
+                $order->setCreatedAt($date);
+                $order->setDeliveryPrice($this->cart->getDelivery2Order());
+                $transaction->applyWorkFlow($order, 'create_order');
+                $this->entityManager->persist($order);
 
-		$form = $this->createForm(OrderType::class, null, [
-			'user' => $this->getUser()
-		]);
+                foreach ($this->cart->getFull($this->cart->getCart2Order()) as $product) {
+                    $orderDetail = new OrderDetails();
+                    $orderDetail->setMyOrder($order);
+                    $orderDetail->setProduct($product['catalog']->getProduct()->getName());
+                    $orderDetail->setSize($product['catalog']->getSize());
+                    $orderDetail->setQuantity($product['quantity']);
+                    $orderDetail->setPrice($product['catalog']->getProduct()->getPrice());
+                    $orderDetail->setTotal($product['quantity'] * $product['catalog']->getProduct()->getPrice());
+                    $this->entityManager->persist($orderDetail);
+                }
+            }
 
-		$form->handleRequest($request);
+            $this->entityManager->flush();
+            return $this->render('order/checkout-two.html.twig', [
+                    'cart' => $this->cart->getFull($this->cart->get()),
+                    'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
+                    'order' => $order,
+                    'page' => 'checkout-two',
+                    'form' => $this->createForm(OrderType::class, $order)->createView()
+                ]
+            );
 
-		if ($form->isSubmitted() && $form->isValid()) {
-			//	dd($form->getData());
-			$date = new \DateTime();
-			/** @var User $user */
-			$user = $this->getUser();
-			/** @var Carrier $carrier */
-			$carrier = $form->get('carriers')->getData();
-			/** @var Address $address */
-			$address = $form->get('addresses')->getData();
-			$delivery_address = $address->getFirstname() . ' ' . $address->getLastname();
-			$delivery_address .= '<br/>' . $address->getPhone();
-			if ($address->getCompany())
-				$delivery_address .= '<br/>' . $address->getCompany();
-			$delivery_address .= '<br/>' . $address->getAddress();
-			$delivery_address .= '<br/>' . $address->getPostal() . ' ' . $address->getCity();
-			$delivery_address .= '<br/>' . $address->getCountry();
+        }
 
-			$order = new order();
-			$reference = $date->format('Ymd').'-'.uniqid();
-			$order->setReference($reference);
-			$order->setUser($user);
-			$order->setCreatedAt($date);
-			$order->setCarrierName($carrier->getName());
-			$order->setCarrierPrice($carrier->getPrice());
-			$order->setDelivery($delivery_address);
-			$transaction->applyWorkFlow($order, 'create_order');
-			$this->entityManager->persist($order);
+        return $this->redirectToRoute('cart');
 
-
-			foreach ($cart->getFull() as $product) {
-				$orderDetail = new OrderDetails();
-				$orderDetail->setMyOrder($order);
-				$orderDetail->setProduct($product['product']->getName());
-				$orderDetail->setQuantity($product['quantity']);
-				$orderDetail->setPrice($product['product']->getPrice());
-				$orderDetail->setTotal($product['quantity'] * $product['product']->getPrice());
-				$this->entityManager->persist($orderDetail);
-			}
-			 $this->entityManager->flush();
-
-
-
-
-			return $this->render('order/add.html.twig', [
-					'cart' => $cart->getFull(),
-					'carrier' => $carrier,
-					'delivery'=> $delivery_address,
-					'id'=> $order->getId()
-				]
-			);
-
-		}
-
-		return  $this->redirectToRoute('cart');
-
-	}
+    }
 }

@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>Cart</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a>CheckOut</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+<div class="container">
+    <div class="row row-pb-md  justify-content-center p-t-75">
+        <div class="col-md-10">
+            <div class="process-wrap">
+                <div class="process text-center active">
+                    <p><span>01</span></p>
+                    <h3>Shopping Cart</h3>
+                </div>
+                <div class="process text-center active">
+                    <p><span>02</span></p>
+                    <h3>Checkout<br>Step One</h3>
+                </div>
+                <div class="process text-center">
+                    <p><span>03</span></p>
+                    <h3>Order Complete</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Check Out -->
+    {{ form_start(form, {action: path('order.recap'), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+        <div class="col-md-7">
+            <div class="colorlib-form">
+                <h2>Billing Details</h2>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="fname">First Name</label>
+                            {{ form_widget(form.shippingFirstName, {'attr': {'class': 'form-control', 'placeholder':'Your firstname'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lname">Last Name</label>
+                            {{ form_widget(form.shippingLastName, {'attr': {'class': 'form-control', 'placeholder':'Your lastname'}}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="fname">Address</label>
+                            {{ form_widget(form.shippingAddress, {'id': 'address', 'attr': {'class': 'form-control text-left', 'placeholder':'Enter Your Address'}}) }}
+                            {{ form_widget(form.shippingLat,{'id': 'lat'}) }}
+                            {{ form_widget(form.shippingLng, {'id': 'lng'}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="companyname">Town/City</label>
+                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'Town or City'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="stateprovince">State/Province</label>
+                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'State Province'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lname">Zip/Postal Code</label>
+                            {{ form_widget(form.shippingPostalCode, {'id': 'postalCode', 'attr': {'class': 'form-control', 'placeholder':'Zip / Postal'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="email">E-mail Address</label>
+                            {{ form_widget(form.shippingEmail, {'attr': {'class': 'form-control', 'placeholder':'Your Email'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Phone">Phone Number</label>
+                            {{ form_widget(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'Your Phone'}}) }}
+                        </div>
+                        {{ form_rest(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="cart-detail">
+                <h2>Cart Total</h2>
+                <ul>
+                    {% set total = null %}
+                    <li>
+                        <ul>
+                            {% for productCart in cart2order %}
+                                <li><span>{{' ¤ ' ~ productCart.quantity }} x {{ productCart.catalog.product.name }}</span> <span>{{ (productCart.quantity * productCart.catalog.product.price/100) |number_format(2, '.', ',')~ currency}}</span></li>
+                                {% set total = total + ((productCart.quantity * productCart.catalog.product.price)/100) %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li> <span>Subtotal</span> <span>{{ total ~currency }}</span></li>
+                    <li><span>Shipping</span> <span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency}}</span></li>
+                    <li><span>Order Total</span> <span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency }}</span></li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                        Next
+                    </button>
+                    <a href="" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                        Back To Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var formSubmitting = false;
+        var setFormSubmitting = function() { formSubmitting = true; };
+
+        window.onload = function() {
+            window.addEventListener("beforeunload", function (e) {
+                if (formSubmitting) {
+                    return undefined;
+                }
+
+                var confirmationMessage = 'It looks like you have been editing something. '
+                    + 'If you leave before saving, your changes will be lost.';
+
+                (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+            });
+        };
+    </script>
+{% endblock %}

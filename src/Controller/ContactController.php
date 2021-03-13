@@ -56,7 +56,7 @@ class ContactController extends AbstractController
         return $this->render('contact/index.html.twig', [
             'form' => $form->createView(),
             'page' => 'contact.us',
-            'cart' => $this->cart->getFull(),
+            'cart' => $this->cart->getFull($this->cart->get()),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\Cart;
 use App\Classes\Mailer;
 use App\Entity\Customer;
 use App\Form\CustomerRegisterType;
@@ -25,14 +26,20 @@ class MainSecurityController extends AbstractController
      * @var \Swift_Mailer
      */
     private $mailer;
+    /**
+     * @var Cart
+     */
+    private $cart;
 
     /**
      * MainSecurityController constructor.
      * @param AuthenticationUtils $authenticationUtils
+     * @param Cart $cart
      * @param Mailer $mailer
      */
     public function __construct(
         AuthenticationUtils $authenticationUtils,
+        Cart $cart,
         Mailer $mailer
     )
     {
@@ -40,6 +47,7 @@ class MainSecurityController extends AbstractController
 
         $this->mailer = $mailer;
 
+        $this->cart = $cart;
     }
 
 
@@ -56,7 +64,8 @@ class MainSecurityController extends AbstractController
         return $this->render('authentication/login.html.twig', [
             'page' => 'login',
             'last_username' => $lastUsername,
-            'error' => $error
+            'error' => $error,
+            'cart' => $this->cart->getFull($this->cart->get())
         ]);
     }
 
@@ -92,7 +101,8 @@ class MainSecurityController extends AbstractController
 
         return $this->render('authentication/register.html.twig', [
             'page'=> 'register',
-            'form'=>$form->createView()
+            'form'=>$form->createView(),
+            'cart' => $this->cart->getFull($this->cart->get())
         ]);
     }
 

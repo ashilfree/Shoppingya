@@ -188,7 +188,7 @@
                             </div>
                         </div>
 
-                        <a {% if delivery is defined %} href="javascript:void(0)" {% endif %}
+                        <a {% if delivery is null %} href="javascript:void(0)" {% else %} href="{{ path('order') }}" {% endif %}
                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04" {% if delivery is null %} disabled {% endif %}
                            data-toggle="tooltip" data-placement="top" title="Calculate Shipping">
                             Proceed to Checkout

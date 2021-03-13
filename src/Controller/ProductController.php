@@ -78,7 +78,7 @@ class ProductController extends AbstractController
             'products' => $products,
             'filter_form' => $filterType->createView(),
             'search_form' => $searchType->createView(),
-            'cart' => $this->cart->getFull(),
+            'cart' => $this->cart->getFull($this->cart->get()),
             'min' => $min,
             'max' => $max
         ]);
@@ -98,6 +98,7 @@ class ProductController extends AbstractController
         return $this->render('product/detail.html.twig', [
             'page' => 'detail',
             'product' => $product,
+            'cart' => $this->cart->getFull($this->cart->get()),
         ]);
     }
 }

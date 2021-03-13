@@ -21,7 +21,7 @@ class AboutController extends AbstractController
     {
         return $this->render('about/index.html.twig', [
             'page' => 'about.us',
-            'cart' => $cart->getFull(),
+            'cart' => $cart->getFull($cart->get()),
         ]);
     }
 }
