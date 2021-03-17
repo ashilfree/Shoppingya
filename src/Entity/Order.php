@@ -358,5 +358,37 @@ class Order
         return $this;
     }
 
+    public function getStatus(): ?string
+    {
+        $status = '';
+        switch ($this->marking){
+            case 'waiting':
+                $status = 'waiting';
+                break;
+            case 'in_payment':
+                $status = 'in_payment';
+                break;
+            case 'paid':
+                $status = 'paid';
+                break;
+            case 'checkout_canceled':
+                $status = 'canceled';
+                break;
+            case 'in_preparation':
+                $status = 'processing';
+                break;
+            case 'in_delivering':
+                $status = 'shipped';
+                break;
+            case 'delivered':
+                $status = 'delivered';
+                break;
+            case 'canceled':
+                $status = 'canceled';
+
+        }
+        return $status;
+    }
+
 
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\Contact;
+use App\Classes\Mailer;
 use App\Form\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +25,11 @@ class ContactController extends AbstractController
 
     /**
      * ContactController constructor.
-     * @param \Swift_Mailer $mailer
+     * @param Mailer $mailer
      * @param Cart $cart
      */
     public function __construct(
-        \Swift_Mailer $mailer,
+        Mailer $mailer,
          Cart $cart
     )
     {
@@ -48,7 +49,7 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->notify($contact);
+            $this->mailer->sendContactEmail($contact);
             $this->addFlash('success', 'Your Message has been sent');
             return $this->redirectToRoute('contact.us');
         }
@@ -58,17 +59,5 @@ class ContactController extends AbstractController
             'page' => 'contact.us',
             'cart' => $this->cart->getFull($this->cart->get()),
         ]);
-    }
-
-    private function notify(Contact $contact)
-    {
-        $message = (new \Swift_Message('Agency : ' . $contact->getSubject()))
-            ->setFrom('noreply@agence.fr')
-            ->setTo($contact->getEmail())
-            ->setReplyTo($contact->getEmail())
-            ->setBody($this->render('contact/contact.html.twig', [
-                'contact' => $contact
-            ]), 'text/html');
-        $this->mailer->send($message);
     }
 }

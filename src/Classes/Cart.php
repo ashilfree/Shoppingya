@@ -3,6 +3,7 @@
 
 namespace App\Classes;
 
+use App\Entity\Order;
 use App\Repository\CatalogRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -121,4 +122,63 @@ class Cart
         $this->remove();
     }
 
+    public function reverseSwitch()
+    {
+        $cart = $this->getCart2Order();
+        $delivery = $this->getDelivery2Order();
+        $this->session->set('cart', $cart);
+        $this->session->set('delivery', $delivery);
+        $this->remove2Order();
+    }
+
+    public function checkStock(): bool
+    {
+        $return = true;
+        $cart = $this->getCart2Order();
+        if (!empty($cart)) {
+            foreach ($cart as $id => $quantity) {
+                $cartCatalog = $this->catalogRepository->find($id);
+                if ($quantity > $cartCatalog->getQuantity()) {
+                    $return = false;
+                    break;
+                }
+            }
+        }
+        return $return;
+    }
+
+    public function decreaseStock()
+    {
+        $cart = $this->getCart2Order();
+        if (!empty($cart)) {
+            foreach ($cart as $id => $quantity) {
+                $cartCatalog = $this->catalogRepository->find($id);
+                $newQuantity = $cartCatalog->getQuantity() - $quantity;
+                $cartCatalog->setQuantity($newQuantity);
+            }
+        }
+    }
+
+    public function increaseStock()
+    {
+        $cart = $this->getCart2Order();
+        if (!empty($cart)) {
+            foreach ($cart as $id => $quantity) {
+                $cartCatalog = $this->catalogRepository->find($id);
+                $newQuantity = $cartCatalog->getQuantity() + $quantity;
+                $cartCatalog->setQuantity($newQuantity);
+            }
+        }
+    }
+
+    public function createCart2Order(Order $order)
+    {
+        $cart = [];
+        foreach ($order->getOrderDetails() as $orderDetail){
+            $catalog = $this->catalogRepository->findByProductName($orderDetail->getProduct(), $orderDetail->getSize());
+            $cart[$catalog->getId()] = $orderDetail->getQuantity();
+        }
+        $this->session->set('cart2order', $cart);
+        $this->session->set('delivery2order', $order->getDeliveryPrice());
+    }
 }

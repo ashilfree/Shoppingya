@@ -35,3 +35,7 @@ services:
     App\Listener\CreatedByUserSubscriber:
         tags:
             name: doctrine.event_subscriber
+
+    App\Listener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }

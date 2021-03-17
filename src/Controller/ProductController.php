@@ -3,17 +3,12 @@
 namespace App\Controller;
 
 use App\Classes\Cart;
-use App\Classes\CartItem;
 use App\Classes\Filter;
 use App\Classes\Search;
-use App\Entity\Product;
-use App\Form\CartType;
 use App\Form\FilterType;
-use App\Form\ProductCartType;
 use App\Form\SearchType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,10 +89,11 @@ class ProductController extends AbstractController
         $product = $this->productRepository->findOneBy(['slug'=>$slug]);
         if(!$product)
             return $this->redirectToRoute('products');
-
+        $products = $this->productRepository->findBy(['category'=>$product->getCategory()]);
         return $this->render('product/detail.html.twig', [
             'page' => 'detail',
             'product' => $product,
+            'products' => $products,
             'cart' => $this->cart->getFull($this->cart->get()),
         ]);
     }

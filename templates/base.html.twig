@@ -24,7 +24,7 @@
         <div class="top-bar">
             <div class="content-topbar flex-sb-m h-full container">
                 <div class="left-top-bar">
-                    Free shipping for standard order over 20 {{ currency }}
+                    Free delivery for standard order over 20 {{ currency }}
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
@@ -32,20 +32,29 @@
                         Help & FAQs
                     </a>
 
-                    <a href="{{ path('register') }}" class="flex-c-m trans-04 p-lr-25">
-                        My Account
-                    </a>
+                    {% if app.user %}
+                        <a href="{{ path('account') }}" class="flex-c-m trans-04 p-lr-25">
+                            My Account
+                        </a>
+                    {% else %}
+                        <a href="{{ path('register') }}" class="flex-c-m trans-04 p-lr-25">
+                            Register
+                        </a>
+                    {% endif %}
 
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         EN
                     </a>
 
                     {% if app.user %}
+
                         <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
+                            {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
                         <a href="{{ path('login') }}" class="flex-c-m p-lr-10 trans-04">
+
                             <i class="fa fa-sign-in"></i>
                         </a>
                     {% endif %}
@@ -58,8 +67,8 @@
             <nav class="limiter-menu-desktop container">
 
                 <!-- Logo desktop -->
-                <a href="#" class="logo">
-                    <img src="{{ '/media/images/icons/logo-01.png' }}" alt="IMG-LOGO">
+                <a href="{{ path('home') }}" class="logo">
+                    <img src="{{ '/media/images/icons/logo-01.png' }}" width="140" alt="IMG-LOGO">
                 </a>
 
                 <!-- Menu desktop -->
@@ -100,7 +109,7 @@
     <div class="wrap-header-mobile">
         <!-- Logo moblie -->
         <div class="logo-mobile">
-            <a href="{{ path('home') }}"><img src="{{ '/media/images/icons/logo-01.png' }}" alt="IMG-LOGO"></a>
+            <a href="{{ path('home') }}"><img src="{{ '/media/images/icons/logo-01.png' }}" width="80" alt="IMG-LOGO"></a>
         </div>
 
         <!-- Icon header -->
@@ -342,24 +351,8 @@
 
         <div class="p-t-40">
             <div class="flex-c-m flex-w p-b-18">
-                <a href="#" class="m-all-1">
-                    <img src="{{ '/media/images/icons/icon-pay-01.png' }}" alt="ICON-PAY">
-                </a>
-
-                <a href="#" class="m-all-1">
-                    <img src="{{ '/media/images/icons/icon-pay-02.png' }}" alt="ICON-PAY">
-                </a>
-
-                <a href="#" class="m-all-1">
-                    <img src="{{ '/media/images/icons/icon-pay-03.png' }}" alt="ICON-PAY">
-                </a>
-
-                <a href="#" class="m-all-1">
-                    <img src="{{ '/media/images/icons/icon-pay-04.png' }}" alt="ICON-PAY">
-                </a>
-
-                <a href="#" class="m-all-1">
-                    <img src="{{ '/media/images/icons/icon-pay-05.png' }}" alt="ICON-PAY">
+                <a class="m-all-1">
+                    <img src="{{ '/media/images/icons/icon-pay.png' }}" width="120" alt="ICON-PAY">
                 </a>
             </div>
 

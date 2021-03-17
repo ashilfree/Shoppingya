@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class OrderController
@@ -30,15 +31,21 @@ class OrderController extends AbstractController
      * @var Cart
      */
     private $cart;
+    /**
+     * @var Security
+     */
+    private $security;
 
     public function __construct
     (
         EntityManagerInterface $entityManager,
+        Security $security,
         Cart $cart
     )
     {
         $this->entityManager = $entityManager;
         $this->cart = $cart;
+        $this->security = $security;
     }
 
     /**
@@ -48,16 +55,26 @@ class OrderController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        if (!$this->getUser())
-            return $this->redirectToRoute('login');
-        if(!empty($this->cart->get())){
+//        if (!$this->getUser())
+//            return $this->redirectToRoute('login', [
+//                '_target_path' => 'order'
+//            ]);
+        if (!empty($this->cart->get())) {
             $this->cart->switch();
         }
-        if (empty($request->request->all())) {
-            $order = new Order();
-        } else {
-            $id = $request->request->get('order')["id"];
-            $order = $this->entityManager->getRepository(Order::class)->find($id);
+        if ($request->get('from') != null) {
+            $user = $this->security->getUser();
+            $order = $this->entityManager->getRepository(Order::class)->findOneBy([
+                'customer' => $user,
+                'stripeSessionId' => null
+            ]);
+        }else {
+            if (empty($request->request->all())) {
+                $order = new Order();
+            } else {
+                $id = $request->request->get('order')["id"];
+                $order = $this->entityManager->getRepository(Order::class)->find($id);
+            }
         }
         $form = $this->createForm(OrderType::class, $order);
 
@@ -72,20 +89,25 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/recap/", name="order.recap", methods={"POST"})
+     * @Route("/recap/", name="order.recap")
      * @param Request $request
      * @param Transaction $transaction
      * @return Response
      */
     public function add(Request $request, Transaction $transaction): Response
     {
+            $id = $request->request->get('order')["id"];
+            if ($id == "") {
+                $order = new Order();
+                if ($this->cart->checkStock()) {
+                    $this->cart->decreaseStock();
+                } else {
+                    return $this->redirectToRoute('back.to.cart');
+                }
 
-        $id = $request->request->get('order')["id"];
-        if ($id == "") {
-            $order = new Order();
-        } else {
-            $order = $this->entityManager->getRepository(Order::class)->find($id);
-        }
+            } else {
+                $order = $this->entityManager->getRepository(Order::class)->find($id);
+            }
         $form = $this->createForm(OrderType::class, $order);
 
         $form->handleRequest($request);
@@ -129,5 +151,15 @@ class OrderController extends AbstractController
 
         return $this->redirectToRoute('cart');
 
+    }
+
+    /**
+     * @Route("/back-to-cart", name="back.to.cart")
+     * @return Response
+     */
+    public function back(): Response
+    {
+        $this->cart->reverseSwitch();
+        return $this->redirectToRoute('cart');
     }
 }

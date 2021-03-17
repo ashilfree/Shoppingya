@@ -56,7 +56,7 @@ class MainSecurityController extends AbstractController
      * @return Response
      */
     // TODO: Use Facebook and Google to Login
-    public function login()
+    public function login(): Response
     {
         $error = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
@@ -92,7 +92,7 @@ class MainSecurityController extends AbstractController
             $entityManager->flush();
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
-            $this->addFlash('success', 'Votre compte à bien été enregistré.');
+            $this->addFlash('success', 'Your account has been registered.');
             //send mail to customer
             $this->mailer->sendConfirmationEmail($customer);
             //return $this->redirectToRoute('login');
@@ -115,7 +115,7 @@ class MainSecurityController extends AbstractController
     public function confirmCustomer(
         string $token,
         CustomerConfirmationService $customerConfirmationService
-    )
+    ): RedirectResponse
     {
         $customerConfirmationService->confirmCustomer($token);
         return $this->redirectToRoute('confirmation');
@@ -125,7 +125,7 @@ class MainSecurityController extends AbstractController
      * @Route("/confirmation", name="confirmation")
      * @return Response
      */
-    public function confirmation()
+    public function confirmation(): Response
     {
         return $this->render('authentication/confirmation.html.twig', [
             'page' => 'confirmation'

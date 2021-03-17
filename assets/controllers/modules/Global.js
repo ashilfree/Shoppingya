@@ -72,6 +72,7 @@ export default class Global {
                 })
             }
         }
+        this.reinitializeModal();
         // this.wishList.querySelectorAll('[data-delete]').forEach(a => {
         //     a.addEventListener('click', e => {
         //         e.preventDefault();
@@ -96,6 +97,62 @@ export default class Global {
         //         this.loadUrl(a, 'DELETE');
         //     })
         // });
+    }
+
+    reinitializeModal() {
+        $('.js-show-modal1').on('click',function(e){
+            debugger
+            e.preventDefault();
+            $('#name').text($(this).data('name'));
+            $('#price').text($(this).data('price'));
+            $('#description').text($(this).data('description'));
+            // $('#quantity').attr('max', $(this).data('quantity'));
+            // $('#wich-icon a').attr('href', $(this).data('href')).attr('id', $(this).data('id')).addClass($(this).data('disabled'));
+            $('#cart-add-button').attr('href', $(this).data('href-a'));
+
+            var i = 1;
+            var access = true;
+            // $('#product_cart_size').empty();
+            // $('#product_cart_size').append("<option value selected>Choose an option</option>");
+
+            $('.js-select2').empty();
+            $('.js-select2').append('<option value="-1">Choose an option</option>');
+            while (access){
+
+                var size = $(this).data('size' + i);
+                var catalog = $(this).data('catalog' + i);
+                if(!size)
+                    break;
+
+                $('.js-select2').append("<option value='" + catalog + "' > Size " + size + "</option>");
+                i++;
+            }
+            //
+            //
+            // $('#product_cart_color').append("<option value='1'>Red</option>");
+
+
+
+
+
+            i = 1;
+            $('.slick3.gallery-lb').empty();
+            $('.slick3').slick('removeSlide', null, null, true);
+            while (access){
+
+                var picture = $(this).data('image' + i);
+                if(!picture)
+                    break;
+                var picturePath = "/media/images/product/"+picture;
+                $('.slick3.gallery-lb').append('<div class="item-slick3" data-thumb=" ' + picturePath +' "><div class="wrap-pic-w pos-relative"><img src=" ' + picturePath + ' " alt="IMG-PRODUCT"><a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href=" ' + picturePath + ' "><i class="fa fa-expand"></i></a></div></div>')
+                // $('div.img'+i).data('thumb', picturePath);
+                // $('img.img'+i).attr('src', picturePath);
+                // $('a.img'+i).attr('href', picturePath);
+                i++;
+            }
+            $('.slick3').slick('refresh');
+            $('.js-modal1').addClass('show-modal1');
+        });
     }
 
     async loadUrl(a, method = 'GET', clear = false) {

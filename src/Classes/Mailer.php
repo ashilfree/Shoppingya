@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Entity\Customer;
+use App\Entity\Order;
 use Twig\Environment;
 
 class Mailer{
@@ -40,6 +41,69 @@ class Mailer{
         $message = (new \Swift_Message('Please confirm your account'))
             ->setFrom('noreply@agence.fr')
             ->setTo($customer->getEmail())
+            ->setBody($body, 'text/html');
+
+        $this->mailer->send($message);
+    }
+
+    public function sendResetPasswordEmail($customer, $resetToken, $tokenLifetime)
+    {
+        $body = $this->twig->render('authentication/email.html.twig', [
+                'resetToken' => $resetToken,
+                'tokenLifetime' => $tokenLifetime,
+            ]
+        );
+        $message = (new \Swift_Message('Your password reset request'))
+            ->setFrom('mohammed@genesistech-dz.com')
+            ->setTo($customer->getEmail())
+            ->setReplyTo($customer->getEmail())
+            ->setBody($body, 'text/html');
+
+        $this->mailer->send($message);
+    }
+
+    public function sendContactEmail(Contact $contact)
+    {
+        $body = $this->twig->render('contact/contact.html.twig', [
+                'contact' => $contact
+            ]
+        );
+        $message = (new \Swift_Message('Agency : ' . $contact->getSubject()))
+            ->setFrom('noreply@agence.fr')
+            ->setTo($contact->getEmail())
+            ->setReplyTo($contact->getEmail())
+            ->setBody($body, 'text/html');
+
+        $this->mailer->send($message);
+    }
+
+    public function sendSuccessOrderEmail(Order $order)
+    {
+        $body = $this->twig->render('contact/confirmation.html.twig',
+            [
+                'order' => $order
+            ]
+        );
+        $message = (new \Swift_Message('Please confirm your account'))
+            ->setFrom('noreply@agence.fr')
+            ->setTo($order->getCustomer()->getEmail())
+            ->setReplyTo($order->getCustomer()->getEmail())
+            ->setBody($body, 'text/html');
+
+        $this->mailer->send($message);
+    }
+
+    public function sendFailureOrderEmail(Order $order)
+    {
+        $body = $this->twig->render('contact/confirmation.html.twig',
+            [
+                'order' => $order
+            ]
+        );
+        $message = (new \Swift_Message('Please confirm your account'))
+            ->setFrom('noreply@agence.fr')
+            ->setTo($order->getCustomer()->getEmail())
+            ->setReplyTo($order->getCustomer()->getEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);

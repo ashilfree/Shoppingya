@@ -211,7 +211,7 @@ class Customer implements UserInterface
     {
         if (!$this->orders->contains($order)) {
             $this->orders[] = $order;
-            $order->setUser($this);
+            $order->setCustomer($this);
         }
 
         return $this;
@@ -221,8 +221,8 @@ class Customer implements UserInterface
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
+            if ($order->getCustomer() === $this) {
+                $order->setCustomer(null);
             }
         }
 

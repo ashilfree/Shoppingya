@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Cart;
+use App\Classes\Mailer;
 use App\Classes\Transaction;
 use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,13 +25,18 @@ class OrderValidateController extends AbstractController
     /**
      * @var Cart
      */
-    private Cart $cart;
+    private $cart;
+    /**
+     * @var Mailer
+     */
+    private $mailer;
 
-    public function __construct(EntityManagerInterface $entityManager, Transaction $transaction, Cart $cart)
+    public function __construct(EntityManagerInterface $entityManager, Transaction $transaction, Cart $cart, Mailer $mailer)
 	{
 		$this->entityManager = $entityManager;
 		$this->transaction = $transaction;
         $this->cart = $cart;
+        $this->mailer = $mailer;
     }
 
 	/**
@@ -46,14 +52,15 @@ class OrderValidateController extends AbstractController
 		}
 
 		if ($this->transaction->check($order, 'checkout')){
-			$this->cart->remove();
+			$this->cart->remove2Order();
 			$this->transaction->applyWorkFlow($order, 'checkout');
 			$this->entityManager->flush();
+            $this->mailer->sendSuccessOrderEmail($order);
 		}
 
         return $this->render('order/order-complete.html.twig', [
         	'order' => $order,
-            'cart' => $this->cart->getFull(),
+            'cart' => $this->cart->getFull($this->cart->get()),
             'page' => 'order-complete'
         ]);
     }
@@ -71,10 +78,13 @@ class OrderValidateController extends AbstractController
 		}
 		if ($this->transaction->check($order, 'checkout_canceled'))
 			$this->transaction->applyWorkFlow($order, 'checkout_canceled');
+        $this->cart->increaseStock();
+        $this->cart->remove2Order();
 		$this->entityManager->flush();
+        $this->mailer->sendFailureOrderEmail($order);
 		return $this->render('order/order-canceled.html.twig', [
 			'order' => $order,
-            'cart' => $this->cart->getFull(),
+            'cart' => $this->cart->getFull($this->cart->get()),
             'page' => 'order-canceled'
 		]);
 	}
