@@ -25,6 +25,7 @@ export default class Global {
         this.wishList = document.querySelector('.js-panel-wish');
         this.addWish = document.querySelector('.js-filter-content');
         this.addCart = document.querySelector('.js-modal1');
+        this.productDetail = document.querySelector('.js-product-detail');
         this.iconWish = document.querySelector('.js-wish-list-icon');
         this.iconCart = document.querySelector('.js-cart-icon');
         this.iconWishModal = document.querySelector('#wich-icon');
@@ -69,6 +70,23 @@ export default class Global {
                     }
                     //  console.log(addCart.getAttribute('href'));
                     //   this.loadUrl(addCart, 'POST');
+                })
+            }
+        }
+        if(this.productDetail){
+            let addToCart = this.productDetail.querySelector('#add-to-cart');
+            let selectedSize = this.productDetail.querySelector('.js-select2');
+            if (addToCart) {
+                addToCart.addEventListener('click', e => {
+                    alert(selectedSize.value)
+                    if (selectedSize.value > 0) {
+                        addToCart.href = addToCart.getAttribute('href') + '/' + selectedSize.value
+                        // swal(nameProduct.innerHTML, "is added to cart !", "success");
+                        //  e.returnValue = true
+                    } else {
+                        e.preventDefault();
+                        swal("PLZ", "Select a size !", "info");
+                    }
                 })
             }
         }

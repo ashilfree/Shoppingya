@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Cart;
 use App\Classes\Contact;
 use App\Classes\Mailer;
+use App\Classes\WishList;
 use App\Form\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,19 +23,26 @@ class ContactController extends AbstractController
      * @var Cart
      */
     private $cart;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
     /**
      * ContactController constructor.
      * @param Mailer $mailer
      * @param Cart $cart
+     * @param WishList $wishlist
      */
     public function __construct(
         Mailer $mailer,
-         Cart $cart
+         Cart $cart,
+        WishList $wishlist
     )
     {
         $this->mailer = $mailer;
         $this->cart = $cart;
+        $this->wishlist = $wishlist;
     }
 
     /**
@@ -58,6 +66,7 @@ class ContactController extends AbstractController
             'form' => $form->createView(),
             'page' => 'contact.us',
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
         ]);
     }
 }

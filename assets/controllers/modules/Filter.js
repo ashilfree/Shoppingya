@@ -127,7 +127,6 @@ export default class Filter {
             console.error(response);
         }
         this.hideLoader();
-        //  this.reinitializeIsotope();
     }
 
     flipContent(content, append) {
@@ -164,31 +163,34 @@ export default class Filter {
         const flipper = new Flipper({
             element: this.content
         });
-        this.content.children.forEach(element => {
-            flipper.addFlipped({
-                element,
-                spring: springConfig,
-                flipId: element.id,
-                shouldFlip: false,
-                onExit: exitSpring
-            })
-        });
-        flipper.recordBeforeUpdate();
+        // this.content.children.forEach(element => {
+        //     flipper.addFlipped({
+        //         element,
+        //         spring: springConfig,
+        //         flipId: element.id,
+        //         shouldFlip: false,
+        //         onExit: exitSpring
+        //     })
+        // });
+        // flipper.recordBeforeUpdate();
         if (append) {
             this.content.innerHTML += content;
         } else {
             this.content.innerHTML = content;
         }
-        this.content.children.forEach(element => {
-            flipper.addFlipped({
-                element,
-                spring: springConfig,
-                flipId: element.id,
-                onAppear: appearSpring
-            })
-        });
-        flipper.update();
+        $('.isotope-grid').isotope('reloadItems').isotope();
+        // this.content.children.forEach(element => {
+        //     flipper.addFlipped({
+        //         element,
+        //         spring: springConfig,
+        //         flipId: element.id,
+        //         onAppear: appearSpring
+        //     })
+        // });
+        //
+        // flipper.update();
         this.reinitializeModal();
+     //   this.reinitializeIsotope();
     }
 
     reinitializeModal() {
@@ -273,7 +275,7 @@ export default class Filter {
             return
         }
         slider.noUiSlider.updateOptions({
-            start: [parseInt(min), parseInt(max)],
+           // start: [parseInt(min), parseInt(max)],
             range: {
                 min: [parseInt(min)],
                 max: [parseInt(max)]
@@ -282,8 +284,14 @@ export default class Filter {
     }
 
     reinitializeIsotope() {
-        $('.isotope-grid').each(function () {
-            $(this).isotope('reloadItems').isotope();
-        })
+        $('.isotope-grid').isotope({
+            itemSelector: '.isotope-item',
+            layoutMode: 'fitRows',
+            percentPosition: true,
+            animationEngine : 'best-available',
+            masonry: {
+                columnWidth: '.isotope-item'
+            }
+        }).isotope();
     }
 }

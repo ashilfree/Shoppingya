@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Cart;
+use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Entity\Order;
 use App\Entity\OrderDetails;
@@ -31,11 +32,16 @@ class AccountController extends AbstractController
      * @var Cart
      */
     private $cart;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
-    public function __construct(EntityManagerInterface $entityManager, Cart $cart)
+    public function __construct(EntityManagerInterface $entityManager, Cart $cart, WishList $wishlist)
 	{
 		$this->entityManager = $entityManager;
         $this->cart = $cart;
+        $this->wishlist = $wishlist;
     }
 
 	/**
@@ -47,10 +53,17 @@ class AccountController extends AbstractController
          * @var Customer $customer
          */
         $customer = $this->getUser();
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
 		return $this->render('account/index.html.twig', [
             'page' => 'account',
             'cart' => $this->cart->getFull($this->cart->get()),
-            'customer' => $customer
+            'wishlist' => $this->wishlist->getFull(),
+            'customer' => $customer,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
         ]);
 	}
 
@@ -62,6 +75,9 @@ class AccountController extends AbstractController
     public function edit(Request $request): Response
     {
         $customer = $this->getUser();
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
         $form = $this->createForm(EditProfileType::class, $customer);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -72,7 +88,11 @@ class AccountController extends AbstractController
             'page' => 'edit.account',
             'form' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
-            'customer' => $customer
+            'wishlist' => $this->wishlist->getFull(),
+            'customer' => $customer,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
         ]);
     }
 
@@ -86,11 +106,18 @@ class AccountController extends AbstractController
          */
         $customer = $this->getUser();
         $orders = $this->entityManager->getRepository(Order::class)->findBy(['customer' => $customer]);
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
         return $this->render('account/my_orders.html.twig', [
             'page' => 'my.orders',
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'customer' => $customer,
-            'orders' => $orders
+            'orders' => $orders,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
         ]);
     }
 
@@ -101,13 +128,24 @@ class AccountController extends AbstractController
      */
     public function myOrderDetail(Order $order): Response
     {
+        $customer = $this->getUser();
+        if (!$order || $order->getCustomer() != $customer){
+			return $this->redirectToRoute('home');
+		}
         $orderDetails = $this->entityManager->getRepository(OrderDetails::class)->findBy(['myOrder' => $order]);
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
         return $this->render('account/my_order_detail.html.twig', [
             'page' => 'my.order.detail',
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'order' => $order,
             'orderDetails' => $orderDetails,
-            'customer' => $this->getUser()
+            'customer' => $customer,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
         ]);
     }
 
@@ -119,15 +157,18 @@ class AccountController extends AbstractController
      */
     public function editPassword(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
-        $user = $this->getUser();
-        $form = $this->createForm(EditPasswordType::class, $user);
+        $customer = $this->getUser();
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
+        $form = $this->createForm(EditPasswordType::class, $customer);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $old_password = $form->get('old_password')->getData();
-            if ($encoder->isPasswordValid($user, $old_password)) {
+            if ($encoder->isPasswordValid($customer, $old_password)) {
                 $new_password = $form->get('new_password')->getData();
-                $password = $encoder->encodePassword($user, $new_password);
-                $user->setPassword($password);
+                $password = $encoder->encodePassword($customer, $new_password);
+                $customer->setPassword($password);
                 $this->entityManager->flush();
                 $this->addFlash(
                     'notice',
@@ -144,35 +185,12 @@ class AccountController extends AbstractController
             'page' => 'edit.password',
             'form' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
-            'customer' => $this->getUser()
+            'wishlist' => $this->wishlist->getFull(),
+            'customer' => $this->getUser(),
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
         ]);
     }
 
-//
-//	/**
-//	 * @Route("/my-orders", name="account.my.orders")
-//	 */
-//	public function myOrders()
-//	{
-//		$orders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($this->getUser());
-//		return $this->render('account/orders.html.twig', [
-//			'orders' => $orders
-//		]);
-//	}
-//
-//	/**
-//	 * @Route("/order-detail/{id}", name="account.order.detail")
-//	 * @return Response
-//	 */
-//	public function showOrder($id)
-//	{
-//		$order = $this->entityManager->getRepository(Order::class)->find($id);
-//		if (!$order || $order->getUser() != $this->getUser()){
-//			return $this->redirectToRoute('home');
-//		}
-//
-//		return $this->render('account/order_detail.html.twig', [
-//			'order' => $order
-//		]);
-//	}
 }

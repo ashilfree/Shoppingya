@@ -57,24 +57,24 @@ import Isotope from './controllers/js/isotope.pkgd.min';
 jQueryBridget('isotope', Isotope, $);
 import './controllers/js/sweetalert.min';
 
-$('.js-addwish-b2').on('click', function (e) {
-    e.preventDefault();
-});
+// $('.js-addwish-b2').on('click', function (e) {
+//     e.preventDefault();
+// });
 
 // $('.header-cart-item-img').on('click', function (e) {
 //     e.preventDefault();
 // });
 
-$('.js-addwish-b2').each(function () {
-    var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
-    $(this).on('click', function () {
-        swal(nameProduct, "is added to wishlist !", "success");
-
-        $(this).addClass('js-addedwish-b2');
-        $(this).addClass('disabled');
-        $(this).off('click');
-    });
-});
+// $('.js-addwish-b2').each(function () {
+//     var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+//     $(this).on('click', function () {
+//         swal(nameProduct, "is added to wishlist !", "success");
+//
+//         $(this).addClass('js-addedwish-b2');
+//         $(this).addClass('disabled');
+//         $(this).off('click');
+//     });
+// });
 
 $('.js-addwish-detail').each(function () {
     var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
@@ -122,10 +122,12 @@ if (slider) {
     const max = document.getElementById('max')
     const minValue = Math.floor(parseInt(slider.dataset.min, 10) / 10) * 10
     const maxValue = Math.ceil(parseInt(slider.dataset.max, 10) / 10) * 10
+    console.log(minValue);
+    console.log(maxValue);
     const range = noUiSlider.create(slider, {
         start: [min.value || minValue, max.value || maxValue],
         connect: true,
-        tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
+     //   tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
         step: 10,
         range: {
             'min': minValue,
@@ -144,6 +146,39 @@ if (slider) {
         min.dispatchEvent(new Event('change'))
     })
 }
+
+// const slider = document.getElementById('sliderPrice');
+// const rangeMin = parseInt(slider.dataset.min);
+// const rangeMax = parseInt(slider.dataset.max);
+// const step = parseInt(slider.dataset.step);
+// const filterInputs = document.querySelectorAll('input.filter__input');
+//
+// noUiSlider.create(slider, {
+//     start: [rangeMin, rangeMax],
+//     connect: true,
+//     step: step,
+//     range: {
+//         'min': rangeMin,
+//         'max': rangeMax
+//     },
+//
+//     // make numbers whole
+//     format: {
+//         to: value => value,
+//         from: value => value
+//     }
+// });
+//
+// // bind inputs with noUiSlider
+// slider.noUiSlider.on('update', (values, handle) => {
+//     filterInputs[handle].value = values[handle];
+// });
+//
+// filterInputs.forEach((input, indexInput) => {
+//     input.addEventListener('change', () => {
+//         slider.noUiSlider.setHandle(indexInput, input.value);
+//     })
+// });
 
 $('.sort-option').on('click', function () {
     if ($(this).hasClass('active')) {

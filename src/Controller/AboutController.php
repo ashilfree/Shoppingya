@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Classes\Cart;
+use App\Classes\WishList;
+use App\Repository\AboutRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +17,17 @@ class AboutController extends AbstractController
      * @Route("/about-us", name="about.us")
      * @param Request $request
      * @param Cart $cart
+     * @param WishList $wishlist
+     * @param AboutRepository $aboutRepository
      * @return Response
      */
-    public function index(Request $request, Cart $cart): Response
+    public function index(Request $request, Cart $cart, WishList $wishlist, AboutRepository $aboutRepository): Response
     {
         return $this->render('about/index.html.twig', [
             'page' => 'about.us',
             'cart' => $cart->getFull($cart->get()),
+            'wishlist' => $wishlist->getFull(),
+            'abouts' => $aboutRepository->findAll()
         ]);
     }
 }

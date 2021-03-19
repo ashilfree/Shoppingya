@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Cart;
+use App\Classes\WishList;
 use App\Repository\GovernorateRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,12 +20,17 @@ class CartController extends AbstractController
      * @var GovernorateRepository
      */
     private $governorateRepository;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
 
-    public function __construct(Cart $cart, GovernorateRepository $governorateRepository)
+    public function __construct(Cart $cart, WishList $wishlist, GovernorateRepository $governorateRepository)
     {
         $this->cart = $cart;
         $this->governorateRepository = $governorateRepository;
+        $this->wishlist = $wishlist;
     }
 
     /**
@@ -41,6 +47,7 @@ class CartController extends AbstractController
         else
             return $this->render('cart/index.html.twig', [
                 'cart' => $cart,
+                'wishlist' => $this->wishlist->getFull(),
                 'page' => 'cart',
                 'delivery' => $this->cart->getDelivery(),
                 'governorates' => $this->governorateRepository->findAll()

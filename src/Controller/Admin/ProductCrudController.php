@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -41,6 +42,9 @@ class ProductCrudController extends AbstractCrudController
             CollectionField::new('catalogs')
                 ->setEntryType(CatalogType::class)
                 ->onlyOnForms(),
+            TextEditorField::new('longDescription')->onlyOnForms(),
+            NumberField::new('weight')->onlyOnForms(),
+            TextField::new('materials')->onlyOnForms(),
         ];
     }
 

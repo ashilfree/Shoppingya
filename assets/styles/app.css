@@ -285,14 +285,14 @@ a[disabled] {
     padding: 18px 0;
 }
 .dash__w-icon-style-1 {
-    background-color: rgba(255, 69, 0, 0.14);
+    background-color: rgb(67, 155, 11);
 }
 .dash__w-icon-style-2 {
-    background-color: rgba(0, 148, 68, 0.14);
+    background-color: rgb(59, 149, 198);
 }
 
 .dash__w-icon-style-3 {
-    background-color: rgba(49, 133, 252, 0.14);
+    background-color: rgb(193, 9, 24);
 }
 .dash__w-icon {
     width: 45px;
@@ -304,13 +304,13 @@ a[disabled] {
     margin-bottom: 8px;
 }
 .dash__w-icon-style-1 > i {
-    color: #D97591;
+    color: #ffffff;
 }
 .dash__w-icon-style-2 > i {
-    color: #009444;
+    color: #ffffff;
 }
 .dash__w-icon-style-3 > i {
-    color: #3185FC;
+    color: #ffffff;
 }
 .dash__w-text {
     display: block;
@@ -604,3 +604,90 @@ a[disabled] {
     color: #7f7f7f;
 }
 /* END MY ORDERS */
+
+/* custom styles for UiSlider */
+.noUi-target {
+    cursor: pointer;
+}
+.noUi-target :focus {
+    outline: none;
+}
+
+.noUi-horizontal {
+    height: 9px;
+}
+
+.noUi-connect {
+    background: #D97591;
+}
+
+.noUi-base {
+    background: #DEDEDE;
+}
+
+.noUi-horizontal .noUi-handle {
+    top: -6px;
+    right: -15px;
+    width: 22px;
+    height: 22px;
+    background: #D97591;
+    border: 2px solid #D97591;
+    border-radius: 50%;
+    box-shadow: unset;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.noUi-horizontal .noUi-handle:before, .noUi-horizontal .noUi-handle:after {
+    content: none;
+}
+.noUi-horizontal .noUi-handle:hover {
+    transform: scale(1.1);
+}
+
+/* styles for filter */
+.filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 370px;
+    border-radius: 10px;
+    /*background: white;*/
+    /*box-shadow: 0px 0px 50px 4px rgba(0, 0, 0, 0.75);*/
+    padding: 20px;
+}
+
+.filter__label {
+    position: relative;
+    cursor: pointer;
+}
+.filter__label:before {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999999;
+    font-size: 14px;
+}
+.filter__label:nth-child(1):before {
+    content: "from";
+}
+.filter__label:nth-child(2):before {
+    content: "to";
+}
+
+.filter__input {
+    height: 35px;
+    border: 2px solid #D97591;
+    border-radius: 5px;
+    padding: 0 10px 0 40px;
+    cursor: pointer;
+    max-width: 160px;
+}
+.filter__input:focus {
+    background: rgba(155, 38, 175, 0.2);
+}
+
+.filter__slider-price {
+    width: 100%;
+    margin: 20px 5px 0;
+}

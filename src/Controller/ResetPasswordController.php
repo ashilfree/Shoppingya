@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\Mailer;
+use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
@@ -29,11 +30,16 @@ class ResetPasswordController extends AbstractController
      * @var Cart
      */
     private $cart;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, Cart $cart)
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, Cart $cart, WishList $wishlist)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->cart = $cart;
+        $this->wishlist = $wishlist;
     }
 
     /**
@@ -59,6 +65,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('authentication/reset_password.html.twig', [
             'requestForm' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'page' => 'reset_password'
         ]);
     }
@@ -78,6 +85,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('authentication/check_email.html.twig', [
             'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'page' => 'check_email'
         ]);
     }
@@ -143,6 +151,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('authentication/reset.html.twig', [
             'resetForm' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'page'=> 'reset'
         ]);
     }

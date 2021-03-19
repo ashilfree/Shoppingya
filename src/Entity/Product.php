@@ -76,6 +76,21 @@ class Product
      */
     private $tags;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $longDescription;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $weight;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $materials;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -281,6 +296,42 @@ class Product
         if ($this->tags->removeElement($tag)) {
             $tag->removeProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getLongDescription(): ?string
+    {
+        return $this->longDescription;
+    }
+
+    public function setLongDescription(string $longDescription): self
+    {
+        $this->longDescription = $longDescription;
+
+        return $this;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(?float $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getMaterials(): ?string
+    {
+        return $this->materials;
+    }
+
+    public function setMaterials(?string $materials): self
+    {
+        $this->materials = $materials;
 
         return $this;
     }

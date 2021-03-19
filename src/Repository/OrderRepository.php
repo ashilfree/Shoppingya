@@ -19,20 +19,48 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-	public function findSuccessOrders($user)
+	public function findSuccessOrders($customer)
 	{
 		return $this->createQueryBuilder('o')
 			->orWhere("o.marking like '%paid%'")
 			->orWhere("o.marking like '%in_preparation%'")
 			->orWhere("o.marking like '%in_delivering%'")
 			->orWhere("o.marking like '%delivered%'")
-			->andWhere('o.user = :user')
-			->setParameter('user', $user)
+			->andWhere('o.customer = :customer')
+			->setParameter('customer', $customer)
 			->orderBy('o.id', 'DESC')
 			->setMaxResults(10)
 			->getQuery()
 			->getResult()
 			;
+    }
+
+    public function findPendingOrders($customer)
+    {
+        return $this->createQueryBuilder('o')
+            ->orWhere("o.marking like '%waiting%'")
+            ->orWhere("o.marking like '%in_payment%'")
+            ->andWhere('o.customer = :customer')
+            ->setParameter('customer', $customer)
+            ->orderBy('o.id', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findCanceledOrders($customer)
+    {
+        return $this->createQueryBuilder('o')
+            ->orWhere("o.marking like '%checkout_canceled%'")
+            ->orWhere("o.marking like '%canceled%'")
+            ->andWhere('o.customer = :customer')
+            ->setParameter('customer', $customer)
+            ->orderBy('o.id', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     // /**

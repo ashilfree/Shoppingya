@@ -79,7 +79,7 @@ class Mailer{
 
     public function sendSuccessOrderEmail(Order $order)
     {
-        $body = $this->twig->render('contact/confirmation.html.twig',
+        $body = $this->twig->render('order/success.html.twig',
             [
                 'order' => $order
             ]
@@ -95,7 +95,7 @@ class Mailer{
 
     public function sendFailureOrderEmail(Order $order)
     {
-        $body = $this->twig->render('contact/confirmation.html.twig',
+        $body = $this->twig->render('order/failure.html.twig',
             [
                 'order' => $order
             ]

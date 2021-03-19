@@ -7,6 +7,8 @@ parameters:
     locale: en
     app.path.product.images: /media/images/product
     app.path.slide.images: /media/images/slide
+    app.path.about.images: /media/images/about
+    maintenanceFilePath: '%kernel.project_dir%/public/.maintenance'
 
 services:
     # default configuration for services in *this* file
@@ -39,3 +41,9 @@ services:
     App\Listener\LoginListener:
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    App\Listener\MaintenanceListener:
+        arguments:
+            - '%maintenanceFilePath%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

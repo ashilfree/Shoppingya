@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Cart;
 use App\Classes\Mailer;
 use App\Classes\Transaction;
+use App\Classes\WishList;
 use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,13 +31,18 @@ class OrderValidateController extends AbstractController
      * @var Mailer
      */
     private $mailer;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
-    public function __construct(EntityManagerInterface $entityManager, Transaction $transaction, Cart $cart, Mailer $mailer)
+    public function __construct(EntityManagerInterface $entityManager, Transaction $transaction, Cart $cart, WishList $wishlist, Mailer $mailer)
 	{
 		$this->entityManager = $entityManager;
 		$this->transaction = $transaction;
         $this->cart = $cart;
         $this->mailer = $mailer;
+        $this->wishlist = $wishlist;
     }
 
 	/**
@@ -61,6 +67,7 @@ class OrderValidateController extends AbstractController
         return $this->render('order/order-complete.html.twig', [
         	'order' => $order,
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'page' => 'order-complete'
         ]);
     }
@@ -85,6 +92,7 @@ class OrderValidateController extends AbstractController
 		return $this->render('order/order-canceled.html.twig', [
 			'order' => $order,
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'page' => 'order-canceled'
 		]);
 	}

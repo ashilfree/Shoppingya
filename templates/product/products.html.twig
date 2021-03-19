@@ -36,11 +36,14 @@
 
 
                     <div class="block2-txt-child2 flex-r p-t-3">
-                        <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                        <a {% if wish[product.id] is defined and wish[product.id] == 1  %} href="{{ path('delete.wishlist', { id:product.id, route:page }) }}" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 js-addedwish-b2" {% else %} href="{{ path('add.wishlist', { id:product.id }) }}" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" {% endif %}>
+
                             <img class="icon-heart1 dis-block trans-04"
                                  src="{{ '/media/images/icons/icon-heart-01.png' }}" alt="ICON">
+
                             <img class="icon-heart2 dis-block trans-04 ab-t-l"
-                                 src="{{ '/media/images/icons/icon-heart-02.png' }}" alt="ICON">
+                                     src="{{ '/media/images/icons/icon-heart-02.png' }}" alt="ICON">
+
                         </a>
                     </div>
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Classes\Cart;
+use App\Classes\WishList;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SlideRepository;
@@ -26,13 +27,18 @@ class HomeController extends AbstractController
      * @var CategoryRepository
      */
     private $categoryRepository;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
-    public function __construct(CategoryRepository $categoryRepository, SlideRepository $slideRepository, Cart $cart)
+    public function __construct(CategoryRepository $categoryRepository, SlideRepository $slideRepository, Cart $cart, WishList $wishlist)
     {
 
         $this->slideRepository = $slideRepository;
         $this->cart = $cart;
         $this->categoryRepository = $categoryRepository;
+        $this->wishlist = $wishlist;
     }
 
     /**
@@ -45,6 +51,7 @@ class HomeController extends AbstractController
             'categories' => $this->categoryRepository->findAll(),
             'slides' => $this->slideRepository->findAll(),
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
         ]);
     }
 }

@@ -63,31 +63,31 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getScalarResult();
 
-        return [$results[0]['min'], $results[0]['max']];
+        return [$results[0]['min']/100, $results[0]['max']/100];
     }
 
     private function getSearchQuery(Filter $filter, $ignorePrice = false):QueryBuilder
     {
-        $query = $this->createQueryBuilder('p');
-//            ->select('p','t')
-//            ->join('p.tags', 't');
+        $query = $this->createQueryBuilder('p')
+            ->select('p','t')
+            ->join('p.tags', 't');
 
 
         if (!empty($filter->min) && $ignorePrice === false){
             $query = $query
                 ->andWhere('p.price >= :min')
-                ->setParameter('min', $filter->min);
+                ->setParameter('min', $filter->min * 100);
         }
 
         if (!empty($filter->max) && $ignorePrice === false){
             $query = $query
                 ->andWhere('p.price <= :max')
-                ->setParameter('max', $filter->max);
+                ->setParameter('max', $filter->max * 100);
         }
 
         if (!empty($filter->tags)){
             $query = $query
-                ->andWhere('p.tags.id IN (:tags) ')
+                ->andWhere('t.id IN (:tags) ')
                 ->setParameter('tags', $filter->tags);
         }
         return $query;

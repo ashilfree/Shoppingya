@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\Transaction;
+use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Entity\Order;
 use App\Entity\OrderDetails;
@@ -35,17 +36,23 @@ class OrderController extends AbstractController
      * @var Security
      */
     private $security;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
     public function __construct
     (
         EntityManagerInterface $entityManager,
         Security $security,
-        Cart $cart
+        Cart $cart,
+        WishList $wishlist
     )
     {
         $this->entityManager = $entityManager;
         $this->cart = $cart;
         $this->security = $security;
+        $this->wishlist = $wishlist;
     }
 
     /**
@@ -55,10 +62,7 @@ class OrderController extends AbstractController
      */
     public function index(Request $request): Response
     {
-//        if (!$this->getUser())
-//            return $this->redirectToRoute('login', [
-//                '_target_path' => 'order'
-//            ]);
+
         if (!empty($this->cart->get())) {
             $this->cart->switch();
         }
@@ -81,6 +85,7 @@ class OrderController extends AbstractController
         return $this->render('order/checkout.html.twig', [
             'form' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
             'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
             'delivery' => $this->cart->getDelivery(),
             'delivery2order' => $this->cart->getDelivery2Order(),
@@ -140,6 +145,7 @@ class OrderController extends AbstractController
             $this->entityManager->flush();
             return $this->render('order/checkout-two.html.twig', [
                     'cart' => $this->cart->getFull($this->cart->get()),
+                    'wishlist' => $this->wishlist->getFull(),
                     'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
                     'order' => $order,
                     'page' => 'checkout-two',

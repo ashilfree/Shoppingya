@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Cart;
 use App\Classes\Filter;
 use App\Classes\Search;
+use App\Classes\WishList;
 use App\Form\FilterType;
 use App\Form\SearchType;
 use App\Repository\CategoryRepository;
@@ -30,12 +31,17 @@ class ProductController extends AbstractController
      * @var Cart
      */
     private $cart;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
-    public function __construct(CategoryRepository $categoryRepository, ProductRepository $productRepository, Cart $cart)
+    public function __construct(CategoryRepository $categoryRepository, ProductRepository $productRepository, Cart $cart, WishList $wishlist)
     {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
         $this->cart = $cart;
+        $this->wishlist = $wishlist;
     }
 
     /**
@@ -52,7 +58,7 @@ class ProductController extends AbstractController
         $searchType = $this->createForm(SearchType::class, $search);
         $filterType->handleRequest($request);
         $searchType->handleRequest($request);
-        $products = $this->productRepository->findSearch($filter, $search, 16);
+        $products = $this->productRepository->findSearch($filter, $search, 8);
       //  dd($products);
         [$min , $max] = $this->productRepository->findMinMax($filter);
 
@@ -74,6 +80,8 @@ class ProductController extends AbstractController
             'filter_form' => $filterType->createView(),
             'search_form' => $searchType->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+            'wish' => $this->wishlist->get(),
             'min' => $min,
             'max' => $max
         ]);
@@ -95,6 +103,7 @@ class ProductController extends AbstractController
             'product' => $product,
             'products' => $products,
             'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
         ]);
     }
 }
