@@ -47,8 +47,8 @@ class ProductRepository extends ServiceEntityRepository
         $query = $query->getQuery();
         return $this->paginator->paginate(
             $query,
-            $filter->page,
-            $pages
+            1,
+            $filter->page*$pages
         );
     }
 

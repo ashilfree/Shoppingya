@@ -13,7 +13,6 @@ framework:
                 - in_payment
                 - paid
                 - checkout_canceled
-                - in_preparation
                 - in_delivering
                 - delivered
                 - canceled
@@ -30,15 +29,15 @@ framework:
                 checkout_canceled:
                     from: in_payment
                     to: checkout_canceled
-                in_preparation:
-                    from: paid
-                    to: in_preparation
                 in_delivering:
-                    from: in_preparation
+                    from: paid
                     to: in_delivering
                 delivery_done:
                     from: in_delivering
                     to: delivered
                 order_canceled:
                     from: waiting
+                    to: canceled
+                order_canceled2:
+                    from: in_payment
                     to: canceled

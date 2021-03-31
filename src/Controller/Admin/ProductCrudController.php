@@ -7,10 +7,12 @@ use App\Entity\Product;
 use App\Form\CatalogType;
 use App\Form\ImageFileType;
 use App\Form\TagType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
@@ -25,6 +27,20 @@ class ProductCrudController extends AbstractCrudController
         return Product::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->overrideTemplate('crud/index', 'admin/product/index.html.twig')
+            ->overrideTemplate('crud/new', 'admin/product/new.html.twig')
+            ->overrideTemplate('crud/edit', 'admin/product/edit.html.twig')
+//            ->setFormThemes(['@EasyAdmin/crud/form_theme.html.twig','admin/product/form.html.twig'])
+            ->setFormThemes(['@EasyAdmin/crud/form_theme.html.twig','admin/product/form_theme.html.twig'])
+//            ->overrideTemplates([
+//                'crud/field/collection' => 'admin/product/collection.html.twig'
+//            ])
+            ;
+    }
+
 
     public function configureFields(string $pageName): iterable
     {
@@ -37,8 +53,7 @@ class ProductCrudController extends AbstractCrudController
             TagField::new('tags', TagType::class)->onlyOnForms(),
             AssociationField::new('category'),
             CollectionField::new('images')
-                ->setEntryType(ImageFileType::class)
-                ->onlyOnForms(),
+                ->setEntryType(ImageFileType::class)->onlyOnForms(),
             CollectionField::new('catalogs')
                 ->setEntryType(CatalogType::class)
                 ->onlyOnForms(),

@@ -145,15 +145,12 @@
                         Help & FAQs
                     </a>
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        My Account
-                    </a>
                     {% if app.user %}
-                        <a href="{{ path('account') }}" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ path('account') }}" class="flex-c-m p-lr-10 trans-04">
                             My Account
                         </a>
                     {% else %}
-                        <a href="{{ path('register') }}" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ path('register') }}" class="flex-c-m p-lr-10 trans-04">
                             Register
                         </a>
                     {% endif %}
@@ -162,9 +159,18 @@
                         EN
                     </a>
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        <i class="zmdi zmdi-logout"></i>
-                    </a>
+                    {% if app.user %}
+
+                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
+                            {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
+                            <i class="fa fa-sign-out"></i>
+                        </a>
+                    {% else %}
+                        <a href="{{ path('login') }}" class="flex-c-m p-lr-10 p-t-5 trans-04">
+
+                            <i class="fa fa-sign-in"></i>
+                        </a>
+                    {% endif %}
 
                 </div>
             </li>

@@ -103,7 +103,6 @@ class Mailer{
         $message = (new \Swift_Message('Please confirm your account'))
             ->setFrom('noreply@agence.fr')
             ->setTo($order->getCustomer()->getEmail())
-            ->setReplyTo($order->getCustomer()->getEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);

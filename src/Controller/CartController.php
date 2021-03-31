@@ -42,7 +42,8 @@ class CartController extends AbstractController
         $cart = $this->cart->getFull($this->cart->get());
         if (empty($cart))
             return $this->render('cart/empty-cart.html.twig', [
-                'cart' => $cart
+                'cart' => $cart,
+                'wishlist' => $this->wishlist->getFull(),
             ]);
         else
             return $this->render('cart/index.html.twig', [

@@ -119,7 +119,7 @@ export default class Global {
 
     reinitializeModal() {
         $('.js-show-modal1').on('click',function(e){
-            debugger
+
             e.preventDefault();
             $('#name').text($(this).data('name'));
             $('#price').text($(this).data('price'));

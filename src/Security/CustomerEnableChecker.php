@@ -20,7 +20,7 @@ class CustomerEnableChecker implements UserCheckerInterface
 
 
         if(!$user->isEnabled()){
-            Throw new DisabledException('Your Account is disabled');
+            Throw new DisabledException('Confirm PLZ Your Email!!!');
         }
     }
 

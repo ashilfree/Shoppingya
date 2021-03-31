@@ -104,16 +104,21 @@ class Order
      */
     private $shippingPhone;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $total;
+
 
 	public function __construct()
-	{
-		$this->orderDetails = new ArrayCollection();
-	}
+      	{
+      		$this->orderDetails = new ArrayCollection();
+      	}
 
 	public function getId(): ?int
-	{
-		return $this->id;
-	}
+      	{
+      		return $this->id;
+      	}
 
     public function setId(int $id): self
     {
@@ -122,121 +127,121 @@ class Order
     }
 
 	public function getCustomer(): ?Customer
-	{
-		return $this->customer;
-	}
+      	{
+      		return $this->customer;
+      	}
 
 	public function setCustomer(?Customer $customer): self
-	{
-		$this->customer = $customer;
-
-		return $this;
-	}
+      	{
+      		$this->customer = $customer;
+      
+      		return $this;
+      	}
 
 	public function getCreatedAt(): ?\DateTimeInterface
-	{
-		return $this->createdAt;
-	}
+      	{
+      		return $this->createdAt;
+      	}
 
 	public function setCreatedAt(\DateTimeInterface $createdAt): self
-	{
-		$this->createdAt = $createdAt;
-
-		return $this;
-	}
+      	{
+      		$this->createdAt = $createdAt;
+      
+      		return $this;
+      	}
 
 	public function getDeliveryPrice(): ?float
-	{
-		return $this->deliveryPrice;
-	}
+      	{
+      		return $this->deliveryPrice;
+      	}
 
 	public function setDeliveryPrice(float $deliveryPrice): self
-	{
-		$this->deliveryPrice = $deliveryPrice;
-
-		return $this;
-	}
+      	{
+      		$this->deliveryPrice = $deliveryPrice;
+      
+      		return $this;
+      	}
 
 	/**
 	 * @return Collection|OrderDetails[]
 	 */
 	public function getOrderDetails(): Collection
-	{
-		return $this->orderDetails;
-	}
+      	{
+      		return $this->orderDetails;
+      	}
 
 	public function addOrderDetail(OrderDetails $orderDetail): self
-	{
-		if (!$this->orderDetails->contains($orderDetail)) {
-			$this->orderDetails[] = $orderDetail;
-			$orderDetail->setMyOrder($this);
-		}
-
-		return $this;
-	}
+      	{
+      		if (!$this->orderDetails->contains($orderDetail)) {
+      			$this->orderDetails[] = $orderDetail;
+      			$orderDetail->setMyOrder($this);
+      		}
+      
+      		return $this;
+      	}
 
 	public function removeOrderDetail(OrderDetails $orderDetail): self
-	{
-		if ($this->orderDetails->removeElement($orderDetail)) {
-			// set the owning side to null (unless already changed)
-			if ($orderDetail->getMyOrder() === $this) {
-				$orderDetail->setMyOrder(null);
-			}
-		}
-
-		return $this;
-	}
+      	{
+      		if ($this->orderDetails->removeElement($orderDetail)) {
+      			// set the owning side to null (unless already changed)
+      			if ($orderDetail->getMyOrder() === $this) {
+      				$orderDetail->setMyOrder(null);
+      			}
+      		}
+      
+      		return $this;
+      	}
 
 	/**
 	 * @return mixed
 	 */
 	public function getMarking()
-	{
-		return $this->marking;
-	}
+      	{
+      		return $this->marking;
+      	}
 
 	/**
 	 * @param mixed $marking
 	 * @return Order
 	 */
 	public function setMarking($marking): self
-	{
-		$this->marking = $marking;
-		return $this;
-	}
+      	{
+      		$this->marking = $marking;
+      		return $this;
+      	}
 
 	public function getTotal()
-	{
-		$total = null;
-		foreach ($this->orderDetails->getValues() as $product) {
-			$total += $product->getPrice() * $product->getQuantity();
-		}
-		return $total;
-	}
+      	{
+      		$total = null;
+      		foreach ($this->orderDetails->getValues() as $product) {
+      			$total += $product->getPrice() * $product->getQuantity();
+      		}
+      		return $total;
+      	}
 
 	public function getStripeSessionId(): ?string
-	{
-		return $this->stripeSessionId;
-	}
+      	{
+      		return $this->stripeSessionId;
+      	}
 
 	public function setStripeSessionId(?string $stripeSessionId): self
-	{
-		$this->stripeSessionId = $stripeSessionId;
-
-		return $this;
-	}
+      	{
+      		$this->stripeSessionId = $stripeSessionId;
+      
+      		return $this;
+      	}
 
 	public function getReference(): ?string
-	{
-		return $this->reference;
-	}
+      	{
+      		return $this->reference;
+      	}
 
 	public function setReference(string $reference): self
-	{
-		$this->reference = $reference;
-
-		return $this;
-	}
+      	{
+      		$this->reference = $reference;
+      
+      		return $this;
+      	}
 
     public function getShippingFirstName(): ?string
     {
@@ -374,11 +379,8 @@ class Order
             case 'checkout_canceled':
                 $status = 'canceled';
                 break;
-            case 'in_preparation':
-                $status = 'processing';
-                break;
             case 'in_delivering':
-                $status = 'shipped';
+                $status = 'in_delivering';
                 break;
             case 'delivered':
                 $status = 'delivered';
@@ -388,6 +390,13 @@ class Order
 
         }
         return $status;
+    }
+
+    public function setTotal(float $total): self
+    {
+        $this->total = $total;
+
+        return $this;
     }
 
 

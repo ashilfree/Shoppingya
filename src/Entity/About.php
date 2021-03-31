@@ -26,9 +26,19 @@ class About
     private $title;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $titleAr;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $description1;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $descriptionAr1;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -38,7 +48,18 @@ class About
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    private $descriptionAr2;
+
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $description3;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $descriptionAr3;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -46,9 +67,19 @@ class About
     private $word;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $wordAr;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $word_honor;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $word_honor_ar;
 
     /**
      * @var string|null
@@ -140,6 +171,78 @@ class About
     public function setWordHonor(?string $word_honor): self
     {
         $this->word_honor = $word_honor;
+
+        return $this;
+    }
+
+    public function getTitleAr(): ?string
+    {
+        return $this->titleAr;
+    }
+
+    public function setTitleAr(string $titleAr): self
+    {
+        $this->titleAr = $titleAr;
+
+        return $this;
+    }
+
+    public function getDescriptionAr1(): ?string
+    {
+        return $this->descriptionAr1;
+    }
+
+    public function setDescriptionAr1(?string $descriptionAr1): self
+    {
+        $this->descriptionAr1 = $descriptionAr1;
+
+        return $this;
+    }
+
+    public function getDescriptionAr2(): ?string
+    {
+        return $this->descriptionAr2;
+    }
+
+    public function setDescriptionAr2(?string $descriptionAr2): self
+    {
+        $this->descriptionAr2 = $descriptionAr2;
+
+        return $this;
+    }
+
+    public function getDescriptionAr3(): ?string
+    {
+        return $this->descriptionAr3;
+    }
+
+    public function setDescriptionAr3(?string $descriptionAr3): self
+    {
+        $this->descriptionAr3 = $descriptionAr3;
+
+        return $this;
+    }
+
+    public function getWordAr(): ?string
+    {
+        return $this->wordAr;
+    }
+
+    public function setWordAr(?string $wordAr): self
+    {
+        $this->wordAr = $wordAr;
+
+        return $this;
+    }
+
+    public function getWordHonorAr(): ?string
+    {
+        return $this->word_honor_ar;
+    }
+
+    public function setWordHonorAr(?string $word_honor_ar): self
+    {
+        $this->word_honor_ar = $word_honor_ar;
 
         return $this;
     }

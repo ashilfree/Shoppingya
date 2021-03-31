@@ -47,3 +47,7 @@ services:
             - '%maintenanceFilePath%'
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    App\Listener\ListenerForAnyRequest:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

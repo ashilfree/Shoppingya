@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\Mailer;
+use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Form\CustomerRegisterType;
 use App\Security\CustomerConfirmationService;
@@ -30,16 +31,22 @@ class MainSecurityController extends AbstractController
      * @var Cart
      */
     private $cart;
+    /**
+     * @var WishList
+     */
+    private $wishlist;
 
     /**
      * MainSecurityController constructor.
      * @param AuthenticationUtils $authenticationUtils
      * @param Cart $cart
+     * @param WishList $wishlist
      * @param Mailer $mailer
      */
     public function __construct(
         AuthenticationUtils $authenticationUtils,
         Cart $cart,
+        WishList $wishlist,
         Mailer $mailer
     )
     {
@@ -48,6 +55,7 @@ class MainSecurityController extends AbstractController
         $this->mailer = $mailer;
 
         $this->cart = $cart;
+        $this->wishlist = $wishlist;
     }
 
 
@@ -65,7 +73,8 @@ class MainSecurityController extends AbstractController
             'page' => 'login',
             'last_username' => $lastUsername,
             'error' => $error,
-            'cart' => $this->cart->getFull($this->cart->get())
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull()
         ]);
     }
 
@@ -92,17 +101,21 @@ class MainSecurityController extends AbstractController
             $entityManager->flush();
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
-            $this->addFlash('success', 'Your account has been registered.');
+//            $this->addFlash('success', 'Your account has been registered.');
             //send mail to customer
             $this->mailer->sendConfirmationEmail($customer);
             //return $this->redirectToRoute('login');
-            return $this->redirectToRoute('register');
+            return $this->render('authentication/confirmation.html.twig', [
+                'cart' => $this->cart->getFull($this->cart->get()),
+                'wishlist' => $this->wishlist->getFull(),
+            ]);
         }
 
         return $this->render('authentication/register.html.twig', [
             'page'=> 'register',
             'form'=>$form->createView(),
-            'cart' => $this->cart->getFull($this->cart->get())
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
         ]);
     }
 
@@ -128,7 +141,9 @@ class MainSecurityController extends AbstractController
     public function confirmation(): Response
     {
         return $this->render('authentication/confirmation.html.twig', [
-            'page' => 'confirmation'
+            'page' => 'confirmation',
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
         ]);
     }
 }

@@ -1,0 +1,233 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% extends ea.templatePath('layout') %}
+{% form_theme new_form with ea.crud.formThemes only %}
+
+{% trans_default_domain ea.i18n.translationDomain %}
+
+{% block body_id 'ea-new-' ~ entity.name ~ '-' ~ entity.primaryKeyValue %}
+{% block body_class 'ea-new ea-new-' ~ entity.name %}
+
+{% block configured_head_contents %}
+    {{ parent() }}
+    {% for htmlContent in new_form.vars.ea_crud_form.assets.headContents %}
+        {{ htmlContent|raw }}
+    {% endfor %}
+{% endblock %}
+
+{% block configured_stylesheets %}
+    {{ parent() }}
+    {% for css_asset in new_form.vars.ea_crud_form.assets.cssFiles %}
+        <link rel="stylesheet" href="{{ asset(css_asset) }}">
+    {% endfor %}
+{% endblock %}
+
+{% block configured_javascripts %}
+    {{ parent() }}
+    {% for js_asset in new_form.vars.ea_crud_form.assets.jsFiles %}
+        <script src="{{ asset(js_asset) }}"></script>
+    {% endfor %}
+{% endblock %}
+    {% block head_javascript %}
+        <!-- BEGIN PAGE LEVEL STYLES -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/assets/css/scrollspyNav.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/plugins/select2/select2.min.css') }}">
+        <link href="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- END PAGE LEVEL STYLES -->
+    {% endblock head_javascript %}
+{% block content_title %}
+    {%- apply spaceless -%}
+        {% set default_title = ea.crud.defaultPageTitle|trans(ea.i18n.translationParameters, 'EasyAdminBundle') %}
+        {{ ea.crud.customPageTitle is null ? default_title|raw : ea.crud.customPageTitle|trans(ea.i18n.translationParameters)|raw }}
+    {%- endapply -%}
+{% endblock %}
+
+{% block page_actions %}
+    {% for action in entity.actions %}
+        {{ include(action.templatePath, { action: action }, with_context = false) }}
+    {% endfor %}
+{% endblock %}
+
+{% block main %}
+    {% block new_form %}
+<div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+        {{ form_start(new_form) }}
+        <div class="row mb-4">
+            <div class="col">
+                {{ form_widget(new_form.name, {'attr': {'class': 'form-control', 'placeholder':'Name'}}) }}
+            </div>
+            <div class="col">
+                {{ form_widget(new_form.slug, {'attr': {'class': 'form-control', 'placeholder':'Slug'}}) }}
+            </div>
+        </div>
+    <div class="row mb-4">
+        <div class="col">
+            {{ form_widget(new_form.tags, {'attr': {'placeholder':'Tags'}}) }}
+        </div>
+        <div class="col">
+            {{ form_widget(new_form.price, {'attr': {'placeholder':'Price'}}) }}
+        </div>
+        <div class="col">
+            {{ form_widget(new_form.category, {'attr': {'class': 'basic'}}) }}
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col">
+            {{ form_widget(new_form.weight, {'attr': {'class': 'form-control', 'placeholder':'Weight'}}) }}
+        </div>
+        <div class="col">
+            {{ form_widget(new_form.materials, {'attr': {'class': 'form-control', 'placeholder':'Materials'}}) }}
+        </div>
+    </div>
+    <div class="statbox widget box box-shadow m-b-5">
+        <div class="widget-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                    <h4> Description </h4>
+                </div>
+            </div>
+        </div>
+        <div class="widget-content widget-content-area">
+            {{ form_widget(new_form.description) }}
+        </div>
+    </div>
+    <div class="statbox widget box box-shadow">
+        <div class="widget-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                    <h4> Long Description </h4>
+                </div>
+            </div>
+        </div>
+        <div class="widget-content widget-content-area">
+        {{ form_widget(new_form.longDescription) }}
+        </div>
+    </div>
+    <div class="statbox widget box box-shadow">
+
+    {{ form_row(new_form.images) }}
+    </div>
+        {{ form_end(new_form) }}
+</div>
+{#        {{ form(new_form) }}#}
+    {% endblock new_form %}
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            {#$('.ea-new-form').areYouSure({ 'message': '{{ 'form.are_you_sure'|trans({}, 'EasyAdminBundle')|e('js') }}' });#}
+
+            const entityForm = document.querySelector('form.ea-new-form');
+            const inputFieldsSelector = 'input,select,textarea';
+
+            // Adding visual feedback for invalid fields: any ".form-group" with invalid fields
+            // receives "has-error" class. The class is removed on click on the ".form-group"
+            // itself to support custom/complex fields.
+            entityForm.addEventListener('submit', function() {
+                entityForm.querySelectorAll(inputFieldsSelector).forEach(function (input) {
+                    if (!input.validity.valid) {
+                        const formGroup = input.closest('div.form-group');
+
+                        formGroup.classList.add('has-error');
+
+                        formGroup.addEventListener('click', function onFormGroupClick() {
+                            formGroup.classList.remove('has-error');
+                            formGroup.removeEventListener('click', onFormGroupClick);
+                        });
+                    }
+                });
+            });
+
+            // forms with tabs require some special treatment for errors. The problem
+            // is when the field with errors is included in a tab not currently visible.
+            // Browser shows this error "An invalid form control with name='...' is not focusable."
+            // So, the user clicks on Submit button, the form is not submitted and the error
+            // is not displayed. This JavaScript code ensures that each tab shows a badge with
+            // the number of errors in it.
+            entityForm.addEventListener('submit', function() {
+                const formTabPanes = entityForm.querySelectorAll('.tab-pane');
+                if (0 === formTabPanes.length) {
+                    return;
+                }
+
+                let firstNavTabItemWithError = null;
+
+                formTabPanes.forEach(function (tabPane) {
+                    let tabPaneNumErrors = 0;
+                    tabPane.querySelectorAll(inputFieldsSelector).forEach(function (input) {
+                        if (!input.validity.valid) {
+                            tabPaneNumErrors++;
+                        }
+                    });
+
+                    let navTabItem = entityForm.querySelector('.nav-item a[href="#' + tabPane.id + '"]');
+                    let existingErrorBadge = navTabItem.querySelector('span.badge.badge-danger');
+                    if (null !== existingErrorBadge) {
+                        navTabItem.removeChild(existingErrorBadge);
+                    }
+
+                    if (tabPaneNumErrors > 0) {
+                        let newErrorBadge = document.createElement('span');
+                        newErrorBadge.classList.add('badge', 'badge-danger');
+                        newErrorBadge.title = 'form.tab.error_badge_title';
+                        newErrorBadge.textContent = tabPaneNumErrors;
+
+                        navTabItem.appendChild(newErrorBadge);
+
+                        if (null === firstNavTabItemWithError) {
+                            firstNavTabItemWithError = navTabItem;
+                        }
+                    }
+                });
+
+                if (firstNavTabItemWithError) {
+                    firstNavTabItemWithError.click();
+                }
+            });
+
+            // prevent multiple form submissions to avoid creating duplicated entities
+            entityForm.addEventListener('submit', function() {
+                // this timeout is needed to include the disabled button into the submitted form
+                setTimeout(function() {
+                    const submitButtons = entityForm.querySelectorAll('[type="submit"]');
+                    submitButtons.forEach(function(button) {
+                        button.setAttribute('disabled', 'disabled');
+                    });
+                }, 1);
+            }, false);
+        });
+    </script>
+
+    <style>
+        .bootstrap-tagsinput .tag {
+            font-weight: bold;
+            padding: 5px;
+            background-color: blue;
+        }
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+        .bootstrap-tagsinput input {
+            width: 100%;
+            padding: .4rem;
+        }
+        trix-editor{
+            color: black;
+        }
+        .btn.btn-link.field-collection-delete-button{
+            background-color: red;
+        }
+        .field-collection-item.field-collection-item-complex{
+                padding: 20px;
+        }
+    </style>
+
+    {{ include('@EasyAdmin/crud/includes/_select2_widget.html.twig') }}
+    <script src="{{ asset('assets/admin/assets/js/scrollspyNav.js') }}"></script>
+    <script src="{{ asset('assets/admin/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/admin/plugins/select2/custom-select2.js') }}"></script>
+    <script src="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
+{% endblock %}

@@ -129,17 +129,20 @@ class OrderController extends AbstractController
                 $order->setDeliveryPrice($this->cart->getDelivery2Order());
                 $transaction->applyWorkFlow($order, 'create_order');
                 $this->entityManager->persist($order);
-
+                $total = 0.0;
                 foreach ($this->cart->getFull($this->cart->getCart2Order()) as $product) {
+                    $subTotal = $product['quantity'] * $product['catalog']->getProduct()->getPrice();
                     $orderDetail = new OrderDetails();
                     $orderDetail->setMyOrder($order);
                     $orderDetail->setProduct($product['catalog']->getProduct()->getName());
                     $orderDetail->setSize($product['catalog']->getSize());
                     $orderDetail->setQuantity($product['quantity']);
                     $orderDetail->setPrice($product['catalog']->getProduct()->getPrice());
-                    $orderDetail->setTotal($product['quantity'] * $product['catalog']->getProduct()->getPrice());
+                    $orderDetail->setTotal($subTotal);
                     $this->entityManager->persist($orderDetail);
+                    $total += $subTotal;
                 }
+                $order->setTotal($total);
             }
 
             $this->entityManager->flush();

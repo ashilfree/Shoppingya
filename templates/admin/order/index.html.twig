@@ -1,0 +1,395 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entities \EasyCorp\Bundle\EasyAdminBundle\Collection\EntityDtoCollection #}
+{# @var paginator \EasyCorp\Bundle\EasyAdminBundle\Orm\EntityPaginator #}
+{% extends ea.templatePath('layout') %}
+{% trans_default_domain ea.i18n.translationDomain %}
+
+{# TODO: change this when reenabling batch actions #}
+{% set has_batch_actions = false and batch_form is defined and ea.crud.actions.batchActions|length > 0 %}
+
+{% block body_id entities|length > 0 ? 'ea-index-' ~ entities|first.name : '' %}
+{% block body_class 'index' ~ (entities|length > 0 ? ' index-' ~ entities|first.name : '') %}
+
+{% block content_title %}
+    {%- apply spaceless -%}
+        {% set default_title = ea.crud.defaultPageTitle|trans(ea.i18n.translationParameters, 'EasyAdminBundle') %}
+        {{ ea.crud.customPageTitle is null ? default_title|raw : ea.crud.customPageTitle|trans(ea.i18n.translationParameters)|raw }}
+    {%- endapply -%}
+{% endblock %}
+    {% block head_javascript %}
+        <!-- BEGIN PAGE LEVEL STYLES -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/plugins/table/datatable/datatables.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/assets/css/forms/theme-checkbox-radio.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/plugins/table/datatable/dt-global_style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/plugins/table/datatable/custom_dt_custom.css') }}">
+        <!-- END PAGE LEVEL STYLES -->
+    {% endblock head_javascript %}
+{% block page_actions %}
+    {% block global_actions %}
+        {% for action in global_actions %}
+            {{ include(action.templatePath, { action: action }, with_context = false) }}
+        {% endfor %}
+    {% endblock global_actions %}
+{% endblock page_actions %}
+
+{% block content_header %}
+    {{ parent() }}
+
+    {# TODO:
+    {% block batch_actions %}
+        {% for batchAction in ea.crud.actions.batchActions %}
+            {{ include(batchAction.templatePath, { action: batchAction }, with_context = false) }}
+        {% endfor %}
+
+        {{ include('@EasyAdmin/crud/includes/_batch_action_modal.html.twig', {}, with_context = false) }}
+    {% endblock %}
+    #}
+{% endblock content_header %}
+
+{% block main %}
+    {# sort can be multiple; let's consider the sorting field the first one #}
+    {% set sort_field_name = app.request.get('sort')|keys|first %}
+    {% set sort_order = app.request.get('sort')|first %}
+    {% set some_results_are_hidden = false %}
+    {% set has_footer = entities|length != 0 %}
+    {% set has_search = ea.crud.isSearchEnabled %}
+    {% set has_filters = filters|length > 0 %}
+    {% set has_datagrid_tools = has_search or has_filters %}
+    {% set title = ea.crud.entityFqcn %}
+<div class="row layout-top-spacing">
+    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+    <div class="widget-content widget-content-area">
+        <div class="table-responsive mb-4">
+
+            <table id="style-2" class="table style-2  table-hover" style="width:100%">
+                    <thead>
+                    {% block table_head %}
+                        <tr>
+                            {% if has_batch_actions %}
+                                <th></th>
+                            {% endif %}
+
+                            {% for field in entities|first.fields ?? [] %}
+                                <th>
+                                    {{ field.label|raw }}
+                                </th>
+                            {% endfor %}
+
+                                <th>
+                                    Action
+                                </th>
+
+                        </tr>
+                    {% endblock table_head %}
+                    </thead>
+                    <tbody>
+                    {% block table_body %}
+                        {% for entity in entities %}
+                            {% if not entity.isAccessible %}
+                                {% set some_results_are_hidden = true %}
+                            {% else %}
+
+                                <tr data-id="{{ entity.primaryKeyValueAsString }}">
+                                    {% if has_batch_actions %}
+                                        <td><input type="checkbox" class="form-batch-checkbox"
+                                                   value="{{ entity.primaryKeyValue }}"></td>
+                                    {% endif %}
+
+                                    {% for field in entity.fields %}
+
+                                        {% if field.label == 'Marking' %}
+
+                                            <td class="{{ field.property == sort_field_name ? 'sorted' }} text-left {{ field.cssClass }}"
+                                                dir="{{ ea.i18n.textDirection }}">
+                                                <span class="shadow-none badge {% if entity.instance.status == 'canceled' %} badge-danger {% elseif entity.instance.status == 'delivered' %} badge-primary {% else %} badge-primary {% endif %}">{{ entity.instance.status }}</span>
+                                            </td>
+                                        {% else %}
+                                            <td class="{{ field.property == sort_field_name ? 'sorted' }} text-left {{ field.cssClass }}"
+                                                dir="{{ ea.i18n.textDirection }}">
+                                                {{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}
+                                            </td>
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    {% block entity_actions %}
+                                        {% if entity.actions is not empty %}
+                                            <td class="actions">
+                                                {% if not ea.crud.showEntityActionsAsDropdown %}
+                                                    {% for action in entity.actions %}
+                                                        {{ include(action.templatePath, { action: action, entity: entity, isIncludedInDropdown: ea.crud.showEntityActionsAsDropdown }, with_context = false) }}
+                                                    {% endfor %}
+                                                {% else %}
+{#                                                    <div class="dropdown dropdown-actions">#}
+{#                                                        {% set value = entity.instance.marking %}#}
+{#                                                        {% if value == 'in_payment' or value == 'waiting' %}#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>#}
+{#                                                        </a>#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        <a class="dropdown-toggle btn btn-secondary btn-sm bs-tooltip" href="{{ entity.primaryKeyValue }}"#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false" title="Cancel">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        {% elseif value == 'checkout_canceled' or value == 'canceled' or value == 'delivered' %}#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href="javascript:void(0);"#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>#}
+{#                                                        </a>#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href="javascript:void(0);"#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href="javascript:void(0);"#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        {% elseif value == 'paid' %}#}
+{#                                                        <a class="dropdown-toggle btn btn-secondary btn-sm bs-tooltip" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>#}
+{#                                                        </a>#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        {% elseif value == 'in_delivering' %}#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>#}
+{#                                                        </a>#}
+{#                                                        <a class="dropdown-toggle btn btn-secondary btn-sm bs-tooltip" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false" title="Delivered">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        <a disabled="disabled" class="dropdown-toggle btn btn-secondary btn-sm" href=""#}
+{#                                                           role="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                                                           aria-expanded="false">#}
+{#                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>#}
+{#                                                        </a>#}
+{#                                                        {% endif %}#}
+{#                                                    </div>#}
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    {% endblock entity_actions %}
+                                </tr>
+
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                                <td class="no-results" colspan="100">
+                                    {{ 'datagrid.no_results'|trans(ea.i18n.translationParameters, 'EasyAdminBundle') }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        {% if some_results_are_hidden %}
+                            <tr class="datagrid-row-empty">
+                                <td class="text-center" colspan="{{ entities|first.fields|length + 1 }}">
+                            <span class="datagrid-row-empty-message"><i
+                                        class="fa fa-lock mr-1"></i> {{ 'datagrid.hidden_results'|trans({}, 'EasyAdminBundle') }}</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endblock table_body %}
+                    </tbody>
+                </table>
+
+        </div>
+    </div>
+    </div></div>
+    {% block delete_form %}
+        {{ include('@EasyAdmin/crud/includes/_delete_form.html.twig', with_context = false) }}
+    {% endblock delete_form %}
+
+    {% if filters|length > 0 %}
+        {{ include('@EasyAdmin/crud/includes/_filters_modal.html.twig') }}
+    {% endif %}
+{% endblock main %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="{{ asset('assets/admin/plugins/table/datatable/datatables.js') }}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            const customSwitches = document.querySelectorAll('td.field-boolean .custom-control.custom-switch input[type="checkbox"]');
+            for (i = 0; i < customSwitches.length; i++) {
+                customSwitches[i].addEventListener('change', function () {
+                    const customSwitch = this;
+                    const newValue = this.checked;
+                    const oldValue = !newValue;
+                    const fieldName = this.closest('.custom-switch').dataset.fieldname;
+
+                    const toggleUrl = "{{ ea_url().setAction('edit')|raw }}"
+                        + "&entityId=" + this.closest('tr').dataset.id
+                        + "&fieldName=" + fieldName
+                        + "&newValue=" + newValue.toString();
+
+                    let toggleRequest = $.ajax({type: "GET", url: toggleUrl, data: {}});
+
+                    toggleRequest.done(function (result) {
+                    });
+
+                    toggleRequest.fail(function () {
+                        // in case of error, restore the original value and disable the toggle
+                        customSwitch.checked = oldValue;
+                        customSwitch.disabled = true;
+                        customSwitch.closest('.custom-switch').classList.add('disabled');
+                    });
+                });
+            }
+
+            $('.action-delete').on('click', function (e) {
+                e.preventDefault();
+                const id = $(this).parents('tr').first().data('id');
+
+                $('#modal-delete').modal({backdrop: true, keyboard: true})
+                    .off('click', '#modal-delete-button')
+                    .on('click', '#modal-delete-button', function () {
+                        let deleteForm = $('#delete-form');
+                        deleteForm.attr('action', deleteForm.attr('action').replace('__entityId_placeholder__', id));
+                        deleteForm.trigger('submit');
+                    });
+            });
+
+            {% if filters|length > 0 %}
+            // HTML5 specifies that a <script> tag inserted with innerHTML should not execute
+            // https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML#Security_considerations
+            // That's why we can't use just 'innerHTML'. See https://stackoverflow.com/a/47614491/2804294
+            var setInnerHTML = function (element, htmlContent) {
+                element.innerHTML = htmlContent;
+                Array.from(element.querySelectorAll('script')).forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes)
+                        .forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            };
+
+            document.querySelector('.action-filters-button').addEventListener('click', function (event) {
+                let filterButton = event.currentTarget;
+                let filterModal = document.querySelector(filterButton.dataset.modal);
+                let filterModalBody = filterModal.querySelector('.modal-body');
+
+                $(filterModal).modal({backdrop: true, keyboard: true});
+                filterModalBody.innerHTML = '<div class="fa-3x px-3 py-3 text-muted text-center"><i class="fas fa-circle-notch fa-spin"></i></div>';
+
+                $.get(filterButton.getAttribute('href'), function (response) {
+                    setInnerHTML(filterModalBody, response);
+                });
+
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            {% endif %}
+
+
+            {% if has_batch_actions %}
+            const titleContent = $('.content-header-title > .title').html();
+            $(document).on('click', '.deselect-batch-button', function () {
+                $(this).closest('.content').find(':checkbox.form-batch-checkbox-all').prop('checked', false).trigger('change');
+            });
+            $(document).on('change', '.form-batch-checkbox-all', function () {
+                $(this).closest('.content').find(':checkbox.form-batch-checkbox').prop('checked', $(this).prop('checked')).trigger('change');
+            });
+            $(document).on('change', '.form-batch-checkbox', function () {
+                const $content = $(this).closest('.content');
+                let $input = $content.find(':hidden#batch_form_ids');
+                let ids = $input.val() ? $input.val().split(',') : [];
+                const id = $(this).val();
+
+                if ($(this).prop('checked')) {
+                    if (-1 === ids.indexOf(id)) {
+                        ids.push(id);
+                    }
+                } else {
+                    ids = ids.filter(function (value) {
+                        return value !== id
+                    });
+                    $content.find(':checkbox.form-batch-checkbox-all').prop('checked', false);
+                }
+
+                if (0 === ids.length) {
+                    $content.find('.global-actions').show();
+                    $content.find('.batch-actions').hide();
+                    $content.find('table').removeClass('table-batch');
+                } else {
+                    $content.find('.batch-actions').show();
+                    $content.find('.global-actions').hide();
+                    $content.find('table').addClass('table-batch');
+                }
+
+                $input.val(ids.join(','));
+                $content.find('.content-header-title > .title').html(0 === ids.length ? titleContent : '');
+            });
+
+            $('button[name="batch_form[name]"].ask-confirm-batch-button').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                let $button = $(this);
+
+                $('#modal-batch-action').modal({backdrop: true, keyboard: true})
+                    .off('click', '#modal-batch-action-button')
+                    .on('click', '#modal-batch-action-button', function () {
+                        $button.unbind('click');
+                        $button.trigger('click');
+                    });
+            });
+            {% endif %}
+        });
+    </script>
+    <script type="text/javascript">
+        c2 = $('#style-2').DataTable({
+            headerCallback:function(e, a, t, n, s) {
+                e.getElementsByTagName("th")[0].innerHTML='<label class="new-control new-checkbox checkbox-outline-primary m-auto">\n<input type="checkbox" class="new-control-input chk-parent select-customers-info" id="customer-all-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>'
+            },
+            columnDefs:[ {
+                targets:0, width:"30px", className:"", orderable:!1, render:function(e, a, t, n) {
+                    return'<label class="new-control new-checkbox checkbox-outline-primary  m-auto">\n<input type="checkbox" class="new-control-input child-chk select-customers-info" id="customer-all-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>'
+                }
+            }],
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+                "sLengthMenu": "Results :  _MENU_",
+            },
+            "lengthMenu": [5, 10, 20, 50],
+            "pageLength": 5
+        });
+
+        multiCheck(c2);
+
+    </script>
+    {% if app.request.get('query') is not empty %}
+        <script type="text/javascript">
+            const search_query = "{{ ea.search.query|default('')|e('js') }}";
+            // the original query is prepended to allow matching exact phrases in addition to single words
+            $('#main').find('table tbody td:not(.actions)').highlight($.merge([search_query], search_query.split(' ')));
+        </script>
+    {% endif %}
+{% endblock %}

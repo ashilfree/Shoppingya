@@ -81,7 +81,6 @@ $('.js-addwish-detail').each(function () {
 
     $(this).on('click', function () {
         swal(nameProduct, "is added to wishlist !", "success");
-        debugger
         $(this).addClass('js-addedwish-detail').addClass('disabled');
         $('#product-'+$(this).attr('id') + ' .js-addwish-b2').addClass('js-addedwish-b2').addClass('disabled');
         $(this).off('click');

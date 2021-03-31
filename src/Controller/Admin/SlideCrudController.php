@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Slide;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -17,7 +18,16 @@ class SlideCrudController extends AbstractCrudController
         return Slide::class;
     }
 
-
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+//            ->overrideTemplate('crud/index', 'admin/slide/index.html.twig')
+            ->overrideTemplate('crud/new', 'admin/slide/new.html.twig')
+            ->overrideTemplate('crud/edit', 'admin/slide/edit.html.twig')
+//            ->overrideTemplate('crud/field/image', 'admin/slide/field/image.html.twig')
+            ->setFormThemes(['@EasyAdmin/crud/form_theme.html.twig','admin/slide/form.html.twig'])
+            ;
+    }
     public function configureFields(string $pageName): iterable
     {
         return [

@@ -6,10 +6,12 @@ use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @UniqueEntity("email", message="This Email is already exist.")
  */
 class Customer implements UserInterface
 {
@@ -227,5 +229,10 @@ class Customer implements UserInterface
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->fullName;
     }
 }
