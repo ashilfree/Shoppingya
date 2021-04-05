@@ -1,0 +1,41 @@
+<div class="dis-none panel-filter w-full p-t-10">
+
+    {{ form_start(filter_form, {'attr': {'class': 'js-filter-form'}}) }}
+
+    <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+
+        <div class="filter-col1 p-r-15 p-b-10">
+            <div class="mtext-102 cl2 p-b-15">
+                العلامات
+            </div>
+            {{ form_row(filter_form.tags) }}
+        </div>
+
+{#        <div class="filter-col2 p-r-15 p-b-10 ">#}
+{#            <div class="mtext-102 cl2 p-b-15">#}
+{#                Price#}
+{#            </div>#}
+{#            <div class="row p-t-20 p-r-20 p-l-20">#}
+{#                <div class="col-md-6">{{ form_row(filter_form.min, {'attr': {'class': 'form-control'}}) }}</div>#}
+{#                <div class="col-md-6">{{ form_row(filter_form.max, {'attr': {'class': 'form-control'}}) }}</div>#}
+{#            </div>#}
+{#            <div id="slider" data-min="{{ min }}" data-max="{{ max }}"#}
+{#                 class="pmd-range-slider pmd-range-tooltip pmd-range-tooltip-bottom p-l-20 p-r-20"></div>#}
+{#        </div>#}
+        <div class="filter">
+            <label class="filter__label">
+                {{ form_widget(filter_form.min, {'attr': {'class': 'filter__input'}}) }}
+            </label>
+
+            <label class="filter__label">
+                {{ form_widget(filter_form.max, {'attr': {'class': 'filter__input'}}) }}
+            </label>
+
+            <div id="slider" class="filter__slider-price" data-min="{{ min }}" data-max="{{ max }}" data-step="5"></div>
+        </div>
+
+    </div>
+
+    {{ form_end(filter_form) }}
+
+</div>

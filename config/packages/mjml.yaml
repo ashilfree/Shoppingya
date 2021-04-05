@@ -1,0 +1,8 @@
+# see https://github.com/notFloran/mjml-bundle#binary
+mjml:
+    renderer: 'binary'
+    options:
+        binary: '%kernel.project_dir%/node_modules/.bin/mjml'
+        node: null # default: null
+        minify: true # default: false
+        validation_level: skip

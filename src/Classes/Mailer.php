@@ -33,7 +33,7 @@ class Mailer{
 
     public function sendConfirmationEmail(Customer $customer)
     {
-        $body = $this->twig->render('contact/confirmation.html.twig',
+        $body = $this->twig->render('authentication/email.mjml.twig',
             [
                 'customer' => $customer
             ]
@@ -86,8 +86,8 @@ class Mailer{
         );
         $message = (new \Swift_Message('Please confirm your account'))
             ->setFrom('noreply@agence.fr')
-            ->setTo($order->getCustomer()->getEmail())
-            ->setReplyTo($order->getCustomer()->getEmail())
+            ->setTo($order->getShippingEmail())
+            ->setReplyTo($order->getShippingEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);
@@ -102,7 +102,7 @@ class Mailer{
         );
         $message = (new \Swift_Message('Please confirm your account'))
             ->setFrom('noreply@agence.fr')
-            ->setTo($order->getCustomer()->getEmail())
+            ->setTo($order->getShippingEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);

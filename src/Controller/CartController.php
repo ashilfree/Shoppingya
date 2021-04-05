@@ -56,27 +56,63 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart/add/{id}", name="add.cart", defaults={"id"=0})
-     * @param $id
+     * @Route("/cart-ar", name="cart.ar")
      * @return Response
      */
-    public function add($id): Response
+    public function indexَAr(): Response
     {
-        $this->cart->add($id);
-        return $this->redirectToRoute('products');
+        $cart = $this->cart->getFull($this->cart->get());
+        if (empty($cart))
+            return $this->render('cart/empty-cartAr.html.twig', [
+                'cart' => $cart,
+                'wishlist' => $this->wishlist->getFull(),
+            ]);
+        else
+            return $this->render('cart/indexAr.html.twig', [
+                'cart' => $cart,
+                'wishlist' => $this->wishlist->getFull(),
+                'page' => 'cart.ar',
+                'delivery' => $this->cart->getDelivery(),
+                'governorates' => $this->governorateRepository->findAll()
+            ]);
     }
 
     /**
-     * @Route("/cart/update", name="update.cart")
+     * @Route("/cart/add/{id}", name="add.cart", defaults={"id"=0})
+     * @param $id
      * @param Request $request
      * @return Response
      */
-    public function update(Request $request): Response
+    public function add($id, Request $request): Response
     {
+        $this->cart->add($id);
+        if(substr($request->server->get("HTTP_REFERER"), -2) == "ar"){
+            return $this->redirectToRoute('products.ar');
+        }else{
+            return $this->redirectToRoute('products');
+        }
+    }
+
+    /**
+     * @Route("/cart/update/{locale}", name="update.cart", defaults={"locale"="en"})
+     * @param $locale
+     * @param Request $request
+     * @return Response
+     */
+    public function update($locale, Request $request): Response
+    {
+
         $this->cart->update($request->query->all());
-        return $this->redirectToRoute('cart', [
-            'delivery' => $this->cart->getDelivery()
-        ]);
+        if($locale == "ar"){
+            return $this->redirectToRoute('cart.ar', [
+                'delivery' => $this->cart->getDelivery()
+            ]);
+        }else{
+            return $this->redirectToRoute('cart', [
+                'delivery' => $this->cart->getDelivery()
+            ]);
+        }
+
     }
 
     /**

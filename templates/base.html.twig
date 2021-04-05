@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,8 +42,8 @@
                         </a>
                     {% endif %}
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        EN
+                    <a href="{{ path('home.ar') }}" class="flex-c-m trans-04 p-lr-25">
+                        AR
                     </a>
 
                     {% if app.user %}
@@ -155,8 +155,8 @@
                         </a>
                     {% endif %}
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        EN
+                    <a href="{{ path('home.ar') }}" class="flex-c-m p-lr-10 trans-04">
+                        AR
                     </a>
 
                     {% if app.user %}
@@ -242,14 +242,22 @@
                                     {{ cartItem.catalog.product.name|upper }}
                                 </a>
                                 <span class="header-cart-item-info">
-								{{ cartItem.quantity }} x {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} KWD
+                                    {% if cartItem.catalog.product.discountPrice != null %}
+								        {{ cartItem.quantity }} x {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') }} KWD
+                                    {% else %}
+                                        {{ cartItem.quantity }} x {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} KWD
+                                    {% endif %}
 							</span>
                                 <span class="header-cart-item-info">
 								Size: <b>{{ cartItem.catalog.size }}</b>
 							</span>
                             </div>
                         </li>
-                        {% set total = total + (cartItem.quantity * cartItem.catalog.product.price) %}
+                        {% if cartItem.catalog.product.discountPrice != null %}
+                            {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice) %}
+                        {% else %}
+                            {% set total = total + (cartItem.quantity * cartItem.catalog.product.price) %}
+                        {% endif %}
                     {% endfor %}
                 </ul>
             {% else %}

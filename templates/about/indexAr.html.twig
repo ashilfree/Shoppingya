@@ -1,0 +1,114 @@
+{% extends 'baseAr.html.twig' %}
+
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>معلومات عنا</h3>
+                <ul>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a href="track.html">معلومات عنا</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+
+    <!-- Content page -->
+    <section class="bg0 p-t-75 p-b-120">
+        <div class="container">
+            {% for about in abouts %}
+                {% if loop.index is not divisible by(2) %}
+                <div class="row {% if not loop.last %} p-b-148 {% endif %}">
+                    <div class="col-md-7 col-lg-8">
+                        <div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md text-right">
+                            <h3 class="mtext-111 cl2 p-b-16">
+                                {{ about.titleAr }}
+                            </h3>
+
+                            <p class="stext-113 cl6 p-b-26">
+                                {% autoescape "html" %}
+                               {{ about.descriptionAr1|raw }}
+                                {% endautoescape %}
+                            </p>
+                {% if about.descriptionAr2 is defined and about.descriptionAr2 is not null %}
+                            <p class="stext-113 cl6 p-b-26">
+                                {{ about.descriptionAr2|raw }}
+                            </p>
+                {% endif %}
+                            {% if about.descriptionAr3 is defined and about.descriptionAr3 is not null %}
+                            <p class="stext-113 cl6 p-b-26">
+                                {{ about.descriptionAr3|raw }}
+                            </p>
+                            {% endif %}
+                            {% if about.wordAr is defined and about.wordAr is not null %}
+                            <div class="bor16 p-l-29 p-b-9 m-t-22">
+                                <p class="stext-114 cl6 p-r-40 p-b-11">
+                                    {{ about.wordAr|raw }}
+                                </p>
+
+                                <span class="stext-111 cl8">
+                                    - {{ about.wordHonorAr }}
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-11 col-md-5 col-lg-4 m-lr-auto">
+                        <div class="how-bor1 ">
+                            <div class="hov-img0">
+                                <img src="{{ vich_uploader_asset(about, 'imageFile') }}" alt="IMG">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row {% if not loop.last %} p-b-148 {% endif %}">
+                    <div class="order-md-2 col-md-7 col-lg-8 p-b-30 text-right">
+                        <div class="p-t-7 p-l-85 p-l-15-lg p-l-0-md">
+                            <h3 class="mtext-111 cl2 p-b-16">
+                                {{ about.titleAr }}
+                            </h3>
+
+                            <p class="stext-113 cl6 p-b-26">
+                                {{ about.descriptionAr1|raw }}
+                            </p>
+
+                            <p class="stext-113 cl6 p-b-26">
+                                {{ about.descriptionAr2|raw }}
+                            </p>
+
+                            <p class="stext-113 cl6 p-b-26">
+                                {{ about.descriptionAr3|raw }}
+                            </p>
+
+                            <div class="bor20 p-r-29 p-b-9 m-t-22">
+                                <p class="stext-114 cl6 p-r-40 p-b-11">
+                                    {{ about.wordAr|raw }}
+                                </p>
+
+                                <span class="stext-111 cl8">
+                                    - {{ about.wordHonorAr }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-md-1 col-11 col-md-5 col-lg-4 m-lr-auto p-b-30">
+                        <div class="how-bor2">
+                            <div class="hov-img0">
+                                <img src="{{ vich_uploader_asset(about, 'imageFile') }}" alt="IMG">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}
+

@@ -69,4 +69,29 @@ class ContactController extends AbstractController
             'wishlist' => $this->wishlist->getFull(),
         ]);
     }
+
+    /**
+     * @Route("/contact-us-ar", name="contact.us.ar")
+     * @param Request $request
+     * @return Response
+     */
+    public function indexAr(Request $request): Response
+    {
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->mailer->sendContactEmail($contact);
+            $this->addFlash('success', 'تم ارسال رسالتك');
+            return $this->redirectToRoute('contact.us.ar');
+        }
+
+        return $this->render('contact/indexAr.html.twig', [
+            'form' => $form->createView(),
+            'page' => 'contact.us.ar',
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+        ]);
+    }
 }

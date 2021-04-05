@@ -1100,7 +1100,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   width: 38px;
   height: 20px;
   top: calc(50% - 10px);
-  right: 5px;
+
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -1109,6 +1109,14 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   align-items: center;
   justify-content: center;
   border-left: 1px solid #e6e6e6;
+}
+
+[dir='ltr'] .rs1-select2 .select2-container--default .select2-selection--single .select2-selection__arrow {
+  right: 5px;
+}
+
+[dir='rtl'] .rs1-select2 .select2-container--default .select2-selection--single .select2-selection__arrow {
+  left: 5px;
 }
 
 .rs1-select2 .select2-container--default .select2-selection--single .select2-selection__arrow b {
@@ -1433,8 +1441,15 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   position: absolute;
   z-index: 100;
   width: 83.333333%;
-  right: 0;
+
   top: calc(50% - 20px);
+}
+
+[dir='rtl'] .wrap-slick3-arrows{
+  left: 0 !important;
+}
+[dir='ltr'] .wrap-slick3-arrows{
+  right: 0 !important;
 }
 
 .arrow-slick3 {
@@ -2781,7 +2796,9 @@ a.cl0 {color: #fff;}
   border: 1px solid #d9d9d9;
   border-radius: 2px;
 }
-
+.bor20 {
+  border-right: 3px solid #e6e6e6;
+}
 
 /*==================================================================
  HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW 
@@ -3509,10 +3526,19 @@ a.cl0 {color: #fff;}
   top: 54%;
   transform: translateY(-50%);
 }
+/*[dir='ltr'] .solid_banner_inner ul li a:before {*/
+/* */
+/*}*/
+/*[dir='rtl'] .solid_banner_inner ul li a:after {*/
+/*  content: ">";*/
+/*}*/
 .solid_banner_inner ul li:last-child {
   margin-right: 0px;
 }
-.solid_banner_inner ul li:last-child a:before {
+[dir='ltr']  .solid_banner_inner ul li:last-child a:before {
+  display: none;
+}
+[dir='rtl'] .solid_banner_inner ul li:first-child a:before {
   display: none;
 }
 

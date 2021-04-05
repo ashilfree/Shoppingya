@@ -1,0 +1,346 @@
+{% extends 'baseAr.html.twig' %}
+
+{% block body %}
+
+    <!-- breadcrumb -->
+    <div class="container">
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+            <a href="{{ path('home.ar') }}" class="stext-109 cl8 hov-cl1 trans-04">
+                الصفحة الرئيسية
+                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+            </a>
+
+            <a href="{{ path('products.ar') }}" class="stext-109 cl8 hov-cl1 trans-04">
+                {{ product.category.nameAr }}
+                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+            </a>
+
+            <span class="stext-109 cl4">
+				{{ product.nameAr|upper }}
+			</span>
+        </div>
+    </div>
+
+
+    <!-- Product Detail -->
+    <section class="sec-product-detail bg0 p-t-65 p-b-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-7 p-b-30">
+                    <div class="p-l-25 p-r-30 p-lr-0-lg">
+                        <div class="wrap-slick3 flex-sb flex-w">
+                            <div class="wrap-slick3-dots"></div>
+                            <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
+                            <div class="slick3 gallery-lb">
+                                {% for image in product.images %}
+                                    <div class="item-slick3" data-thumb="{{ vich_uploader_asset(image, 'imageFile') }}">
+                                        <div class="wrap-pic-w pos-relative">
+                                            <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="IMG-PRODUCT">
+
+                                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                               href="{{ vich_uploader_asset(image, 'imageFile') }}">
+                                                <i class="fa fa-expand"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5 p-b-30 js-product-detail text-right">
+                    <div class="p-r-50 p-t-5 p-lr-0-lg">
+                        <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                            {{ product.nameAr|upper }}
+                        </h4>
+
+                        {% if product.discountPrice != null %}
+                            <div class="style-1">
+                                <del>
+                        <span class="stext-105 cl3">
+									{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
+								</span>
+                                </del>
+                                <ins>
+                        <span class="stext-105 cl3">
+									{{ (product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
+								</span>
+                                </ins>
+                            </div>
+                        {% else %}
+                            <ins>
+                        <span class="stext-105 cl3">
+									{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
+								</span>
+                            </ins>
+                        {% endif %}
+
+                        <p class="stext-102 cl3 p-t-23">
+                            {{ product.descriptionAr|raw }}
+                        </p>
+
+                        <!--  -->
+                        <div class="p-t-33">
+                            <div class="flex-w flex-r-m p-b-10">
+                                <div class="size-203 flex-c-m respon6">
+                                    الحجم
+                                </div>
+
+                                <div class="size-204 respon6-next">
+                                    <div class="rs1-select2 bor8 bg0">
+                                        <select class="js-select2" name="time">
+                                            <option value="-1">اختر أحد الخيارات أدناه</option>
+                                            {% for size in product.category.sizes %}
+                                                <option value="{{ loop.index }}">{{ size }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="dropDownSelect2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-w flex-r-m p-b-10">
+                                <div class="size-204 flex-w flex-m respon6-next">
+                                    {# <div class="wrap-num-product flex-w m-r-20 m-tb-10"> #}
+                                    {# <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"> #}
+                                    {# <i class="fs-16 zmdi zmdi-minus"></i> #}
+                                    {# </div> #}
+
+                                    {# <input class="mtext-104 cl3 txt-center num-product" type="number" #}
+                                    {# name="num-product" value="1"> #}
+
+                                    {# <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"> #}
+                                    {# <i class="fs-16 zmdi zmdi-plus"></i> #}
+                                    {# </div> #}
+                                    {# </div> #}
+
+                                    <a id="add-to-cart" href="{{ path('add.cart') }}"
+                                       class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                        أضف إلى السلة
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--  -->
+                        <div class="flex-w flex-m p-l-100 p-t-40 respon7">
+                            <div class="flex-m bor9 p-r-10 m-r-11">
+                                <a href="#"
+                                   class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
+                                   data-tooltip="Add to Wishlist">
+                                    <i class="zmdi zmdi-favorite"></i>
+                                </a>
+                            </div>
+
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
+                               data-tooltip="Facebook">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
+                               data-tooltip="Twitter">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
+                               data-tooltip="Google Plus">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bor10 m-t-50 p-t-43 p-b-40">
+                <!-- Tab01 -->
+                <div class="tab01">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item p-b-10">
+                            <a class="nav-link active" data-toggle="tab" href="#description" role="tab">الوصف</a>
+                        </li>
+
+                        <li class="nav-item p-b-10">
+                            <a class="nav-link" data-toggle="tab" href="#information" role="tab">معلومات إضافية</a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content p-t-43">
+                        <!-- - -->
+                        <div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <div class="how-pos2 p-lr-15-md">
+                                <p class="stext-102 cl6 text-right">
+                                    {{ product.longDescriptionAr|raw }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- - -->
+                        <div class="tab-pane fade" id="information" role="tabpanel">
+                            <div class="row">
+                                <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
+                                    <ul class="p-lr-28 p-lr-15-sm">
+                                        <li class="flex-w flex-t p-b-7">
+											<span class="stext-102 cl3 size-205">
+												الوزن
+											</span>
+
+                                            <span class="stext-102 cl6 size-206">
+												{{ product.weight }} كغ
+											</span>
+                                        </li>
+
+                                        <li class="flex-w flex-t p-b-7">
+											<span class="stext-102 cl3 size-205">
+												المواد
+											</span>
+
+                                            <span class="stext-102 cl6 size-206">
+												{{ product.materials }}
+											</span>
+                                        </li>
+
+                                        <li class="flex-w flex-t p-b-7">
+											<span class="stext-102 cl3 size-205">
+												الحجم
+											</span>
+
+                                            <span class="stext-102 cl6 size-206">
+												XL, L, M, S
+											</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
+			<span class="stext-107 cl6 p-lr-25">
+				المنتج: {{ product.nameAr }}
+			</span>
+
+            <span class="stext-107 cl6 p-lr-25">
+				النوع: {{ product.category.nameAr|upper }}
+			</span>
+        </div>
+    </section>
+
+
+    <!-- Related Products -->
+    <section class="sec-relate-product bg0 p-t-45 p-b-105">
+        <div class="container">
+            <div class="p-b-45">
+                <h3 class="ltext-106 cl5 txt-center">
+                    منتجات ذات صله
+                </h3>
+            </div>
+            {% set prod = product %}
+            <!-- Slide2 -->
+            <div class="wrap-slick2">
+                <div class="slick2">
+                    {% for product in products %}
+                        {% if product != prod %}
+                            <div id="product-{{ product.id }}" class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+                                <!-- Block2 -->
+                                <div class="block2">
+                                    <div class="block2-pic hov-img0">
+                                        <img src="{{ vich_uploader_asset(product.images.first, 'imageFile') | imagine_filter('medium') }}"
+                                             alt="{{ product.name }}">
+
+                                        <a href="#"
+                                           class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
+                                           data-id="{{ product.id }}"
+                                           data-name="{{ product.nameAr|upper }}"
+                                           data-description="{{ product.descriptionAr|raw }}"
+                                           data-price="{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency_ar }}"
+                                           data-discount="{{ (product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency_ar }}"
+                                                {% for catalog in  product.catalogs %} data-catalog{{ loop.index }}="{{ catalog.id }}" {% endfor %}
+                                                {% for catalog in  product.catalogs %} data-size{{ loop.index }}="{{ catalog.size }}" {% endfor %}
+                                                {% for catalog in  product.catalogs %} data-quantity{{ loop.index }}="{{ catalog.quantity }}" {% endfor %}
+                                                {% for image in  product.images %} data-image{{ loop.index }}="{{ image }}" {% endfor %}
+                                           data-href-a="{{ path('add.cart') }}"
+                                        >
+                                            نظرة سريعة
+                                        </a>
+                                    </div>
+
+                                    <div class="block2-txt flex-w flex-t p-t-14">
+                                        <div class="block2-txt-child1 flex-col-l ">
+                                            <a href="{{ path('product.ar', {'slug': product.slug }) }}"
+                                               class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                {{ product.nameAr|upper }}
+                                            </a>
+
+                                            {% if product.discountPrice != null %}
+                                                <div class="style-1">
+                                                    <del>
+                        <span class="stext-105 cl3">
+									{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
+								</span>
+                                                    </del>
+                                                    <ins>
+                        <span class="stext-105 cl3">
+									{{ (product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
+								</span>
+                                                    </ins>
+                                                </div>
+                                            {% else %}
+                                                <ins>
+                        <span class="stext-105 cl3">
+									{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
+								</span>
+                                                </ins>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="block2-txt-child2 flex-r p-t-3">
+                                            <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                                <img class="icon-heart1 dis-block trans-04"
+                                                     src="{{ '/media/images/icons/icon-heart-01.png' }}" alt="ICON">
+                                                <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                                     src="{{ '/media/images/icons/icon-heart-02.png' }}" alt="ICON">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <style>
+        .style-1 del {
+            color: #D97591;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        .style-1 del:before {
+            content: " ";
+            display: block;
+            width: 100%;
+            border-top: 2px solid #D97591;
+            height: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transform: rotate(-7deg);
+        }
+
+        .style-1 ins {
+            color: green;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}

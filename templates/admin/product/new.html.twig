@@ -57,15 +57,18 @@
                 {{ form_widget(new_form.name, {'attr': {'class': 'form-control', 'placeholder':'Name'}}) }}
             </div>
             <div class="col">
+                {{ form_widget(new_form.nameAr, {'attr': {'class': 'form-control', 'placeholder':'اسم'}}) }}
+            </div>
+            <div class="col">
                 {{ form_widget(new_form.slug, {'attr': {'class': 'form-control', 'placeholder':'Slug'}}) }}
             </div>
         </div>
     <div class="row mb-4">
         <div class="col">
-            {{ form_widget(new_form.tags, {'attr': {'placeholder':'Tags'}}) }}
+            {{ form_widget(new_form.price, {'attr': {'placeholder':'Price'}}) }}
         </div>
         <div class="col">
-            {{ form_widget(new_form.price, {'attr': {'placeholder':'Price'}}) }}
+            {{ form_widget(new_form.tags, {'attr': {'placeholder':'Tags'}}) }}
         </div>
         <div class="col">
             {{ form_widget(new_form.category, {'attr': {'class': 'basic'}}) }}
@@ -73,10 +76,16 @@
     </div>
     <div class="row mb-4">
         <div class="col">
+            {{ form_widget(new_form.discountPrice, {'attr': {'placeholder':'Discount'}}) }}
+        </div>
+        <div class="col">
             {{ form_widget(new_form.weight, {'attr': {'class': 'form-control', 'placeholder':'Weight'}}) }}
         </div>
         <div class="col">
             {{ form_widget(new_form.materials, {'attr': {'class': 'form-control', 'placeholder':'Materials'}}) }}
+        </div>
+        <div class="col">
+            {{ form_widget(new_form.materialsAr, {'attr': {'class': 'form-control', 'placeholder':'المواد'}}) }}
         </div>
     </div>
     <div class="statbox widget box box-shadow m-b-5">
@@ -91,6 +100,18 @@
             {{ form_widget(new_form.description) }}
         </div>
     </div>
+    <div class="statbox widget box box-shadow m-b-5">
+        <div class="widget-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                    <h4> وصف </h4>
+                </div>
+            </div>
+        </div>
+        <div class="widget-content widget-content-area">
+            {{ form_widget(new_form.descriptionAr) }}
+        </div>
+    </div>
     <div class="statbox widget box box-shadow">
         <div class="widget-header">
             <div class="row">
@@ -101,6 +122,18 @@
         </div>
         <div class="widget-content widget-content-area">
         {{ form_widget(new_form.longDescription) }}
+        </div>
+    </div>
+    <div class="statbox widget box box-shadow">
+        <div class="widget-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                    <h4> وصف طويل </h4>
+                </div>
+            </div>
+        </div>
+        <div class="widget-content widget-content-area">
+            {{ form_widget(new_form.longDescriptionAr) }}
         </div>
     </div>
     <div class="statbox widget box box-shadow">

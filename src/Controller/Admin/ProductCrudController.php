@@ -47,9 +47,12 @@ class ProductCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name'),
+            TextField::new('nameAr'),
             SlugField::new('slug')->setTargetFieldName('name'),
             MoneyField::new('price')->setCurrency('KWD'),
+            MoneyField::new('discountPrice')->setCurrency('KWD'),
             TextareaField::new('description'),
+            TextareaField::new('descriptionAr'),
             TagField::new('tags', TagType::class)->onlyOnForms(),
             AssociationField::new('category'),
             CollectionField::new('images')
@@ -58,8 +61,10 @@ class ProductCrudController extends AbstractCrudController
                 ->setEntryType(CatalogType::class)
                 ->onlyOnForms(),
             TextEditorField::new('longDescription')->onlyOnForms(),
+            TextEditorField::new('longDescriptionAr')->onlyOnForms(),
             NumberField::new('weight')->onlyOnForms(),
             TextField::new('materials')->onlyOnForms(),
+            TextField::new('materialsAr')->onlyOnForms(),
         ];
     }
 

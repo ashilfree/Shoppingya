@@ -49,7 +49,11 @@ export default class Filter {
             this.page = 1;
         });
         if (this.moreNav) {
-            this.pagination.innerHTML = '<a href=""  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> Load More </a>';
+            if(document.dir == 'rtl'){
+                this.pagination.innerHTML = '<a href=""  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> تحميل المزيد </a>';
+            }else{
+                this.pagination.innerHTML = '<a href=""  class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"  data-page="1"> Load More </a>';
+            }
             this.pagination.querySelector('a').addEventListener('click', this.loadMore.bind(this))
         } else {
             this.pagination.addEventListener('click', aClickListener)

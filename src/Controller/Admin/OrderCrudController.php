@@ -87,6 +87,7 @@ class OrderCrudController extends AbstractCrudController
             ->generateUrl();
         if ($this->transaction->check($entity, 'in_delivering')) {
             $this->transaction->applyWorkFlow($entity, 'in_delivering');
+            $entity->setInDeliveringAt(new \DateTime());
         }
         $this->entityManager->flush();
         return $this->redirect($url);
@@ -101,6 +102,7 @@ class OrderCrudController extends AbstractCrudController
             ->generateUrl();
         if ($this->transaction->check($entity, 'delivery_done')) {
             $this->transaction->applyWorkFlow($entity, 'delivery_done');
+            $entity->setDeliveredAt(new \DateTime());
         }
         $this->entityManager->flush();
         return $this->redirect($url);
@@ -115,9 +117,11 @@ class OrderCrudController extends AbstractCrudController
             ->generateUrl();
         if ($this->transaction->check($entity, 'order_canceled')) {
             $this->transaction->applyWorkFlow($entity, 'order_canceled');
+            $entity->setCancelledAt(new \DateTime());
         }
         if ($this->transaction->check($entity, 'order_canceled2')) {
             $this->transaction->applyWorkFlow($entity, 'order_canceled2');
+            $entity->setCancelledAt(new \DateTime());
         }
         $this->entityManager->flush();
         return $this->redirect($url);

@@ -62,7 +62,13 @@
                                                     </a>
                                                 </td>
                                                 <td class="column-2">{{ cartItem.catalog.product.name|upper }} <br> Size {{ cartItem.catalog.size }} </td>
-                                                <td class="column-3">{{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} {{ currency }}</td>
+                                                <td class="column-3">
+                                                    {% if cartItem.catalog.product.discountPrice != null %}
+                                                        {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                    {% else %}
+                                                        {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                    {% endif %}
+                                                </td>
                                                 <td class="column-4">
                                                     <input type="hidden" name="catalog-{{ loop.index }}" value="{{ cartItem.catalog.id }}">
                                                     <div class="wrap-num-product flex-w m-l-auto m-r-0">
@@ -79,10 +85,19 @@
                                                     </div>
                                                 </td>
                                                 <td class="column-5">
-                                                    <span>{{ (cartItem.catalog.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                                    <span>
+                                                        {% if cartItem.catalog.product.discountPrice != null %}
+                                                        {{ (cartItem.catalog.product.discountPrice * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                        {% else %}
+                                            {{ (cartItem.catalog.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
-                                            {% set total = total + ((cartItem.quantity * cartItem.catalog.product.price)/100) %}
+                                            {% if cartItem.catalog.product.discountPrice != null %}
+                                                {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice)/100 %}
+                                            {% else %}
+                                                {% set total = total + (cartItem.quantity * cartItem.catalog.product.price)/100 %}
+                                            {% endif %}
                                         {% endfor %}
                                     {% endif %}
 
@@ -144,32 +159,52 @@
                                     Please double check your address, or contact us if you need any help.
                                 </p>
 
-                                <div class="p-t-15">
+
+                            </div>
+                            <div class="p-t-15">
 									<span class="stext-112 cl8">
 										Calculate Shipping
 									</span>
-                                    <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-                                        <select class="js-select2" name="delivery" required="required">
-                                            <option value="">Select a region...</option>
-                                            {% for governorate in governorates %}
-                                                <option {% if delivery is defined and delivery == governorate.price  %}  selected {% endif %} value="{{ governorate.price }}">{{ governorate.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <div class="dropDownSelect2"></div>
-                                    </div>
-
-                                    <div class="flex-w">
-                                        <button type="submit"
-                                           class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04">
-                                            Update Totals
-                                        </button>
-                                    </div>
-
+                                <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+                                    <select class="js-select2" name="delivery" required="required">
+                                        <option value="">Select a region...</option>
+                                        {% for governorate in governorates %}
+                                            <option {% if delivery is defined and delivery == governorate.price  %}  selected {% endif %} value="{{ governorate.price }}">{{ governorate.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
                                 </div>
+
+                                <div class="flex-w">
+                                    <button type="submit"
+                                            class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04">
+                                        Update Totals
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div class="flex-w flex-t p-t-27 p-b-33">
+                        <div class="flex-w flex-t p-t-27">
+                            <div class="size-208">
+								<span class="mtext-101 cl2">
+									fees:
+								</span>
+                            </div>
+
+                            <div class="size-209 p-t-1">
+								<span id="total" class="mtext-110 cl2">
+                                    {% if delivery is defined %}
+                                        {{ (delivery/100)|number_format(2, '.', ',') }}
+                                    {% else %}
+									    0.00
+                                    {% endif %}
+								</span>
+                                {{ currency }}
+                            </div>
+                        </div>
+
+                        <div class="flex-w flex-t p-t-10 p-b-33">
                             <div class="size-208">
 								<span class="mtext-101 cl2">
 									Total:
@@ -181,7 +216,7 @@
                                     {% if delivery is defined %}
                                         {{ (total+ (delivery/100))|number_format(2, '.', ',') }}
                                     {% else %}
-									{{ total|number_format(2, '.', ',') }}
+                                        {{ total|number_format(2, '.', ',') }}
                                     {% endif %}
 								</span>
                                 {{ currency }}

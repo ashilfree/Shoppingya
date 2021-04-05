@@ -59,8 +59,23 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
+
         return $this->render('home/index.html.twig', [
             'page' => 'home',
+            'categories' => $this->categoryRepository->findAll(),
+            'slides' => $this->slideRepository->findAll(),
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+        ]);
+    }
+
+    /**
+     * @Route("/ar", name="home.ar")
+     */
+    public function indexAr(): Response
+    {
+        return $this->render('home/indexAr.html.twig', [
+            'page' => 'home.ar',
             'categories' => $this->categoryRepository->findAll(),
             'slides' => $this->slideRepository->findAll(),
             'cart' => $this->cart->getFull($this->cart->get()),

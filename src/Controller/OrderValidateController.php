@@ -9,6 +9,7 @@ use App\Classes\WishList;
 use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -60,6 +61,7 @@ class OrderValidateController extends AbstractController
 		if ($this->transaction->check($order, 'checkout')){
 			$this->cart->remove2Order();
 			$this->transaction->applyWorkFlow($order, 'checkout');
+            $order->setPaidAt(new \DateTime());
 			$this->entityManager->flush();
             $this->mailer->sendSuccessOrderEmail($order);
 		}
@@ -72,12 +74,13 @@ class OrderValidateController extends AbstractController
         ]);
     }
 
-	/**
-	 * @Route("/order/error/{stripeSessionId}", name="order.validate.error")
-	 * @param $stripeSessionId
-	 * @return Response
-	 */
-	public function cancel($stripeSessionId): Response
+    /**
+     * @Route("/order/error/{stripeSessionId}", name="order.validate.error")
+     * @param $stripeSessionId
+     * @param Request $request
+     * @return Response
+     */
+	public function cancel($stripeSessionId, Request $request): Response
 	{
 		$order = $this->entityManager->getRepository(Order::class)->findOneBy(['stripeSessionId' => $stripeSessionId]);
 		if(!$order || $order->getCustomer() != $this->getUser()){
@@ -87,8 +90,10 @@ class OrderValidateController extends AbstractController
 			$this->transaction->applyWorkFlow($order, 'checkout_canceled');
         $this->cart->increaseStock();
         $this->cart->remove2Order();
+        $order->setCancelledAt(new \DateTime());
 		$this->entityManager->flush();
         $this->mailer->sendFailureOrderEmail($order);
+        dd($request);
 		return $this->render('order/order-canceled.html.twig', [
 			'order' => $order,
             'cart' => $this->cart->getFull($this->cart->get()),

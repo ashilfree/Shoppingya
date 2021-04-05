@@ -61,7 +61,7 @@ export default class Global {
                  addCart.addEventListener('click', e => {
 
                     if (selectedSize.value > 0) {
-                        addCart.href = addCart.getAttribute('href') + '/' + selectedSize.value
+                            addCart.href = addCart.getAttribute('href') + '/' + selectedSize.value
                        // swal(nameProduct.innerHTML, "is added to cart !", "success");
                        //  e.returnValue = true
                     }else{
@@ -118,39 +118,56 @@ export default class Global {
     }
 
     reinitializeModal() {
+
         $('.js-show-modal1').on('click',function(e){
 
             e.preventDefault();
+            let discount = $(this).data('discount');
+            if(discount === '0.00 KWD' || discount === '0.00 دينار كويتي'){
+                $('#price-block1').css('display','none')
+                $('#price-block2').css('display','block')
+            }else{
+                $('#price-block2').css('display','none')
+                $('#price-block1').css('display','block')
+            }
             $('#name').text($(this).data('name'));
             $('#price').text($(this).data('price'));
+            $('#price2').text($(this).data('price'));
+            $('#discount').text($(this).data('discount'));
             $('#description').text($(this).data('description'));
-            // $('#quantity').attr('max', $(this).data('quantity'));
-            // $('#wich-icon a').attr('href', $(this).data('href')).attr('id', $(this).data('id')).addClass($(this).data('disabled'));
             $('#cart-add-button').attr('href', $(this).data('href-a'));
 
             var i = 1;
             var access = true;
-            // $('#product_cart_size').empty();
-            // $('#product_cart_size').append("<option value selected>Choose an option</option>");
 
             $('.js-select2').empty();
-            $('.js-select2').append('<option value="-1">Choose an option</option>');
-            while (access){
+            if(document.dir === 'ltr'){
+                $('.js-select2').append('<option value="-1">Choose an option</option>');
+                while (access){
 
-                var size = $(this).data('size' + i);
-                var catalog = $(this).data('catalog' + i);
-                if(!size)
-                    break;
+                    var size = $(this).data('size' + i);
+                    var catalog = $(this).data('catalog' + i);
+                    var quantity = $(this).data('quantity' + i);
+                    if(!size)
+                        break;
 
-                $('.js-select2').append("<option value='" + catalog + "' > Size " + size + "</option>");
-                i++;
+                    $('.js-select2').append("<option value='" + catalog + "' data-quantity='" + quantity + "'> Size " + size + "</option>");
+                    i++;
+                }
+            }else{
+                $('.js-select2').append('<option value="-1">اختر أحد الخيارات أدناه</option>');
+                while (access){
+
+                    var size = $(this).data('size' + i);
+                    var catalog = $(this).data('catalog' + i);
+                    var quantity = $(this).data('quantity' + i);
+                    if(!size)
+                        break;
+
+                    $('.js-select2').append("<option value='" + catalog + "' data-quantity='" + quantity + "'> الحجم " + size + "</option>");
+                    i++;
+                }
             }
-            //
-            //
-            // $('#product_cart_color').append("<option value='1'>Red</option>");
-
-
-
 
 
             i = 1;
@@ -162,7 +179,8 @@ export default class Global {
                 if(!picture)
                     break;
                 var picturePath = "/media/images/product/"+picture;
-                $('.slick3.gallery-lb').append('<div class="item-slick3" data-thumb=" ' + picturePath +' "><div class="wrap-pic-w pos-relative"><img src=" ' + picturePath + ' " alt="IMG-PRODUCT"><a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href=" ' + picturePath + ' "><i class="fa fa-expand"></i></a></div></div>')
+                var sold_out = (document.dir === "ltr")?'Sold out' :'نفاذ المخزون';
+                $('.slick3.gallery-lb').append('<div class="item-slick3" data-thumb=" ' + picturePath +' "><a class="sold_out" style="display:none" href="https://abc.com/">'+sold_out+'</a><div class="wrap-pic-w pos-relative"><img src=" ' + picturePath + ' " alt="IMG-PRODUCT"><a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href=" ' + picturePath + ' "><i class="fa fa-expand"></i></a></div></div>')
                 // $('div.img'+i).data('thumb', picturePath);
                 // $('img.img'+i).attr('src', picturePath);
                 // $('a.img'+i).attr('href', picturePath);

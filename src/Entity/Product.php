@@ -23,6 +23,10 @@ class Product
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nameAr;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -30,14 +34,29 @@ class Product
     private $slug;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slugAr;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $descriptionAr;
+
+    /**
      * @ORM\Column(type="float")
      */
     private $price;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $discountPrice;
 
     /**
      * @ORM\Column(type="datetime")
@@ -82,6 +101,11 @@ class Product
     private $longDescription;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $longDescriptionAr;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $weight;
@@ -90,6 +114,11 @@ class Product
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $materials;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $materialsAr;
 
     public function __construct()
     {
@@ -141,6 +170,42 @@ class Product
         return $this;
     }
 
+    public function getNameAr(): ?string
+    {
+        return $this->nameAr;
+    }
+
+    public function setNameAr(string $nameAr): self
+    {
+        $this->nameAr = $nameAr;
+
+        return $this;
+    }
+
+    public function getSlugAr(): ?string
+    {
+        return $this->slugAr;
+    }
+
+    public function setSlugAr(string $slugAr): self
+    {
+        $this->slugAr = $slugAr;
+
+        return $this;
+    }
+
+    public function getDescriptionAr(): ?string
+    {
+        return $this->descriptionAr;
+    }
+
+    public function setDescriptionAr(string $descriptionAr): self
+    {
+        $this->descriptionAr = $descriptionAr;
+
+        return $this;
+    }
+
     public function getPrice(): ?float
     {
         return $this->price;
@@ -149,6 +214,18 @@ class Product
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDiscountPrice(): ?float
+    {
+        return $this->discountPrice;
+    }
+
+    public function setDiscountPrice(?float $discountPrice): self
+    {
+        $this->discountPrice = $discountPrice;
 
         return $this;
     }
@@ -312,6 +389,18 @@ class Product
         return $this;
     }
 
+    public function getLongDescriptionAr(): ?string
+    {
+        return $this->longDescriptionAr;
+    }
+
+    public function setLongDescriptionAr(string $longDescriptionAr): self
+    {
+        $this->longDescriptionAr = $longDescriptionAr;
+
+        return $this;
+    }
+
     public function getWeight(): ?float
     {
         return $this->weight;
@@ -336,4 +425,15 @@ class Product
         return $this;
     }
 
+    public function getMaterialsAr(): ?string
+    {
+        return $this->materials;
+    }
+
+    public function setMaterialsAr(?string $materials): self
+    {
+        $this->materials = $materials;
+
+        return $this;
+    }
 }

@@ -13,46 +13,46 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	private $id;
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="orders")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $customer;
+    /**
+     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="orders")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $customer;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	private $createdAt;
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
-	/**
-	 * @ORM\Column(type="float")
-	 */
-	private $deliveryPrice;
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $deliveryPrice;
 
-	/**
-	 * @ORM\OneToMany(targetEntity=OrderDetails::class, mappedBy="myOrder")
-	 */
-	private $orderDetails;
+    /**
+     * @ORM\OneToMany(targetEntity=OrderDetails::class, mappedBy="myOrder")
+     */
+    private $orderDetails;
 
-	/** @ORM\Column(type="json", nullable=true) */
-	private $marking;
+    /** @ORM\Column(type="json", nullable=true) */
+    private $marking;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private $stripeSessionId;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $stripeSessionId;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private $reference;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $reference;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -109,16 +109,36 @@ class Order
      */
     private $total;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $paid_at;
 
-	public function __construct()
-      	{
-      		$this->orderDetails = new ArrayCollection();
-      	}
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $inDelivering_at;
 
-	public function getId(): ?int
-      	{
-      		return $this->id;
-      	}
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $delivered_at;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $cancelled_at;
+
+
+    public function __construct()
+    {
+        $this->orderDetails = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function setId(int $id): self
     {
@@ -126,122 +146,122 @@ class Order
         return $this;
     }
 
-	public function getCustomer(): ?Customer
-      	{
-      		return $this->customer;
-      	}
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
 
-	public function setCustomer(?Customer $customer): self
-      	{
-      		$this->customer = $customer;
-      
-      		return $this;
-      	}
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
 
-	public function getCreatedAt(): ?\DateTimeInterface
-      	{
-      		return $this->createdAt;
-      	}
+        return $this;
+    }
 
-	public function setCreatedAt(\DateTimeInterface $createdAt): self
-      	{
-      		$this->createdAt = $createdAt;
-      
-      		return $this;
-      	}
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
 
-	public function getDeliveryPrice(): ?float
-      	{
-      		return $this->deliveryPrice;
-      	}
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
-	public function setDeliveryPrice(float $deliveryPrice): self
-      	{
-      		$this->deliveryPrice = $deliveryPrice;
-      
-      		return $this;
-      	}
+        return $this;
+    }
 
-	/**
-	 * @return Collection|OrderDetails[]
-	 */
-	public function getOrderDetails(): Collection
-      	{
-      		return $this->orderDetails;
-      	}
+    public function getDeliveryPrice(): ?float
+    {
+        return $this->deliveryPrice;
+    }
 
-	public function addOrderDetail(OrderDetails $orderDetail): self
-      	{
-      		if (!$this->orderDetails->contains($orderDetail)) {
-      			$this->orderDetails[] = $orderDetail;
-      			$orderDetail->setMyOrder($this);
-      		}
-      
-      		return $this;
-      	}
+    public function setDeliveryPrice(float $deliveryPrice): self
+    {
+        $this->deliveryPrice = $deliveryPrice;
 
-	public function removeOrderDetail(OrderDetails $orderDetail): self
-      	{
-      		if ($this->orderDetails->removeElement($orderDetail)) {
-      			// set the owning side to null (unless already changed)
-      			if ($orderDetail->getMyOrder() === $this) {
-      				$orderDetail->setMyOrder(null);
-      			}
-      		}
-      
-      		return $this;
-      	}
+        return $this;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getMarking()
-      	{
-      		return $this->marking;
-      	}
+    /**
+     * @return Collection|OrderDetails[]
+     */
+    public function getOrderDetails(): Collection
+    {
+        return $this->orderDetails;
+    }
 
-	/**
-	 * @param mixed $marking
-	 * @return Order
-	 */
-	public function setMarking($marking): self
-      	{
-      		$this->marking = $marking;
-      		return $this;
-      	}
+    public function addOrderDetail(OrderDetails $orderDetail): self
+    {
+        if (!$this->orderDetails->contains($orderDetail)) {
+            $this->orderDetails[] = $orderDetail;
+            $orderDetail->setMyOrder($this);
+        }
 
-	public function getTotal()
-      	{
-      		$total = null;
-      		foreach ($this->orderDetails->getValues() as $product) {
-      			$total += $product->getPrice() * $product->getQuantity();
-      		}
-      		return $total;
-      	}
+        return $this;
+    }
 
-	public function getStripeSessionId(): ?string
-      	{
-      		return $this->stripeSessionId;
-      	}
+    public function removeOrderDetail(OrderDetails $orderDetail): self
+    {
+        if ($this->orderDetails->removeElement($orderDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($orderDetail->getMyOrder() === $this) {
+                $orderDetail->setMyOrder(null);
+            }
+        }
 
-	public function setStripeSessionId(?string $stripeSessionId): self
-      	{
-      		$this->stripeSessionId = $stripeSessionId;
-      
-      		return $this;
-      	}
+        return $this;
+    }
 
-	public function getReference(): ?string
-      	{
-      		return $this->reference;
-      	}
+    /**
+     * @return mixed
+     */
+    public function getMarking()
+    {
+        return $this->marking;
+    }
 
-	public function setReference(string $reference): self
-      	{
-      		$this->reference = $reference;
-      
-      		return $this;
-      	}
+    /**
+     * @param mixed $marking
+     * @return Order
+     */
+    public function setMarking($marking): self
+    {
+        $this->marking = $marking;
+        return $this;
+    }
+
+    public function getTotal()
+    {
+        $total = null;
+        foreach ($this->orderDetails->getValues() as $product) {
+            $total += $product->getPrice() * $product->getQuantity();
+        }
+        return $total;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): self
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
 
     public function getShippingFirstName(): ?string
     {
@@ -366,7 +386,7 @@ class Order
     public function getStatus(): ?string
     {
         $status = '';
-        switch ($this->marking){
+        switch ($this->marking) {
             case 'waiting':
                 $status = 'waiting';
                 break;
@@ -395,6 +415,54 @@ class Order
     public function setTotal(float $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getPaidAt(): ?\DateTimeInterface
+    {
+        return $this->paid_at;
+    }
+
+    public function setPaidAt(?\DateTimeInterface $paid_at): self
+    {
+        $this->paid_at = $paid_at;
+
+        return $this;
+    }
+
+    public function getInDeliveringAt(): ?\DateTimeInterface
+    {
+        return $this->inDelivering_at;
+    }
+
+    public function setInDeliveringAt(?\DateTimeInterface $inDelivering_at): self
+    {
+        $this->inDelivering_at = $inDelivering_at;
+
+        return $this;
+    }
+
+    public function getDeliveredAt(): ?\DateTimeInterface
+    {
+        return $this->delivered_at;
+    }
+
+    public function setDeliveredAt(?\DateTimeInterface $delivered_at): self
+    {
+        $this->delivered_at = $delivered_at;
+
+        return $this;
+    }
+
+    public function getCancelledAt(): ?\DateTimeInterface
+    {
+        return $this->cancelled_at;
+    }
+
+    public function setCancelledAt(?\DateTimeInterface $cancelled_at): self
+    {
+        $this->cancelled_at = $cancelled_at;
 
         return $this;
     }

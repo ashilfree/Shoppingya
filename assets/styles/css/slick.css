@@ -117,3 +117,12 @@
 .slick-arrow.slick-hidden {
     display: none;
 }
+
+/*[dir='rtl'] .slick-slide*/
+/*{*/
+/*    float: left;*/
+/*}*/
+
+/*.slick-slider .slick-track, .slick-slider .slick-list {*/
+/*    direction: ltr;*/
+/*}*/

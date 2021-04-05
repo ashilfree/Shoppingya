@@ -95,8 +95,21 @@
                     <li>
                         <ul>
                             {% for productCart in cart2order %}
-                                <li><span>{{' ¤ ' ~ productCart.quantity }} x {{ productCart.catalog.product.name }}</span> <span>{{ (productCart.quantity * productCart.catalog.product.price/100) |number_format(2, '.', ',')~ currency}}</span></li>
+                                <li>
+                                    <span>{{' ¤ ' ~ productCart.quantity }} x {{ productCart.catalog.product.name }}</span>
+                                    <span>
+                                         {% if productCart.catalog.product.discountPrice != null %}
+                                        {{ (productCart.quantity * productCart.catalog.product.discountPrice/100) |number_format(2, '.', ',')~ currency}}
+                            {% else %}
+                                {{ (productCart.quantity * productCart.catalog.product.price/100) |number_format(2, '.', ',')~ currency}}
+                                {% endif %}
+                                    </span>
+                                </li>
+                                {% if productCart.catalog.product.discountPrice != null %}
+                                {% set total = total + ((productCart.quantity * productCart.catalog.product.discountPrice)/100) %}
+                                {% else %}
                                 {% set total = total + ((productCart.quantity * productCart.catalog.product.price)/100) %}
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </li>

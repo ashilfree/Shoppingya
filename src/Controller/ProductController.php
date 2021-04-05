@@ -59,7 +59,6 @@ class ProductController extends AbstractController
         $filterType->handleRequest($request);
         $searchType->handleRequest($request);
         $products = $this->productRepository->findSearch($filter, $search, 8);
-      //  dd($products);
         [$min , $max] = $this->productRepository->findMinMax($filter);
 
         if($request->get('ajax')){
@@ -99,7 +98,70 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('products');
         $products = $this->productRepository->findBy(['category'=>$product->getCategory()]);
         return $this->render('product/detail.html.twig', [
-            'page' => 'detail',
+            'page' => 'product',
+            'product' => $product,
+            'products' => $products,
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+        ]);
+    }
+
+    /**
+     * @Route("/products-ar", name="products.ar")
+     * @param Request $request
+     * @return Response
+     */
+    public function indexAr(Request $request): Response
+    {
+        $filter = new Filter();
+        $search = new Search();
+        $filter->page = $request->get('page',1);
+        $filterType = $this->createForm(FilterType::class, $filter);
+        $searchType = $this->createForm(SearchType::class, $search);
+        $filterType->handleRequest($request);
+        $searchType->handleRequest($request);
+        $products = $this->productRepository->findSearch($filter, $search, 8);
+        //  dd($products);
+        [$min , $max] = $this->productRepository->findMinMax($filter);
+
+        if($request->get('ajax')){
+            return new JsonResponse([
+                "content" => $this->renderView('product/products.html.twig', ['products' => $products]),
+                'sorting' => $this->renderView('product/_sorting.html.twig', ['products' => $products]),
+                'pagination' => $this->renderView('product/_more.html.twig', ['products' => $products]),
+                'pages' => ceil($products->getTotalItemCount() / $products->getItemNumberPerPage()),
+                'min' => $min,
+                'max' => $max
+            ]);
+        }
+
+        return $this->render('product/indexAr.html.twig', [
+            'page' => 'products.ar',
+            'categories' => $this->categoryRepository->findAll(),
+            'products' => $products,
+            'filter_form' => $filterType->createView(),
+            'search_form' => $searchType->createView(),
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+            'wish' => $this->wishlist->get(),
+            'min' => $min,
+            'max' => $max
+        ]);
+    }
+
+    /**
+     * @Route("/product-ar/{slug}", name="product.ar")
+     * @param $slug
+     * @return Response
+     */
+    public function showAr($slug): Response
+    {
+        $product = $this->productRepository->findOneBy(['slug'=>$slug]);
+        if(!$product)
+            return $this->redirectToRoute('products.ar');
+        $products = $this->productRepository->findBy(['category'=>$product->getCategory()]);
+        return $this->render('product/detailAr.html.twig', [
+            'page' => 'product.ar',
             'product' => $product,
             'products' => $products,
             'cart' => $this->cart->getFull($this->cart->get()),

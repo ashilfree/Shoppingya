@@ -1,0 +1,35 @@
+{% extends 'baseAr.html.twig' %}
+
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>تسجيل</h3>
+                <ul>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a>تسجيل</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================login Area =================-->
+    <section class="login_area p-t-100 p-b-100">
+        <div class="container">
+            <div class="login_inner">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <span class="icon"><i class="zmdi zmdi-shopping-cart"></i></span>
+                        <h2>شكرا لك على الشراء ، لقد اكتمل طلبك</h2>
+                        <p>
+                            <a href="{{ path('home') }}"class=" stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-25 p-tb-10 m-r-5 trans-04 pointer">الصفحة الرئيسية</a>
+                            <a href="{{ path('products') }}"class="stext-101 cl2 size-119 bg8 bor13 hov-btn3  p-lr-25 p-tb-10 trans-04 pointer m-tb-10">مواصلة التسوق</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End login Area =================-->
+{% endblock %}

@@ -13,41 +13,11 @@
                     <div class="p-l-25 p-r-30 p-lr-0-lg">
                         <div class="wrap-slick3 flex-sb flex-w">
                             <div class="wrap-slick3-dots"></div>
+
                             <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
                             <div id="gallery-lb" class="slick3 gallery-lb">
-{#                                <div class="item-slick3 img1">#}
-{#                                    <div class="wrap-pic-w pos-relative">#}
-{#                                        <img alt="IMG-PRODUCT" class="img1">#}
 
-{#                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04 img1"#}
-{#                                           href="">#}
-{#                                            <i class="fa fa-expand"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{#                                </div>#}
-
-{#                                <div class="item-slick3 img2">#}
-{#                                    <div class="wrap-pic-w pos-relative">#}
-{#                                        <img alt="IMG-PRODUCT" class="img2">#}
-
-{#                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04 img2"#}
-{#                                           href="">#}
-{#                                            <i class="fa fa-expand"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{#                                </div>#}
-
-{#                                <div class="item-slick3" data-thumb="{{ '/media/images/product-detail-03.jpg' }}">#}
-{#                                    <div class="wrap-pic-w pos-relative">#}
-{#                                        <img src="{{ '/media/images/product-detail-03.jpg' }}" alt="IMG-PRODUCT">#}
-
-{#                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"#}
-{#                                           href="{{ '/media/images/product-detail-03.jpg' }}">#}
-{#                                            <i class="fa fa-expand"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{#                                </div>#}
                             </div>
                         </div>
                     </div>
@@ -57,10 +27,22 @@
                     <div class="p-r-50 p-t-5 p-lr-0-lg">
                         <h4 id="name" class="mtext-105 cl2 js-name-detail p-b-14">
                         </h4>
-
-                        <span id="price" class="mtext-106 cl2">
-							</span>
-
+                        <div id="price-block1" class="style-1">
+                            <del>
+                                <span id="price" class="mtext-106 cl2 ">
+							    </span>
+                            </del>
+                            <ins>
+                                <span id="discount" class="mtext-106 cl2 ">
+                                </span>
+                            </ins>
+                        </div>
+                        <div id="price-block2" class="style-1">
+                            <ins>
+                                <span id="price2" class="mtext-106 cl2 ">
+                                </span>
+                            </ins>
+                        </div>
                         <p id="description" class="stext-102 cl3 p-t-23">
                         </p>
 
@@ -73,14 +55,23 @@
 
                                 <div class="size-204 respon6-next">
                                     <div class="rs1-select2 bor8 bg0">
-                                        <select class="js-select2" name="time">
+                                        <select  onchange="check_status(this);" class="js-select2" name="time">
                                             <option>Choose an option</option>
                                         </select>
                                         <div class="dropDownSelect2"></div>
                                     </div>
                                 </div>
                             </div>
-
+                            <script>
+                                function check_status(obj) {
+                                    var quantity = obj.options[obj.selectedIndex].getAttribute('data-quantity');
+                                    if(quantity === '0'){
+                                        document.querySelector('.sold_out').style.display = 'block';
+                                    }else{
+                                        document.querySelector('.sold_out').style.display = 'none';
+                                    }
+                                }
+                            </script>
                             {# <div class="flex-w flex-r-m p-b-10"> #}
                             {# <div class="size-203 flex-c-m respon6"> #}
                             {# Color #}
@@ -100,21 +91,21 @@
                             {# </div> #}
                             {# </div> #}
 
-{#                            <div class="flex-w flex-r-m p-b-10">#}
-{#                                <div class="size-204 flex-w flex-m respon6-next">#}
-{#                                    <div class="wrap-num-product flex-w m-r-20 m-tb-10">#}
-{#                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">#}
-{#                                            <i class="fs-16 zmdi zmdi-minus"></i>#}
-{#                                        </div>#}
-{#                                        <input class="mtext-104 cl3 txt-center num-product" type="number"#}
-{#                                               name="num-product" value="1">#}
+                            {# <div class="flex-w flex-r-m p-b-10"> #}
+                            {# <div class="size-204 flex-w flex-m respon6-next"> #}
+                            {# <div class="wrap-num-product flex-w m-r-20 m-tb-10"> #}
+                            {# <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"> #}
+                            {# <i class="fs-16 zmdi zmdi-minus"></i> #}
+                            {# </div> #}
+                            {# <input class="mtext-104 cl3 txt-center num-product" type="number" #}
+                            {# name="num-product" value="1"> #}
 
-{#                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">#}
-{#                                            <i class="fs-16 zmdi zmdi-plus"></i>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
+                            {# <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"> #}
+                            {# <i class="fs-16 zmdi zmdi-plus"></i> #}
+                            {# </div> #}
+                            {# </div> #}
+                            {# </div> #}
+                            {# </div> #}
                             <div class="flex-w flex-r-m m-t-20 p-b-10">
                                 <div class="size-204 flex-w flex-m respon6-next">
                                     <a id="cart-add-button" href="#"
@@ -157,3 +148,36 @@
         </div>
     </div>
 </div>
+<style>
+    .sold_out {
+        top: 2em;
+        left: -4em;
+        color: #fff;
+        display: block;
+        position:absolute;
+        text-align: center;
+        text-decoration: none;
+        letter-spacing: .06em;
+        background-color: #A00;
+        padding: 0.5em 5em 0.4em 5em;
+        text-shadow: 0 0 0.75em #444;
+        box-shadow: 0 0 0.5em rgba(0,0,0,0.5);
+        font: bold 16px/1.2em Arial, Sans-Serif;
+        -webkit-text-shadow: 0 0 0.75em #444;
+        -webkit-box-shadow: 0 0 0.5em rgba(0,0,0,0.5);
+        -webkit-transform: rotate(-45deg) scale(0.75,1);
+        z-index:10;
+    }
+    .sold_out:before {
+        content: '';
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        margin: -0.3em -5em;
+        transform: scale(0.7);
+        -webkit-transform: scale(0.7);
+        border: 2px rgba(255,255,255,0.7) dashed;
+    }
+</style>

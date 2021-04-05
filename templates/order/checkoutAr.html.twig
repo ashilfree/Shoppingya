@@ -1,0 +1,166 @@
+{% extends 'baseAr.html.twig' %}
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>عربة التسوق</h3>
+                <ul>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a>الدفع</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+<div class="container">
+    <div class="row row-pb-md  justify-content-center p-t-75">
+        <div class="col-md-10">
+            <div class="process-wrap">
+                <div class="process text-center active">
+                    <p><span>01</span></p>
+                    <h3>عربة التسوق</h3>
+                </div>
+                <div class="process text-center active">
+                    <p><span>02</span></p>
+                    <h3>الدفع</h3>
+                </div>
+                <div class="process text-center">
+                    <p><span>03</span></p>
+                    <h3>الطلب جاهز</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Check Out -->
+    {{ form_start(form, {action: path('order.recap.ar'), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+        <div class="col-md-7 text-right">
+            <div class="colorlib-form">
+                <h2>تفاصيل الفاتورة</h2>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="lname">اسم العائلة</label>
+                            {{ form_widget(form.shippingLastName, {'attr': {'class': 'form-control', 'placeholder':'اسمك الاخير'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fname">الاسم الأول</label>
+                            {{ form_widget(form.shippingFirstName, {'attr': {'class': 'form-control', 'placeholder':'اسمك الأول'}}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="fname">عنوان</label>
+                            {{ form_widget(form.shippingAddress, {'id': 'address', 'attr': {'class': 'form-control text-right', 'placeholder':'أدخل عنوانك'}}) }}
+                            {{ form_widget(form.shippingLat,{'id': 'lat'}) }}
+                            {{ form_widget(form.shippingLng, {'id': 'lng'}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="companyname">البلدة / المدينة</label>
+                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'البلدة أو المدينة'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="stateprovince">الولاية / المقاطعة</label>
+                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'مقاطعة الولاية'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lname">الرمز البريدي</label>
+                            {{ form_widget(form.shippingPostalCode, {'id': 'postalCode', 'attr': {'class': 'form-control', 'placeholder':'الرمز البريدي'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="email">عنوان بريد الكتروني</label>
+                            {{ form_widget(form.shippingEmail, {'attr': {'class': 'form-control', 'placeholder':'بريدك الالكتروني'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Phone">رقم الهاتف</label>
+                            {{ form_widget(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'هاتفك'}}) }}
+                        </div>
+                        {{ form_rest(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 text-right">
+            <div class="cart-detail">
+                <h2>إجمالي سلة التسوق</h2>
+                <ul>
+                    {% set total = null %}
+                    <li>
+                        <ul>
+                            {% for productCart in cart2order %}
+                                <li>
+                                        <span>
+                                         {% if productCart.catalog.product.discountPrice != null %}
+                                             {{ (productCart.quantity * productCart.catalog.product.discountPrice/100) |number_format(2, '.', ',')~ currency_ar}}
+                                         {% else %}
+                                             {{ (productCart.quantity * productCart.catalog.product.price/100) |number_format(2, '.', ',')~ currency_ar}}
+                                         {% endif %}
+                                    </span>
+                                    <span>{{' ¤ ' ~ productCart.quantity }} x {{ productCart.catalog.product.nameAr }}</span>
+                                </li>
+                                {% if productCart.catalog.product.discountPrice != null %}
+                                {% set total = total + ((productCart.quantity * productCart.catalog.product.discountPrice)/100) %}
+                                {% else %}
+                                {% set total = total + ((productCart.quantity * productCart.catalog.product.price)/100) %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li><span>{{ total ~currency_ar }}</span> <span>المجموع الفرعي</span> </li>
+                    <li><span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency_ar}}</span><span>توصيل</span> </li>
+                    <li><span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency_ar }}</span><span>الطلب الكلي</span> </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                        التالي
+                    </button>
+                    <a href="{{ path('back.to.cart') }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                        العودة إلى عربة التسوق
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var formSubmitting = false;
+        var setFormSubmitting = function() { formSubmitting = true; };
+
+        window.onload = function() {
+            window.addEventListener("beforeunload", function (e) {
+                if (formSubmitting) {
+                    return undefined;
+                }
+
+                var confirmationMessage = 'It looks like you have been editing something. '
+                    + 'If you leave before saving, your changes will be lost.';
+
+                (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+            });
+        };
+    </script>
+    <style>
+        .ap-input-icon{
+            left: 16px;
+        }
+
+        .ap-input-icon svg{
+            left: 16px;
+        }
+    </style>
+{% endblock %}

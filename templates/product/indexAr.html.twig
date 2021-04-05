@@ -1,0 +1,58 @@
+{% extends 'baseAr.html.twig' %}
+{% block title %}Our Products{% endblock %}
+{% block body %}
+
+    <!-- Product -->
+    <div class="bg0 m-t-23 p-b-140">
+        <div class="container  js-filter">
+            <div class="flex-w flex-sb-m p-b-52 js-overlay">
+                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+                        جميع المنتجات
+                    </button>
+
+                    {{ include('product/categoriesAr.html.twig') }}
+
+                </div>
+
+                <div class="flex-w flex-c-m m-tb-10">
+                    <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+                        <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
+                        <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                        ترشح
+                    </div>
+
+                    <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+                        <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+                        <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                        بحث
+                    </div>
+                </div>
+
+                <!--  Overlay -->
+                {% include 'product/_overlay.html.twig' %}
+
+                <!-- Search product -->
+                {% include 'product/_searchAr.html.twig'  with {form: search_form} only %}
+
+                <!-- Filter -->
+                {% include 'product/_filterAr.html.twig' %}
+
+                <!-- Sort -->
+                {% include 'product/_sort.html.twig' %}
+            </div>
+
+            <div class="row isotope-grid js-filter-content">
+                {{ include('product/productsAr.html.twig') }}
+            </div>
+
+            <!-- Load more -->
+            {% include 'product/_more.html.twig' %}
+
+        </div>
+    </div>
+
+    <!-- Modal1 -->
+    {% include 'modal2.html.twig' %}
+
+{% endblock %}

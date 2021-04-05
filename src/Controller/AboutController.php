@@ -30,4 +30,22 @@ class AboutController extends AbstractController
             'abouts' => $aboutRepository->findAll()
         ]);
     }
+
+    /**
+     * @Route("/about-us-ar", name="about.us.ar")
+     * @param Request $request
+     * @param Cart $cart
+     * @param WishList $wishlist
+     * @param AboutRepository $aboutRepository
+     * @return Response
+     */
+    public function indexAr(Request $request, Cart $cart, WishList $wishlist, AboutRepository $aboutRepository): Response
+    {
+        return $this->render('about/indexAr.html.twig', [
+            'page' => 'about.us.ar',
+            'cart' => $cart->getFull($cart->get()),
+            'wishlist' => $wishlist->getFull(),
+            'abouts' => $aboutRepository->findAll()
+        ]);
+    }
 }

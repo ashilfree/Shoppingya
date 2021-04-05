@@ -5,7 +5,11 @@
 {% block body %}
 {% set total = null %}
     {% for orderDetail in cart2order %}
+     {% if orderDetail.catalog.product.discountPrice != null %}
+        {% set total = total + ((orderDetail.quantity * orderDetail.catalog.product.discountPrice)) %}
+        {% else %}
         {% set total = total + ((orderDetail.quantity * orderDetail.catalog.product.price)) %}
+        {% endif %}
     {% endfor %}
     <!--================Categories Banner Area =================-->
     <section class="solid_banner_area">
@@ -103,7 +107,13 @@
                                     <h5>x {{ orderDetail.quantity }}</h5>
                                 </td>
                                 <td>
-                                    <p>{{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}</p>
+                                    <p>
+                                    {% if orderDetail.catalog.product.discountPrice != null %}
+                                    {{ orderDetail.catalog.product.discountPrice * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
+                                    {% else %}
+                                     {{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
+                                    {% endif %}
+                                    </p>
                                 </td>
                             </tr>
                         {% endfor %}

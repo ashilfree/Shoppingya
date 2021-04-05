@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>تأكيد التسجيل</h3>
+                <ul>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a href="track.html">تأكيد التسجيل</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+
+    <!--================login Area =================-->
+    <section class="login_area p-t-100 p-b-100">
+        <div class="container">
+            <div class="login_inner">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="login_title text-center"  >
+                            <h2 style="font-size: 25px;">شكرا لك!</h2>
+                            <p>يمكنك الآن تسجيل الدخول باستخدام بيانات الاعتماد الخاصة بك</p>
+                            <a href="{{ path('login.ar') }}">&larr; اذهب إلى صفحة تسجيل الدخول</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End login Area =================-->
+
+{% endblock %}
+
+
+
