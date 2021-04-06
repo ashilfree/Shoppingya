@@ -17,7 +17,6 @@
 @import "~propellerkit/dist/css/propeller.css";
 @import "~propellerkit-range-slider/css/range-slider.css";
 
-
 .is-loading::before{
     content:'';
     position: absolute;

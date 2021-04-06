@@ -51,6 +51,7 @@ class ProductController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        dd($request->getLocale());
         $filter = new Filter();
         $search = new Search();
         $filter->page = $request->get('page',1);

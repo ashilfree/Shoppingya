@@ -5,9 +5,7 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\WishList;
-use App\Entity\VisitStats;
 use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
 use App\Repository\SlideRepository;
 use App\Repository\VisitStatsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,10 +54,10 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/", name="home")
+     * @return Response
      */
     public function index(): Response
     {
-
         return $this->render('home/index.html.twig', [
             'page' => 'home',
             'categories' => $this->categoryRepository->findAll(),
@@ -71,6 +69,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/ar", name="home.ar")
+     * @return Response
      */
     public function indexAr(): Response
     {

@@ -29,6 +29,11 @@ class Tag
      */
     private $products;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nameAr;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -76,6 +81,18 @@ class Tag
     public function removeProduct(Product $product): self
     {
         $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    public function getNameAr(): ?string
+    {
+        return $this->nameAr;
+    }
+
+    public function setNameAr(string $nameAr): self
+    {
+        $this->nameAr = $nameAr;
 
         return $this;
     }
