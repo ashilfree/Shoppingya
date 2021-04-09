@@ -72,13 +72,13 @@
                                                 <td class="column-4">
                                                     <input type="hidden" name="catalog-{{ loop.index }}" value="{{ cartItem.catalog.id }}">
                                                     <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m js-minus">
                                                             <i class="fs-16 zmdi zmdi-minus"></i>
                                                         </div>
                                                         <input class="mtext-104 cl3 txt-center num-product"
                                                                type="number"
                                                                name="quantity-{{ loop.index }}" value="{{ cartItem.quantity }}">
-                                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
+                                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m js-plus"
                                                              data-max="{{ cartItem.catalog.quantity }}">
                                                             <i class="fs-16 zmdi zmdi-plus"></i>
                                                         </div>

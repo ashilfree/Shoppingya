@@ -29,7 +29,7 @@ class StripeController extends AbstractController
 		$order = $entityManager->getRepository(Order::class)->find($id);
 		if (!$order || !$transaction->check($order, 'proceed_checkout'))
 			return new JsonResponse(["error" => 'order']);
-		$YOUR_DOMAIN = 'https://127.0.0.1:8000';
+		$YOUR_DOMAIN = 'http://127.0.0.1:8000';
 		$product_for_stripe = [];
 
 		Stripe::setApiKey('sk_test_51IU51mLg5TZnbiRrGxaUlCa9qamQCo24YESCXZHytvFteAQEkR6WvwcG3ZXTY7IbdSMFEJUMG9PyygazjbOHPTqx00srNcDRob');

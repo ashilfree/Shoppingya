@@ -55,18 +55,30 @@ export default class Global {
         if (this.addCart) {
             let addCart = this.addCart.querySelector('#cart-add-button');
             let selectedSize = this.addCart.querySelector('.js-select2');
-            let nameProduct = this.addCart.querySelector('.js-name-detail');
 
             if (addCart) {
                  addCart.addEventListener('click', e => {
-
+                     var quantity = selectedSize.options[selectedSize.selectedIndex].getAttribute('data-quantity');
                     if (selectedSize.value > 0) {
+                        if(quantity > 0){
                             addCart.href = addCart.getAttribute('href') + '/' + selectedSize.value
-                       // swal(nameProduct.innerHTML, "is added to cart !", "success");
-                       //  e.returnValue = true
+                        }else{
+                            e.preventDefault();
+                            if(document.dir == 'rtl'){
+                                swal("تحذير", "المنتج نفذ من المخزون!", "warning");
+                            }else{
+                                swal("Warning", "Product Out of Stock !", "warning");
+                            }
+
+                        }
                     }else{
                         e.preventDefault();
-                        swal("PLZ", "Select a size !", "info");
+                        if(document.dir === 'rtl'){
+                            swal("من فضلك", "اختر حجما !", "info");
+                        }else{
+                            swal("PLZ", "Select a size !", "info");
+                        }
+
                     }
                     //  console.log(addCart.getAttribute('href'));
                     //   this.loadUrl(addCart, 'POST');
@@ -78,14 +90,27 @@ export default class Global {
             let selectedSize = this.productDetail.querySelector('.js-select2');
             if (addToCart) {
                 addToCart.addEventListener('click', e => {
-                    alert(selectedSize.value)
+                    var quantity = selectedSize.options[selectedSize.selectedIndex].getAttribute('data-quantity');
                     if (selectedSize.value > 0) {
-                        addToCart.href = addToCart.getAttribute('href') + '/' + selectedSize.value
-                        // swal(nameProduct.innerHTML, "is added to cart !", "success");
-                        //  e.returnValue = true
-                    } else {
+                        if(quantity > 0){
+                            addToCart.href = addToCart.getAttribute('href') + '/' + selectedSize.value
+                        }else{
+                            e.preventDefault();
+                            if(document.dir === 'rtl'){
+                                swal("تحذير", "المنتج نفذ من المخزون!", "warning");
+                            }else{
+                                swal("Warning", "Product Out of Stock !", "warning");
+                            }
+
+                        }
+                    }else{
                         e.preventDefault();
-                        swal("PLZ", "Select a size !", "info");
+                        if(document.dir === 'rtl'){
+                            swal("من فضلك", "اختر حجما !", "info");
+                        }else{
+                            swal("PLZ", "Select a size !", "info");
+                        }
+
                     }
                 })
             }

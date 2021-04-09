@@ -42,7 +42,7 @@ class ListenerForAnyRequest
         $visitor = $this->visitStatsRepository->findBy(['ip' => $ip], array('id'=>'DESC'),1,0);
 
         if(!$this->session->get('online', false)) {
-            if ($visitor[0] != null) {
+            if ($visitor != null) {
                 if(!($visitor[0]->getVisitAt()->format('Y-m-d') == $date)){
                     $visitor = new VisitStats();
                     $visitor->setIp($ip);

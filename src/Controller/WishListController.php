@@ -26,12 +26,17 @@ class WishListController extends AbstractController
     /**
      * @Route("/wishlist/add/{id}", name="add.wishlist", defaults={"id"=0})
      * @param $id
+     * @param Request $request
      * @return Response
      */
-    public function add($id): Response
+    public function add($id, Request $request): Response
     {
         $this->wishlist->add($id);
-        return $this->redirectToRoute('products');
+        if(substr($request->server->get("HTTP_REFERER"), -2) == "ar"){
+            return $this->redirectToRoute('products.ar');
+        }else{
+            return $this->redirectToRoute('products');
+        }
     }
 
     /**

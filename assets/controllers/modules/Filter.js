@@ -216,15 +216,23 @@ export default class Filter {
             // $('#product_cart_size').append("<option value selected>Choose an option</option>");
 
             $('.js-select2').empty();
-            $('.js-select2').append('<option value="-1">Choose an option</option>');
+            if(document.dir == 'rtl'){
+                $('.js-select2').append('<option value="-1">اختر أحد الخيارات أدناه</option>');
+            }else{
+                $('.js-select2').append('<option value="-1">Choose an option</option>');
+            }
             while (access){
 
                 var size = $(this).data('size' + i);
                 var catalog = $(this).data('catalog' + i);
                 if(!size)
                     break;
+                if(document.dir == 'rtl'){
+                    $('.js-select2').append("<option value='" + catalog + "' > الحجم " + size + "</option>");
+                }else{
+                    $('.js-select2').append("<option value='" + catalog + "' > Size " + size + "</option>");
+                }
 
-                $('.js-select2').append("<option value='" + catalog + "' > Size " + size + "</option>");
                 i++;
             }
             //

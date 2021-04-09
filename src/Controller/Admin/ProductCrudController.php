@@ -6,13 +6,13 @@ use App\Admin\Field\TagField;
 use App\Entity\Product;
 use App\Form\CatalogType;
 use App\Form\ImageFileType;
+use App\Form\TogType;
 use App\Form\TagType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
@@ -54,6 +54,7 @@ class ProductCrudController extends AbstractCrudController
             TextareaField::new('description'),
             TextareaField::new('descriptionAr'),
             TagField::new('tags', TagType::class)->onlyOnForms(),
+            TagField::new('togs', TogType::class)->onlyOnForms(),
             AssociationField::new('category'),
             CollectionField::new('images')
                 ->setEntryType(ImageFileType::class)->onlyOnForms(),

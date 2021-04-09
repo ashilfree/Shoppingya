@@ -316,7 +316,7 @@
         var i = 1;
         var access = true;
         $('#product_cart_size').empty();
-        $('#product_cart_size').append("<option value selected>Choose an option</option>");
+        $('#product_cart_size').append("<option value selected>اختر أحد الخيارات أدناه</option>");
 
 
         while (access){
@@ -325,7 +325,7 @@
             if(!size)
                 break;
 
-            $('#product_cart_size').append("<option value='" + i + "' > Size " + size + "</option>");
+            $('#product_cart_size').append("<option value='" + i + "' > الحجم " + size + "</option>");
             i++;
         }
 

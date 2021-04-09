@@ -35,6 +35,7 @@
                             <div class="slick3 gallery-lb">
                                 {% for image in product.images %}
                                     <div class="item-slick3" data-thumb="{{ vich_uploader_asset(image, 'imageFile') }}">
+                                        <a class="sold_out" style="display:none" href="https://abc.com/">Sold out</a>
                                         <div class="wrap-pic-w pos-relative">
                                             <img src="{{ vich_uploader_asset(image, 'imageFile') }}" alt="IMG-PRODUCT">
 
@@ -90,10 +91,10 @@
 
                                 <div class="size-204 respon6-next">
                                     <div class="rs1-select2 bor8 bg0">
-                                        <select class="js-select2" name="time">
+                                        <select onchange="check_status(this);" class="js-select2" name="time">
                                             <option value="-1">Choose an option</option>
-                                            {% for size in product.category.sizes %}
-                                                <option value="{{ loop.index }}">{{ size }}</option>
+                                            {% for catalog in product.catalogs %}
+                                                <option data-quantity="{{ catalog.quantity }}" value="{{ loop.index }}">{{ catalog.size }}</option>
                                             {% endfor %}
                                         </select>
                                         <div class="dropDownSelect2"></div>
@@ -337,5 +338,46 @@
             color: green;
             text-decoration: none;
         }
+        .sold_out {
+            top: 2em;
+            left: -4em;
+            color: #fff;
+            display: block;
+            position:absolute;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: .06em;
+            background-color: #A00;
+            padding: 0.5em 5em 0.4em 5em;
+            text-shadow: 0 0 0.75em #444;
+            box-shadow: 0 0 0.5em rgba(0,0,0,0.5);
+            font: bold 16px/1.2em Arial, Sans-Serif;
+            -webkit-text-shadow: 0 0 0.75em #444;
+            -webkit-box-shadow: 0 0 0.5em rgba(0,0,0,0.5);
+            -webkit-transform: rotate(-45deg) scale(0.75,1);
+            z-index:10;
+        }
+        .sold_out:before {
+            content: '';
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            position: absolute;
+            margin: -0.3em -5em;
+            transform: scale(0.7);
+            -webkit-transform: scale(0.7);
+            border: 2px rgba(255,255,255,0.7) dashed;
+        }
     </style>
+    <script>
+        function check_status(obj) {
+            var quantity = obj.options[obj.selectedIndex].getAttribute('data-quantity');
+            if(quantity === '0'){
+                document.querySelector('.sold_out').style.display = 'block';
+            }else{
+                document.querySelector('.sold_out').style.display = 'none';
+            }
+        }
+    </script>
 {% endblock %}

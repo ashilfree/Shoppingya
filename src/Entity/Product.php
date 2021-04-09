@@ -34,11 +34,6 @@ class Product
     private $slug;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $slugAr;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $description;
@@ -96,6 +91,10 @@ class Product
     private $tags;
 
     /**
+     * @ORM\ManyToMany(targetEntity=Tog::class, mappedBy="products", cascade={"persist"})
+     */
+    private $togs;
+    /**
      * @ORM\Column(type="text")
      */
     private $longDescription;
@@ -120,6 +119,8 @@ class Product
      */
     private $materialsAr;
 
+
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -127,6 +128,7 @@ class Product
         $this->images = new ArrayCollection();
         $this->catalogs = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->togs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,18 +180,6 @@ class Product
     public function setNameAr(string $nameAr): self
     {
         $this->nameAr = $nameAr;
-
-        return $this;
-    }
-
-    public function getSlugAr(): ?string
-    {
-        return $this->slugAr;
-    }
-
-    public function setSlugAr(string $slugAr): self
-    {
-        $this->slugAr = $slugAr;
 
         return $this;
     }
@@ -377,6 +367,33 @@ class Product
         return $this;
     }
 
+    /**
+     * @return Collection|Tog[]
+     */
+    public function getTogs(): Collection
+    {
+        return $this->togs;
+    }
+
+    public function addTog(Tog $tog): self
+    {
+        if (!$this->togs->contains($tog)) {
+            $this->togs[] = $tog;
+            $tog->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTog(Tog $tog): self
+    {
+        if ($this->togs->removeElement($tog)) {
+            $tog->removeProduct($this);
+        }
+
+        return $this;
+    }
+
     public function getLongDescription(): ?string
     {
         return $this->longDescription;
@@ -436,4 +453,5 @@ class Product
 
         return $this;
     }
+
 }

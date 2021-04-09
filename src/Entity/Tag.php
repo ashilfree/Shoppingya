@@ -29,10 +29,6 @@ class Tag
      */
     private $products;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nameAr;
 
     public function __construct()
     {
@@ -85,15 +81,4 @@ class Tag
         return $this;
     }
 
-    public function getNameAr(): ?string
-    {
-        return $this->nameAr;
-    }
-
-    public function setNameAr(string $nameAr): self
-    {
-        $this->nameAr = $nameAr;
-
-        return $this;
-    }
 }

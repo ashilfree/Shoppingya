@@ -47,10 +47,10 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="app_forgot_password_request")
      * @param Request $request
-     * @param \Swift_Mailer $mailer
+     * @param Mailer $mailer
      * @return Response
      */
-    public function request(Request $request, \Swift_Mailer $mailer): Response
+    public function request(Request $request, Mailer $mailer): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);

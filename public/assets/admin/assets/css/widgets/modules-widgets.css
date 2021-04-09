@@ -56,10 +56,10 @@ body.minimal .widget-card-four {
   .widget-card-four .w-info p {
     font-weight: 600;
     margin-bottom: 0;
-    color: #5c1ac3;
+    color: #D97591;
     font-size: 16px; }
   .widget-card-four .w-icon {
-    color: #5c1ac3;
+    color: #D97591;
     background-color: #dccff7;
     height: 45px;
     display: inline-flex;
@@ -942,7 +942,7 @@ body.minimal .widget-three {
     .widget-three .widget-content .summary-list:nth-child(3) .w-icon {
       background: #ffeccb; }
     .widget-three .widget-content .summary-list:nth-child(1) .w-icon svg {
-      color: #5c1ac3; }
+      color: #D97591; }
     .widget-three .widget-content .summary-list:nth-child(2) .w-icon svg {
       color: #009688; }
     .widget-three .widget-content .summary-list:nth-child(3) .w-icon svg {

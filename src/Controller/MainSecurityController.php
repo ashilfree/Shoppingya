@@ -105,9 +105,10 @@ class MainSecurityController extends AbstractController
             //send mail to customer
             $this->mailer->sendConfirmationEmail($customer);
             //return $this->redirectToRoute('login');
-            return $this->render('authentication/confirmation.html.twig', [
+            return $this->render('authentication/check-email-register.html.twig', [
                 'cart' => $this->cart->getFull($this->cart->get()),
                 'wishlist' => $this->wishlist->getFull(),
+                'page'=> 'register',
             ]);
         }
 
@@ -168,6 +169,7 @@ class MainSecurityController extends AbstractController
             return $this->render('authentication/confirmationAr.html.twig', [
                 'cart' => $this->cart->getFull($this->cart->get()),
                 'wishlist' => $this->wishlist->getFull(),
+                'page'=> 'register.ar',
             ]);
         }
 

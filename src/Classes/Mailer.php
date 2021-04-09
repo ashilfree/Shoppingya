@@ -33,7 +33,7 @@ class Mailer{
 
     public function sendConfirmationEmail(Customer $customer)
     {
-        $body = $this->twig->render('authentication/email.mjml.twig',
+        $body = $this->twig->render('emails/register-confirmation.html.twig',
             [
                 'customer' => $customer
             ]
@@ -48,15 +48,14 @@ class Mailer{
 
     public function sendResetPasswordEmail($customer, $resetToken, $tokenLifetime)
     {
-        $body = $this->twig->render('authentication/email.html.twig', [
+        $body = $this->twig->render('emails/reset-password.html.twig', [
                 'resetToken' => $resetToken,
                 'tokenLifetime' => $tokenLifetime,
             ]
         );
         $message = (new \Swift_Message('Your password reset request'))
-            ->setFrom('mohammed@genesistech-dz.com')
+            ->setFrom('noreply@agence.fr')
             ->setTo($customer->getEmail())
-            ->setReplyTo($customer->getEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);

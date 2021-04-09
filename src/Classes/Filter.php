@@ -2,6 +2,7 @@
 namespace App\Classes;
 
 use App\Entity\Tag;
+use App\Entity\Tog;
 
 class Filter{
 
@@ -14,6 +15,11 @@ class Filter{
      * @var Tag[]
      */
     public $tags = [];
+
+    /**
+     * @var Tog[]
+     */
+    public $togs = [];
 
     /**
      * @var null|integer

@@ -661,7 +661,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   display: block;
   position: relative;
   height: 80%;
-  padding-right: 25px;
+  padding-left: 25px;
   -webkit-flex-grow: 1;
   -moz-flex-grow: 1;
   flex-grow: 1;
@@ -672,7 +672,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   max-height: 100%;
   position:absolute;
   top: 0; 
-  left: 0; 
+  right: 0;
   bottom: 0;
   margin: auto;
 }

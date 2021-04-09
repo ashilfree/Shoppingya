@@ -134,7 +134,7 @@
     <div class="menu-mobile">
         <ul class="topbar-mobile">
             <li>
-                <div class="left-top-bar">
+                <div class="left-top-bar text-right">
                     التوصيل المجاني للطلب فوق 20 {{ currency_ar }}
                 </div>
             </li>
@@ -176,7 +176,7 @@
             </li>
         </ul>
 
-        <ul class="main-menu-m">
+        <ul class="main-menu-m text-right">
             <li>
                 <a href="{{ path('home.ar') }}">الصفحة الرئيسية</a>
             </li>
@@ -238,7 +238,7 @@
                             </a>
 
                             <div class="header-cart-item-txt p-t-8 text-right">
-                                <a href="{{ path('product', {'slug': cartItem.catalog.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
+                                <a href="{{ path('product.ar', {'slug': cartItem.catalog.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
                                     {{ cartItem.catalog.product.nameAr|upper }}
                                 </a>
                                 <span class="header-cart-item-info">
@@ -313,8 +313,8 @@
                             </a>
 
                             <div class="header-cart-item-txt p-t-8">
-                                <a href="{{ path('product', {'slug': cartItem.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
-                                    {{ cartItem.product.name|upper }}
+                                <a href="{{ path('product.ar', {'slug': cartItem.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04  text-right">
+                                    {{ cartItem.product.nameAr }}
                                 </a>
                             </div>
                         </li>

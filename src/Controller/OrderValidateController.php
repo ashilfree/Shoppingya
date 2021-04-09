@@ -93,7 +93,6 @@ class OrderValidateController extends AbstractController
         $order->setCancelledAt(new \DateTime());
 		$this->entityManager->flush();
         $this->mailer->sendFailureOrderEmail($order);
-        dd($request);
 		return $this->render('order/order-canceled.html.twig', [
 			'order' => $order,
             'cart' => $this->cart->getFull($this->cart->get()),

@@ -94,6 +94,18 @@ class CartController extends AbstractController
     }
 
     /**
+     * @Route("/cart/add-ar/{id}", name="add.cart.ar", defaults={"id"=0})
+     * @param $id
+     * @return Response
+     */
+    public function addAr($id): Response
+    {
+        $this->cart->add($id);
+            return $this->redirectToRoute('products.ar');
+
+    }
+
+    /**
      * @Route("/cart/update/{locale}", name="update.cart", defaults={"locale"="en"})
      * @param $locale
      * @param Request $request

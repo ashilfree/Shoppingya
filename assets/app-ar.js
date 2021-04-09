@@ -190,14 +190,15 @@ $('.sort-option').on('click', function () {
 });
 
 $(document).ready(function () {
-    $('#tags label').addClass('dis-inline-block stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5');
+    $('#togs').addClass('text-right');
+    $('#togs label').addClass('dis-inline-block stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5');
 });
 
-$('#tags label').on('click', function () {
-    if ($(this).hasClass('tag-filter-active')) {
-        $(this).removeClass('tag-filter-active');
+$('#togs label').on('click', function () {
+    if ($(this).hasClass('tog-filter-active')) {
+        $(this).removeClass('tog-filter-active');
     } else {
-        $(this).addClass('tag-filter-active');
+        $(this).addClass('tog-filter-active');
     }
 });
 

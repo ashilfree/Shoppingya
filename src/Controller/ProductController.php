@@ -6,6 +6,7 @@ use App\Classes\Cart;
 use App\Classes\Filter;
 use App\Classes\Search;
 use App\Classes\WishList;
+use App\Form\FilterArType;
 use App\Form\FilterType;
 use App\Form\SearchType;
 use App\Repository\CategoryRepository;
@@ -51,7 +52,6 @@ class ProductController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        dd($request->getLocale());
         $filter = new Filter();
         $search = new Search();
         $filter->page = $request->get('page',1);
@@ -117,17 +117,16 @@ class ProductController extends AbstractController
         $filter = new Filter();
         $search = new Search();
         $filter->page = $request->get('page',1);
-        $filterType = $this->createForm(FilterType::class, $filter);
+        $filterArType = $this->createForm(FilterArType::class, $filter);
         $searchType = $this->createForm(SearchType::class, $search);
-        $filterType->handleRequest($request);
+        $filterArType->handleRequest($request);
         $searchType->handleRequest($request);
-        $products = $this->productRepository->findSearch($filter, $search, 8);
-        //  dd($products);
+        $products = $this->productRepository->findArSearch($filter, $search, 8);
         [$min , $max] = $this->productRepository->findMinMax($filter);
 
         if($request->get('ajax')){
             return new JsonResponse([
-                "content" => $this->renderView('product/products.html.twig', ['products' => $products]),
+                "content" => $this->renderView('product/productsAr.html.twig', ['products' => $products]),
                 'sorting' => $this->renderView('product/_sorting.html.twig', ['products' => $products]),
                 'pagination' => $this->renderView('product/_more.html.twig', ['products' => $products]),
                 'pages' => ceil($products->getTotalItemCount() / $products->getItemNumberPerPage()),
@@ -140,7 +139,7 @@ class ProductController extends AbstractController
             'page' => 'products.ar',
             'categories' => $this->categoryRepository->findAll(),
             'products' => $products,
-            'filter_form' => $filterType->createView(),
+            'filter_form' => $filterArType->createView(),
             'search_form' => $searchType->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),

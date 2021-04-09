@@ -54,6 +54,29 @@ class ProductRepository extends ServiceEntityRepository
 
     /**
      * @param Filter $filter
+     * @param Search $search
+     * @param int $pages
+     * @return PaginationInterface
+     */
+    public function findArSearch(Filter $filter, Search $search, int $pages):PaginationInterface
+    {
+        $query = $this->getArSearchQuery($filter);
+        if (!empty($search->string)){
+            $query = $query
+                ->andWhere('p.nameAr LIKE :string')
+                ->setParameter('string', "%{$search->string}%");
+        }
+
+        $query = $query->getQuery();
+        return $this->paginator->paginate(
+            $query,
+            1,
+            $filter->page*$pages
+        );
+    }
+
+    /**
+     * @param Filter $filter
      * @return integer[]
      */
     public function findMinMax(Filter $filter): array
@@ -89,6 +112,33 @@ class ProductRepository extends ServiceEntityRepository
             $query = $query
                 ->andWhere('t.id IN (:tags) ')
                 ->setParameter('tags', $filter->tags);
+        }
+        return $query;
+    }
+
+    private function getArSearchQuery(Filter $filter, $ignorePrice = false):QueryBuilder
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('p','t')
+            ->join('p.togs', 't');
+
+
+        if (!empty($filter->min) && $ignorePrice === false){
+            $query = $query
+                ->andWhere('p.price >= :min')
+                ->setParameter('min', $filter->min * 100);
+        }
+
+        if (!empty($filter->max) && $ignorePrice === false){
+            $query = $query
+                ->andWhere('p.price <= :max')
+                ->setParameter('max', $filter->max * 100);
+        }
+
+        if (!empty($filter->togs)){
+            $query = $query
+                ->andWhere('t.id IN (:togs) ')
+                ->setParameter('togs', $filter->togs);
         }
         return $query;
     }

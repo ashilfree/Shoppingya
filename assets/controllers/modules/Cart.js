@@ -1,4 +1,5 @@
 /**
+ * @property {HTMLFormElement} form
  * @property {HTMLElement} table
  * @property {HTMLElement} updateCart
  * @property {HTMLElement} ApplyCoupon
@@ -20,12 +21,12 @@ export default class Cart {
         if (element === null) {
             return
         }
-
+        this.form =document.querySelector('.js-cart-form');
+        console.log(this.form)
         this.table = document.querySelector('table');
         this.updateCart = document.querySelector('.js-update-cart');
         this.subtotal = document.querySelector('#subtotal');
         this.total = document.querySelector('#total');
-        this.select = document.querySelector('.js-select2');
         this.updateTotals = document.querySelector('#updateTotals');
         this.proceedToCheckout = document.querySelector('#proceed-to-checkout');
         this.overlay = document.querySelector('.js-overlay');
@@ -34,6 +35,10 @@ export default class Cart {
 
 
     bindEvents() {
+
+        // $('.js-select2').on('select2:select', (e) => {
+        //     this.loadForm()
+        // });
         // this.updateCart.querySelectorAll('a').forEach(a =>{
         //         a.addEventListener('click', e => {
         //             console.log('Cart');
@@ -120,6 +125,18 @@ export default class Cart {
             console.error(response);
         }
         this.hideLoader();
+    }
+
+    async loadForm() {
+        const data = new FormData(this.form);
+
+        const url = this.form.getAttribute('action');
+
+        const params = new URLSearchParams();
+        data.forEach((value, key) => {
+            params.append(key, value.toString());
+        });
+        return this.loadUrl(url, data);
     }
 
     showLoader() {
