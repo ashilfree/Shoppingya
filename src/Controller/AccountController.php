@@ -68,6 +68,29 @@ class AccountController extends AbstractController
 	}
 
     /**
+     * @Route("/ar", name="account.ar")
+     */
+    public function indexAr(): Response
+    {
+        /**
+         * @var Customer $customer
+         */
+        $customer = $this->getUser();
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
+        return $this->render('account/indexAr.html.twig', [
+            'page' => 'account.ar',
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+            'customer' => $customer,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
+        ]);
+    }
+
+    /**
      * @Route("/edit-account", name="edit.account")
      * @param Request $request
      * @return Response

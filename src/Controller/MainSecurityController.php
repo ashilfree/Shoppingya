@@ -60,22 +60,32 @@ class MainSecurityController extends AbstractController
 
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/login/{locale}", name="login", defaults={"locale"="en"})
      * @return Response
      */
     // TODO: Use Facebook and Google to Login
-    public function login(): Response
+    public function login($locale): Response
     {
         $error = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
+        if($locale == "en"){
+            return $this->render('authentication/login.html.twig', [
+                'page' => 'login',
+                'last_username' => $lastUsername,
+                'error' => $error,
+                'cart' => $this->cart->getFull($this->cart->get()),
+                'wishlist' => $this->wishlist->getFull()
+            ]);
+        }else{
+            return $this->render('authentication/loginAr.html.twig', [
+                'page' => 'login',
+                'last_username' => $lastUsername,
+                'error' => $error,
+                'cart' => $this->cart->getFull($this->cart->get()),
+                'wishlist' => $this->wishlist->getFull()
+            ]);
+        }
 
-        return $this->render('authentication/login.html.twig', [
-            'page' => 'login',
-            'last_username' => $lastUsername,
-            'error' => $error,
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull()
-        ]);
     }
 
     /**
@@ -117,25 +127,6 @@ class MainSecurityController extends AbstractController
             'form'=>$form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
-        ]);
-    }
-
-    /**
-     * @Route("/login-ar", name="login.ar")
-     * @return Response
-     */
-    // TODO: Use Facebook and Google to Login
-    public function loginAr(): Response
-    {
-        $error = $this->authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $this->authenticationUtils->getLastUsername();
-
-        return $this->render('authentication/loginAr.html.twig', [
-            'page' => 'login.ar',
-            'last_username' => $lastUsername,
-            'error' => $error,
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull()
         ]);
     }
 

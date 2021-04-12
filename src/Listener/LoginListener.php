@@ -53,7 +53,7 @@ class LoginListener
 
     public function onKernelResponse(ResponseEvent $event)
     {
-
+        dd($event);
         $user = $this->security->getUser();
         if($user instanceof Customer) {
             $order = $this->em->getRepository(Order::class)->findOneBy([

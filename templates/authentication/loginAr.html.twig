@@ -31,7 +31,7 @@
                                 {{ error.message | trans(error.messageData, 'security') }}
                             </div>
                         {% endif %}
-                        <form class="login_form row" action="{{ path('login.ar') }}" method="post">
+                        <form class="login_form row" action="{{ path('login', { locale: 'ar'}) }}" method="post">
                             <div class="col-lg-12 form-group">
                                 <input class="form-control" type="text" name="_username" placeholder="بريد إلكتروني" value="{{ last_username }}">
                             </div>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-lg-12 form-group">
                                 <div class="creat_account">
-                                    <a href="{{ path('register') }}"><h4>إنشاء حساب...</h4></a>
+                                    <a href="{{ path('register.ar') }}"><h4>إنشاء حساب...</h4></a>
                                 </div>
                                 <div>
                                     <a href="{{ path('app_forgot_password_request') }}"><h4>نسيت رقمك السري ؟</h4></a>

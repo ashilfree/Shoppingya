@@ -113,16 +113,12 @@ class CartController extends AbstractController
      */
     public function update($locale, Request $request): Response
     {
-
-        $this->cart->update($request->query->all());
+        $data = json_decode($request->getContent(), true);
+        $this->cart->update($data);
         if($locale == "ar"){
-            return $this->redirectToRoute('cart.ar', [
-                'delivery' => $this->cart->getDelivery()
-            ]);
+            return $this->redirectToRoute('cart.ar');
         }else{
-            return $this->redirectToRoute('cart', [
-                'delivery' => $this->cart->getDelivery()
-            ]);
+            return $this->redirectToRoute('cart');
         }
 
     }

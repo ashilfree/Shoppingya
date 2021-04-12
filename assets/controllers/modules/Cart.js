@@ -22,7 +22,6 @@ export default class Cart {
             return
         }
         this.form =document.querySelector('.js-cart-form');
-        console.log(this.form)
         this.table = document.querySelector('table');
         this.updateCart = document.querySelector('.js-update-cart');
         this.subtotal = document.querySelector('#subtotal');
@@ -36,9 +35,21 @@ export default class Cart {
 
     bindEvents() {
 
-        // $('.js-select2').on('select2:select', (e) => {
-        //     this.loadForm()
-        // });
+        $('.js-select2').on('select2:select', (e) => {
+            this.loadForm();
+        });
+        this.table.querySelectorAll('input[type="number"]').forEach( input => {
+
+            input.addEventListener('change', evt => {
+                this.loadForm();
+            })
+        })
+        this.table.querySelectorAll('.js-quantity').forEach( div => {
+
+            div.addEventListener('click', evt => {
+                this.loadForm();
+            })
+        })
         // this.updateCart.querySelectorAll('a').forEach(a =>{
         //         a.addEventListener('click', e => {
         //             console.log('Cart');
@@ -66,77 +77,31 @@ export default class Cart {
         // });
     }
 
-    async loadUrl(a, method = 'GET', data = null) {
+    async loadUrl(a, data = null) {
         this.showLoader();
         let init = {
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
         };
-        if (method === 'DELETE'){
-            init = {
-                method: 'DELETE',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({'token': a.dataset.token})
-            };
-        }
-        if (method === 'POST'){
-            init = {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            };
-        }
-        const request = new Request(a.getAttribute('href'), init);
-        const response = await fetch(request);
-        if (response.status >= 200 && response.status < 300)
-        {
-            const data = await response.json();
-                if(request.method === 'DELETE'){
-                        a.parentNode.parentNode.parentNode.removeChild(a.parentNode.parentNode);
-                }
-                else
-                {
-                    if(data.type === 'shipping'){
-                        if(parseInt(this.select.value) !== 0){
-                            this.proceedToCheckout.removeAttribute('disabled');
-                            this.proceedToCheckout.removeAttribute('data-original-title');
-                            this.proceedToCheckout.setAttribute('href', "/shopping-cart/checkout");
-                        }else{
-                            this.proceedToCheckout.setAttribute('disabled', 'true');
-                            this.proceedToCheckout.setAttribute('data-original-title', 'Calculate Shipping');
-                            this.proceedToCheckout.setAttribute('href', "javascript:void(0)");
-                        }
-                    }else{
-                        this.table.querySelectorAll('.table_row').forEach(tr =>{
-                            tr.querySelector('.column-5 span').textContent =  (tr.querySelector('.column-5').dataset.price * tr.querySelector('input[type="number"]').value).toString();
-                        });
-                    }
-                }
-            this.subtotal.textContent = data.sumItemsCart;
-            this.total.textContent = (parseInt(data.sumItemsCart) + parseInt(this.select.value)).toString();
-        }else {
-            console.error(response);
-        }
-        this.hideLoader();
+        const request = new Request(a, init);
+        await fetch(request);
+
+        location.reload();
     }
 
     async loadForm() {
         const data = new FormData(this.form);
-
         const url = this.form.getAttribute('action');
 
-        const params = new URLSearchParams();
+        let params = {};
         data.forEach((value, key) => {
-            params.append(key, value.toString());
+            params[key] = value.toString();
         });
-        return this.loadUrl(url, data);
+        return this.loadUrl(url, params);
     }
 
     showLoader() {

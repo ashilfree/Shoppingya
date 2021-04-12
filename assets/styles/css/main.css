@@ -1821,6 +1821,16 @@ button.mfp-close {
   cursor: pointer;
 }
 
+/*@media (max-width: 767px) {*/
+/*  .wrap-num-product {*/
+/*    width: 50px;*/
+/*  }*/
+/*  .btn-num-product-up,*/
+/*  .btn-num-product-down {*/
+/*    display: none;*/
+/*  }*/
+/*}*/
+
 .num-product {
   width: calc(100% - 90px);
   height: 100%;

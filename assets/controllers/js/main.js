@@ -247,12 +247,12 @@
 
     /*==================================================================
     [ +/- num product ]*/
-    $('.btn-num-product-down').on('click', function(){
+    $('.btn-num-product-down').on('click touchstart', function(){
         var numProduct = Number($(this).next().val());
         if(numProduct > 1) $(this).next().val(numProduct - 1);
     });
 
-    $('.btn-num-product-up').on('click', function(){
+    $('.btn-num-product-up').on('click touchstart', function(){
 
         var numProduct = Number($(this).prev().val());
         if(numProduct < $(this).data('max'))
