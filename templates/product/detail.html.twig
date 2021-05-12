@@ -5,12 +5,12 @@
     <!-- breadcrumb -->
     <div class="container">
         <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-            <a href="{{ path('home') }}" class="stext-109 cl8 hov-cl1 trans-04">
+            <a href="{{ path('home', { locale: 'en' }) }}" class="stext-109 cl8 hov-cl1 trans-04">
                 Home
                 <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
             </a>
 
-            <a href="{{ path('products') }}" class="stext-109 cl8 hov-cl1 trans-04">
+            <a href="{{ path('products', { locale: 'en' }) }}" class="stext-109 cl8 hov-cl1 trans-04">
                 {{ product.category.name }}
                 <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
             </a>
@@ -61,19 +61,19 @@
                             <div class="style-1">
                                 <del>
                         <span class="stext-105 cl3">
-									{{ (product.price / 100) |number_format(2, '.', ',') }} KWD
+									{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
 								</span>
                                 </del>
                                 <ins>
                         <span class="stext-105 cl3">
-									{{ (product.discountPrice / 100) |number_format(2, '.', ',') }} KWD
+									{{ (product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency }}
 								</span>
                                 </ins>
                             </div>
                         {% else %}
                             <ins>
                         <span class="stext-105 cl3">
-									{{ (product.price / 100) |number_format(2, '.', ',') }} KWD
+									{{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
 								</span>
                             </ins>
                         {% endif %}
@@ -117,7 +117,7 @@
 {#                                        </div>#}
 {#                                    </div>#}
 
-                                    <a id="add-to-cart" href="{{ path('add.cart') }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                    <a id="add-to-cart" href="{{ path('add.cart', { locale: 'en' }) }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                         Add to cart
                                     </a>
                                 </div>
@@ -267,7 +267,7 @@
                                             {% for catalog in  product.catalogs %} data-size{{ loop.index }}="{{ catalog.size }}" {% endfor %}
                                             {% for catalog in  product.catalogs %} data-quantity{{ loop.index }}="{{ catalog.quantity }}" {% endfor %}
                                             {% for image in  product.images %} data-image{{ loop.index }}="{{ image }}" {% endfor %}
-                                       data-href-a ="{{ path('add.cart') }}"
+                                       data-href-a ="{{ path('add.cart', { locale: 'en' }) }}"
                                     >
                                         Quick View
                                     </a>
@@ -275,28 +275,28 @@
 
                                 <div class="block2-txt flex-w flex-t p-t-14">
                                     <div class="block2-txt-child1 flex-col-l ">
-                                        <a href="{{ path('product', {'slug': product.slug }) }}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        <a href="{{ path('product', {locale: 'en', 'slug': product.slug }) }}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                             {{ product.name|upper }}
                                         </a>
 
                                         {% if product.discountPrice != null %}
                                             <div class="style-1">
                                                 <del>
-                        <span class="stext-105 cl3">
-									{{ (product.price / 100) |number_format(2, '.', ',') }} KWD
-								</span>
+                                                    <span class="stext-105 cl3">
+                                                        {{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                    </span>
                                                 </del>
                                                 <ins>
-                        <span class="stext-105 cl3">
-									{{ (product.discountPrice / 100) |number_format(2, '.', ',') }} KWD
-								</span>
+                                                    <span class="stext-105 cl3">
+                                                        {{ (product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                    </span>
                                                 </ins>
                                             </div>
                                         {% else %}
                                             <ins>
-                        <span class="stext-105 cl3">
-									{{ (product.price / 100) |number_format(2, '.', ',') }} KWD
-								</span>
+                                                <span class="stext-105 cl3">
+                                                    {{ (product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                </span>
                                             </ins>
                                         {% endif %}
                                     </div>

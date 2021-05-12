@@ -7,7 +7,7 @@
             <div class="solid_banner_inner">
                 <h3>عربة التسوق</h3>
                 <ul>
-                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">الصفحة الرئيسية</a></li>
                     <li><a>الدفع</a></li>
                 </ul>
             </div>
@@ -34,7 +34,7 @@
         </div>
     </div>
     <!-- Check Out -->
-    {{ form_start(form, {action: path('order.recap.ar'), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+    {{ form_start(form, {action: path('order.recap', { locale: 'ar' }), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
         <div class="col-md-7 text-right">
             <div class="colorlib-form">
                 <h2>تفاصيل الفاتورة</h2>
@@ -123,7 +123,7 @@
                     <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                         التالي
                     </button>
-                    <a href="{{ path('back.to.cart') }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                    <a href="{{ path('back.to.cart', { locale: 'en' }) }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                         العودة إلى عربة التسوق
                     </a>
                 </div>

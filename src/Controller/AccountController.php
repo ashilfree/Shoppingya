@@ -19,7 +19,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * Class AccountController
  * @package App\Controller
- * @Route("/account")
  */
 class AccountController extends AbstractController
 {
@@ -44,19 +43,22 @@ class AccountController extends AbstractController
         $this->wishlist = $wishlist;
     }
 
-	/**
-	 * @Route("/", name="account")
-	 */
-	public function index(): Response
+    /**
+     * @Route("/{locale}/account", name="account", defaults={"locale"="en"})
+     * @param $locale
+     * @return Response
+     */
+	public function index($locale): Response
 	{
         /**
          * @var Customer $customer
          */
         $customer = $this->getUser();
-        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders($customer);
         $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
         $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
-		return $this->render('account/index.html.twig', [
+        $path = ($locale == "en") ? 'account/index.html.twig' : 'account/indexAr.html.twig';
+		return $this->render($path, [
             'page' => 'account',
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
@@ -68,34 +70,12 @@ class AccountController extends AbstractController
 	}
 
     /**
-     * @Route("/ar", name="account.ar")
-     */
-    public function indexAr(): Response
-    {
-        /**
-         * @var Customer $customer
-         */
-        $customer = $this->getUser();
-        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
-        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
-        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
-        return $this->render('account/indexAr.html.twig', [
-            'page' => 'account.ar',
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-            'customer' => $customer,
-            'pendingOrders' => $pendingOrders,
-            'successOrders' => $successOrders,
-            'canceledOrders' => $canceledOrders,
-        ]);
-    }
-
-    /**
-     * @Route("/edit-account", name="edit.account")
+     * @Route("/{locale}/account/edit-account", name="edit.account", defaults={"locale"="en"})
+     * @param $locale
      * @param Request $request
      * @return Response
      */
-    public function edit(Request $request): Response
+    public function edit($locale, Request $request): Response
     {
         $customer = $this->getUser();
         $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
@@ -105,9 +85,10 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
-            return $this->redirectToRoute('account');
+            return $this->redirectToRoute('account', ['locale' => $locale]);
         }
-        return $this->render('account/edit_profile.html.twig', [
+        $path = ($locale == "en") ? 'account/edit_profile.html.twig' : 'account/edit_profileAr.html.twig';
+        return $this->render($path, [
             'page' => 'edit.account',
             'form' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
@@ -120,9 +101,11 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/my-orders", name="my.orders")
+     * @Route("/{locale}/account/my-orders", name="my.orders", defaults={"locale"="en"})
+     * @param $locale
+     * @return Response
      */
-    public function myOrders(): Response
+    public function myOrders($locale): Response
     {
         /**
          * @var Customer $customer
@@ -132,7 +115,8 @@ class AccountController extends AbstractController
         $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
         $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
         $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
-        return $this->render('account/my_orders.html.twig', [
+        $path = ($locale == "en") ? 'account/my_orders.html.twig' : 'account/my_ordersAr.html.twig';
+        return $this->render($path, [
             'page' => 'my.orders',
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
@@ -145,21 +129,23 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/my-order-detail/{id}", name="my.order.detail")
+     * @Route("/{locale}/account/my-order-detail/{id}", name="my.order.detail", defaults={"locale"="en"})
+     * @param $locale
      * @param Order $order
      * @return Response
      */
-    public function myOrderDetail(Order $order): Response
+    public function myOrderDetail($locale, Order $order): Response
     {
         $customer = $this->getUser();
         if (!$order || $order->getCustomer() != $customer){
-			return $this->redirectToRoute('home');
+			return $this->redirectToRoute('home', ['locale' => $locale]);
 		}
         $orderDetails = $this->entityManager->getRepository(OrderDetails::class)->findBy(['myOrder' => $order]);
         $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
         $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
         $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
-        return $this->render('account/my_order_detail.html.twig', [
+        $path = ($locale == "en") ? 'account/my_order_detail.html.twig' : 'account/my_order_detailAr.html.twig';
+        return $this->render($path, [
             'page' => 'my.order.detail',
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
@@ -173,12 +159,13 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/edit-password", name="edit.password")
+     * @Route("/{locale}/account/edit-password", name="edit.password", defaults={"locale"="en"})
+     * @param $locale
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @return Response
      */
-    public function editPassword(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function editPassword($locale, Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $customer = $this->getUser();
         $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
@@ -193,18 +180,21 @@ class AccountController extends AbstractController
                 $password = $encoder->encodePassword($customer, $new_password);
                 $customer->setPassword($password);
                 $this->entityManager->flush();
+                $message = ($locale == "en") ? 'Your changes were saved!' : 'تم حفظ التغييرات الخاصة بك!';
                 $this->addFlash(
                     'notice',
-                    'Your changes were saved!'
+                    $message
                 );
             } else {
+                $message = ($locale == "en") ? 'Check your password' : 'تحقق من كلمة المرور الخاصة بك';
                 $this->addFlash(
                     'notice',
-                    'Check your password'
+                    $message
                 );
             }
         }
-        return $this->render('account/edit_password.html.twig', [
+        $path = ($locale == "en") ? 'account/edit_password.html.twig' : 'account/edit_passwordAr.html.twig';
+        return $this->render($path, [
             'page' => 'edit.password',
             'form' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),

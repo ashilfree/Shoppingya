@@ -8,7 +8,7 @@
             <div class="solid_banner_inner">
                 <h3>تسجيل الدخول</h3>
                 <ul>
-                    <li><a href="{{ path('home.ar') }}">الصفحة الرئيسية</a></li>
+                    <li><a href="{{ path('home', { locale: 'ar' }) }}">الصفحة الرئيسية</a></li>
                     <li><a>تسجيل الدخول</a></li>
                 </ul>
             </div>
@@ -40,10 +40,10 @@
                             </div>
                             <div class="col-lg-12 form-group">
                                 <div class="creat_account">
-                                    <a href="{{ path('register.ar') }}"><h4>إنشاء حساب...</h4></a>
+                                    <a href="{{ path('register', { locale: 'ar'}) }}"><h4>إنشاء حساب...</h4></a>
                                 </div>
                                 <div>
-                                    <a href="{{ path('app_forgot_password_request') }}"><h4>نسيت رقمك السري ؟</h4></a>
+                                    <a href="{{ path('app_forgot_password_request', { locale: 'ar'}) }}"><h4>نسيت رقمك السري ؟</h4></a>
                                 </div>
                             </div>
                             <div class="col-lg-12 form-group">

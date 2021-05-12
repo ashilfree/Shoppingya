@@ -23,10 +23,7 @@ class OrderType extends AbstractType
                 'label'=>false
             ])
             ->add('shippingAddress', TextType::class, [
-                'label'=>false,
-                'attr' => [
-                    'id' => 'address'
-                ]
+                'label'=>false
             ])
             ->add('shippingCity', TextType::class, [
                 'label'=>false
@@ -37,8 +34,6 @@ class OrderType extends AbstractType
             ->add('shippingPostalCode', TextType::class, [
                 'label'=>false
             ])
-            ->add('shippingLat', HiddenType::class)
-            ->add('shippingLng', HiddenType::class)
             ->add('shippingEmail', EmailType::class, [
                 'label'=>false
             ])

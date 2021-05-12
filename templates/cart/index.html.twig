@@ -8,7 +8,7 @@
             <div class="solid_banner_inner">
                 <h3>Cart</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
                     <li><a>Shopping Cart</a></li>
                 </ul>
             </div>
@@ -36,93 +36,96 @@
     </div>
     <!-- Shoping Cart -->
     {% if(delivery == '') %}
-      {% set delivery = 0 %}
+        {% set delivery = 0 %}
     {% endif %}
-    <form class="bg0 p-t-75 p-b-85 js-cart-form" action="{{ path('update.cart')}}">
+    <form class="bg0 p-t-75 p-b-85 js-cart-form" action="{{ path('update.cart', { locale: 'en' }) }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50">
                     <div class="m-l-25 m-r--38 m-lr-0-xl">
-                            <div class="wrap-table-shopping-cart">
-                                <table class="table-shopping-cart">
-                                    <tr class="table_head">
-                                        <th class="column-1">Product</th>
-                                        <th class="column-2"></th>
-                                        <th class="column-3">Price</th>
-                                        <th class="column-4">Quantity</th>
-                                        <th class="column-5">Total</th>
-                                    </tr>
-                                    {% set total = null %}
-                                    {% if cart %}
-                                        {% for cartItem in cart %}
-                                            <tr class="table_row">
-                                                <td class="column-1">
-                                                    <a href="{{ path('delete.cart', {id: cartItem.catalog.id, route:page}) }}">
-                                                        <div class="how-itemcart1">
-                                                            <img src="{{ vich_uploader_asset(cartItem.catalog.product.images.first, 'imageFile') | imagine_filter('small') }} "
-                                                                 alt="{{ cartItem.catalog.product.name }}">
-                                                        </div>
-                                                    </a>
-                                                </td>
-                                                <td class="column-2">{{ cartItem.catalog.product.name|upper }} <br> Size {{ cartItem.catalog.size }} </td>
-                                                <td class="column-3">
-                                                    {% if cartItem.catalog.product.discountPrice != null %}
-                                                        {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency }}
-                                                    {% else %}
-                                                        {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
-                                                    {% endif %}
-                                                </td>
-                                                <td class="column-4">
-                                                    <input type="hidden" name="catalog-{{ loop.index }}" value="{{ cartItem.catalog.id }}">
-                                                    <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m js-quantity">
-                                                            <i class="fs-16 zmdi zmdi-minus"></i>
-                                                        </div>
-                                                        <input class="mtext-104 cl3 txt-center num-product"
-                                                               type="number"
-                                                               name="quantity-{{ loop.index }}" value="{{ cartItem.quantity }}">
-                                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m js-quantity"
-                                                             data-max="{{ cartItem.catalog.quantity }}">
-                                                            <i class="fs-16 zmdi zmdi-plus"></i>
-                                                        </div>
+                        <div class="wrap-table-shopping-cart">
+                            <table class="table-shopping-cart">
+                                <tr class="table_head">
+                                    <th class="column-1">Product</th>
+                                    <th class="column-2"></th>
+                                    <th class="column-3">Price</th>
+                                    <th class="column-4">Quantity</th>
+                                    <th class="column-5">Total</th>
+                                </tr>
+                                {% set total = null %}
+                                {% if cart %}
+                                    {% for cartItem in cart %}
+                                        <tr class="table_row">
+                                            <td class="column-1">
+                                                <a href="{{ path('delete.cart', {locale: 'en' ,id: cartItem.catalog.id, route:page}) }}">
+                                                    <div class="how-itemcart1">
+                                                        <img src="{{ vich_uploader_asset(cartItem.catalog.product.images.first, 'imageFile') | imagine_filter('small') }} "
+                                                             alt="{{ cartItem.catalog.product.name }}">
                                                     </div>
-                                                </td>
-                                                <td class="column-5">
-                                                    <span>
-                                                        {% if cartItem.catalog.product.discountPrice != null %}
-                                                        {{ (cartItem.catalog.product.discountPrice * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                                </a>
+                                            </td>
+                                            <td class="column-2">{{ cartItem.catalog.product.name|upper }} <br>
+                                                Size {{ cartItem.catalog.size }} </td>
+                                            <td class="column-3">
+                                                {% if cartItem.catalog.product.discountPrice != null %}
+                                                    {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                {% else %}
+                                                    {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} {{ currency }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="column-4">
+                                                <input type="hidden" name="catalog-{{ loop.index }}"
+                                                       value="{{ cartItem.catalog.id }}">
+                                                <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m js-quantity">
+                                                        <i class="fs-16 zmdi zmdi-minus"></i>
+                                                    </div>
+                                                    <input class="mtext-104 cl3 txt-center num-product"
+                                                           type="number"
+                                                           name="quantity-{{ loop.index }}"
+                                                           value="{{ cartItem.quantity }}">
+                                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m js-quantity"
+                                                         data-max="{{ cartItem.catalog.quantity }}">
+                                                        <i class="fs-16 zmdi zmdi-plus"></i>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="column-5">
+
+                                                {% if cartItem.catalog.product.discountPrice != null %}
+                                                    <span> {{ (cartItem.catalog.product.discountPrice * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                                {% else %}
+                                                    <span>{{ (cartItem.catalog.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% if cartItem.catalog.product.discountPrice != null %}
+                                            {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice)/100 %}
                                         {% else %}
-                                            {{ (cartItem.catalog.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span>{{ currency }}
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                            {% if cartItem.catalog.product.discountPrice != null %}
-                                                {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice)/100 %}
-                                            {% else %}
-                                                {% set total = total + (cartItem.quantity * cartItem.catalog.product.price)/100 %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
+                                            {% set total = total + (cartItem.quantity * cartItem.catalog.product.price)/100 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
 
-                                </table>
+                            </table>
+                        </div>
+
+                        <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm text-right">
+                            <div class="flex-w flex-m m-r-20 m-tb-5">
+                                {# <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" #}
+                                {# name="coupon" placeholder="Coupon Code"> #}
+
+                                {# <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5 js-apply-coupon"> #}
+                                {# Apply coupon #}
+                                {# </div> #}
                             </div>
-
-                            <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm text-right">
-                                <div class="flex-w flex-m m-r-20 m-tb-5">
-{#                                    <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text"#}
-{#                                           name="coupon" placeholder="Coupon Code">#}
-
-{#                                    <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5 js-apply-coupon">#}
-{#                                        Apply coupon#}
-{#                                    </div>#}
-                                </div>
-                                <div>
-                                    <a href="{{ path('remove.cart', {route: page}) }}"
-                                            class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                                        Clear Cart
-                                    </a>
-                                </div>
+                            <div>
+                                <a href="{{ path('remove.cart', {locale: 'en' ,route: page}) }}"
+                                   class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                                    Clear Cart
+                                </a>
                             </div>
+                        </div>
                     </div>
                 </div>
 
@@ -153,7 +156,7 @@
                         <div class="flex-w flex-t bor12 p-t-15 p-b-30">
                             <div class="size-208 w-full-ssm">
 								<span class="stext-110 cl2">
-									Shipping:
+									Delivery:
 								</span>
                             </div>
 
@@ -166,24 +169,25 @@
                             </div>
                             <div class="p-t-15 size-209">
 									<span class="stext-112 cl8">
-										Calculate Shipping
+										Calculate Delivery
 									</span>
                                 <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
                                     <select class="js-select2" name="delivery" required="required">
                                         <option value="">Select a region...</option>
                                         {% for governorate in governorates %}
-                                            <option {% if delivery is defined and delivery == governorate.price  %}  selected {% endif %} value="{{ governorate.price }}">{{ governorate.name }}</option>
+                                            <option {% if delivery is defined and delivery == governorate.price %}  selected {% endif %}
+                                                    value="{{ governorate.price }}">{{ governorate.name }}</option>
                                         {% endfor %}
                                     </select>
                                     <div class="dropDownSelect2"></div>
                                 </div>
 
-{#                                <div class="flex-w">#}
-{#                                    <button type="submit"#}
-{#                                            class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04">#}
-{#                                        Update Totals#}
-{#                                    </button>#}
-{#                                </div>#}
+                                {# <div class="flex-w"> #}
+                                {# <button type="submit" #}
+                                {# class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04"> #}
+                                {# Update Totals #}
+                                {# </button> #}
+                                {# </div> #}
 
                             </div>
                         </div>
@@ -200,7 +204,7 @@
                                     {% if delivery is defined %}
                                         {{ (delivery/100)|number_format(2, '.', ',') }}
                                     {% else %}
-									    0.00
+                                        0.00
                                     {% endif %}
 								</span>
                                 {{ currency }}
@@ -226,9 +230,9 @@
                             </div>
                         </div>
 
-                        <a {% if delivery is null or delivery == 0 %} href="javascript:void(0)" {% else %} href="{{ path('order') }}" {% endif %}
-                           class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04" {% if delivery is null or delivery == 0 %} disabled {% endif %}
-                           data-toggle="tooltip" data-placement="top" title="Calculate Shipping">
+                        <a {% if delivery is null or delivery == 0 %} href="javascript:void(0)" {% else %} href="{{ path('order', { locale: 'en' }) }}" {% endif %}
+                                class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04" {% if delivery is null or delivery == 0 %} disabled {% endif %}
+                                data-toggle="tooltip" data-placement="top" title="Calculate Shipping">
                             Proceed to Checkout
                         </a>
                     </div>

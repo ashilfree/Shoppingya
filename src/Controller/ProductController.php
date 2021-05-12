@@ -46,34 +46,38 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/products", name="products")
+     * @Route("/{locale}/products", name="products", defaults={"locale"="en"})
+     * @param $locale
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index($locale, Request $request): Response
     {
         $filter = new Filter();
         $search = new Search();
         $filter->page = $request->get('page',1);
-        $filterType = $this->createForm(FilterType::class, $filter);
+        $filterType = ($locale == "en") ? $this->createForm(FilterType::class, $filter) : $this->createForm(FilterArType::class, $filter);
         $searchType = $this->createForm(SearchType::class, $search);
         $filterType->handleRequest($request);
         $searchType->handleRequest($request);
         $products = $this->productRepository->findSearch($filter, $search, 8);
         [$min , $max] = $this->productRepository->findMinMax($filter);
 
+        $content = ($locale == "en") ? 'product/products.html.twig' : 'product/productsAr.html.twig';
+        $sorting = ($locale == "en") ? 'product/_sorting.html.twig' : 'product/_sortingAr.html.twig';
+        $pagination = ($locale == "en") ? 'product/_more.html.twig' : 'product/_moreAr.html.twig';
         if($request->get('ajax')){
             return new JsonResponse([
-                "content" => $this->renderView('product/products.html.twig', ['products' => $products]),
-                'sorting' => $this->renderView('product/_sorting.html.twig', ['products' => $products]),
-                'pagination' => $this->renderView('product/_more.html.twig', ['products' => $products]),
+                "content" => $this->renderView($content, ['products' => $products]),
+                'sorting' => $this->renderView($sorting, ['products' => $products]),
+                'pagination' => $this->renderView($pagination, ['products' => $products]),
                 'pages' => ceil($products->getTotalItemCount() / $products->getItemNumberPerPage()),
                 'min' => $min,
                 'max' => $max
             ]);
         }
-
-        return $this->render('product/index.html.twig', [
+        $path = ($locale == "en") ? 'product/index.html.twig' : 'product/indexAr.html.twig';
+        return $this->render($path, [
             'page' => 'products',
             'categories' => $this->categoryRepository->findAll(),
             'products' => $products,
@@ -88,80 +92,20 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{slug}", name="product")
+     * @Route("/{locale}/product/{slug}", name="product", defaults={"locale"="en"})
+     * @param $locale
      * @param $slug
      * @return Response
      */
-    public function show($slug): Response
+    public function show($locale, $slug): Response
     {
         $product = $this->productRepository->findOneBy(['slug'=>$slug]);
         if(!$product)
-            return $this->redirectToRoute('products');
+            return $this->redirectToRoute('products', ['locale' => $locale]);
         $products = $this->productRepository->findBy(['category'=>$product->getCategory()]);
-        return $this->render('product/detail.html.twig', [
+        $path = ($locale == "en") ? 'product/detail.html.twig' : 'product/detailAr.html.twig';
+        return $this->render($path, [
             'page' => 'product',
-            'product' => $product,
-            'products' => $products,
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-        ]);
-    }
-
-    /**
-     * @Route("/products-ar", name="products.ar")
-     * @param Request $request
-     * @return Response
-     */
-    public function indexAr(Request $request): Response
-    {
-        $filter = new Filter();
-        $search = new Search();
-        $filter->page = $request->get('page',1);
-        $filterArType = $this->createForm(FilterArType::class, $filter);
-        $searchType = $this->createForm(SearchType::class, $search);
-        $filterArType->handleRequest($request);
-        $searchType->handleRequest($request);
-        $products = $this->productRepository->findArSearch($filter, $search, 8);
-        [$min , $max] = $this->productRepository->findMinMax($filter);
-
-        if($request->get('ajax')){
-            return new JsonResponse([
-                "content" => $this->renderView('product/productsAr.html.twig', ['products' => $products]),
-                'sorting' => $this->renderView('product/_sorting.html.twig', ['products' => $products]),
-                'pagination' => $this->renderView('product/_more.html.twig', ['products' => $products]),
-                'pages' => ceil($products->getTotalItemCount() / $products->getItemNumberPerPage()),
-                'min' => $min,
-                'max' => $max
-            ]);
-        }
-
-        return $this->render('product/indexAr.html.twig', [
-            'page' => 'products.ar',
-            'categories' => $this->categoryRepository->findAll(),
-            'products' => $products,
-            'filter_form' => $filterArType->createView(),
-            'search_form' => $searchType->createView(),
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-            'wish' => $this->wishlist->get(),
-            'min' => $min,
-            'max' => $max
-        ]);
-    }
-
-    /**
-     * @Route("/product-ar/{slug}", name="product.ar")
-     * @param $slug
-     * @return Response
-     */
-    public function showAr($slug): Response
-    {
-        $product = $this->productRepository->findOneBy(['slug'=>$slug]);
-        if(!$product)
-            return $this->redirectToRoute('products.ar');
-        $products = $this->productRepository->findBy(['category'=>$product->getCategory()]);
-        return $this->render('product/detailAr.html.twig', [
-            'page' => 'product.ar',
             'product' => $product,
             'products' => $products,
             'cart' => $this->cart->getFull($this->cart->get()),

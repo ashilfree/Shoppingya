@@ -34,79 +34,46 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart", name="cart")
+     * @Route("/{locale}/cart", name="cart", defaults={"locale"="en"})
+     * @param $locale
      * @return Response
      */
-    public function index(): Response
+    public function index($locale): Response
     {
         $cart = $this->cart->getFull($this->cart->get());
-        if (empty($cart))
-            return $this->render('cart/empty-cart.html.twig', [
+        if (empty($cart)) {
+            $path = ($locale == "en") ? 'cart/empty-cart.html.twig' : 'cart/empty-cartAr.html.twig';
+            return $this->render($path, [
                 'cart' => $cart,
                 'wishlist' => $this->wishlist->getFull(),
             ]);
-        else
-            return $this->render('cart/index.html.twig', [
+        }else {
+            $path = ($locale == "en") ? 'cart/index.html.twig' : 'cart/indexAr.html.twig';
+            return $this->render($path, [
                 'cart' => $cart,
                 'wishlist' => $this->wishlist->getFull(),
                 'page' => 'cart',
                 'delivery' => $this->cart->getDelivery(),
                 'governorates' => $this->governorateRepository->findAll()
             ]);
-    }
-
-    /**
-     * @Route("/cart-ar", name="cart.ar")
-     * @return Response
-     */
-    public function indexَAr(): Response
-    {
-        $cart = $this->cart->getFull($this->cart->get());
-        if (empty($cart))
-            return $this->render('cart/empty-cartAr.html.twig', [
-                'cart' => $cart,
-                'wishlist' => $this->wishlist->getFull(),
-            ]);
-        else
-            return $this->render('cart/indexAr.html.twig', [
-                'cart' => $cart,
-                'wishlist' => $this->wishlist->getFull(),
-                'page' => 'cart.ar',
-                'delivery' => $this->cart->getDelivery(),
-                'governorates' => $this->governorateRepository->findAll()
-            ]);
-    }
-
-    /**
-     * @Route("/cart/add/{id}", name="add.cart", defaults={"id"=0})
-     * @param $id
-     * @param Request $request
-     * @return Response
-     */
-    public function add($id, Request $request): Response
-    {
-        $this->cart->add($id);
-        if(substr($request->server->get("HTTP_REFERER"), -2) == "ar"){
-            return $this->redirectToRoute('products.ar');
-        }else{
-            return $this->redirectToRoute('products');
         }
     }
 
     /**
-     * @Route("/cart/add-ar/{id}", name="add.cart.ar", defaults={"id"=0})
+     * @Route("/{locale}/cart/add/{id}", name="add.cart", defaults={"id"=0, "locale"="en"})
+     * @param $locale
      * @param $id
+     * @param Request $request
      * @return Response
      */
-    public function addAr($id): Response
+    public function add($locale, $id, Request $request): Response
     {
         $this->cart->add($id);
-            return $this->redirectToRoute('products.ar');
-
+        return $this->redirectToRoute('products', ["locale" => $locale]);
     }
 
     /**
-     * @Route("/cart/update/{locale}", name="update.cart", defaults={"locale"="en"})
+     * @Route("/{locale}/cart/update", name="update.cart", defaults={"locale"="en"})
      * @param $locale
      * @param Request $request
      * @return Response
@@ -115,34 +82,31 @@ class CartController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $this->cart->update($data);
-        if($locale == "ar"){
-            return $this->redirectToRoute('cart.ar');
-        }else{
-            return $this->redirectToRoute('cart');
-        }
-
+        return $this->redirectToRoute('cart', ["locale" => $locale]);
     }
 
     /**
-     * @Route("/cart/remove/{route}", name="remove.cart")
+     * @Route("/{locale}/cart/remove/{route}", name="remove.cart", defaults={"locale"="en"})
+     * @param $locale
      * @param $route
      * @return Response
      */
-    public function remove($route): Response
+    public function remove($locale, $route): Response
     {
         $this->cart->remove();
-        return $this->redirectToRoute($route);
+        return $this->redirectToRoute($route, ["locale" => $locale]);
     }
 
     /**
-     * @Route("/cart/delete/{id}-{route}", name="delete.cart")
+     * @Route("/{locale}/cart/delete/{id}-{route}", name="delete.cart", defaults={"locale"="en"})
+     * @param $locale
      * @param $id
      * @param $route
      * @return Response
      */
-    public function delete($id, $route): Response
+    public function delete($locale, $id, $route): Response
     {
         $this->cart->delete($id);
-        return $this->redirectToRoute($route);
+        return $this->redirectToRoute($route, ["locale" => $locale]);
     }
 }

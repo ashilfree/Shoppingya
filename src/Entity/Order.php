@@ -47,7 +47,12 @@ class Order
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $stripeSessionId;
+    private $invoiceId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $invoiceKey;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -85,16 +90,6 @@ class Order
     private $shippingPostalCode;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $shippingLat;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $shippingLng;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $shippingEmail;
@@ -103,6 +98,11 @@ class Order
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $shippingPhone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $paymentMethod;
 
     /**
      * @ORM\Column(type="float")
@@ -239,14 +239,26 @@ class Order
         return $total;
     }
 
-    public function getStripeSessionId(): ?string
+    public function getInvoiceId(): ?string
     {
-        return $this->stripeSessionId;
+        return $this->invoiceId;
     }
 
-    public function setStripeSessionId(?string $stripeSessionId): self
+    public function setInvoiceId(?string $invoiceId): self
     {
-        $this->stripeSessionId = $stripeSessionId;
+        $this->invoiceId = $invoiceId;
+
+        return $this;
+    }
+
+    public function getInvoiceKey(): ?string
+    {
+        return $this->invoiceKey;
+    }
+
+    public function setInvoiceKey(?string $invoiceKey): self
+    {
+        $this->invoiceKey = $invoiceKey;
 
         return $this;
     }
@@ -331,30 +343,6 @@ class Order
     public function setShippingPostalCode(string $shippingPostalCode): self
     {
         $this->shippingPostalCode = $shippingPostalCode;
-
-        return $this;
-    }
-
-    public function getShippingLat(): ?float
-    {
-        return $this->shippingLat;
-    }
-
-    public function setShippingLat(float $shippingLat): self
-    {
-        $this->shippingLat = $shippingLat;
-
-        return $this;
-    }
-
-    public function getShippingLng(): ?float
-    {
-        return $this->shippingLng;
-    }
-
-    public function setShippingLng(float $shippingLng): self
-    {
-        $this->shippingLng = $shippingLng;
 
         return $this;
     }
@@ -467,5 +455,19 @@ class Order
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
 
+    /**
+     * @param mixed $paymentMethod
+     */
+    public function setPaymentMethod($paymentMethod): void
+    {
+        $this->paymentMethod = $paymentMethod;
+    }
 }

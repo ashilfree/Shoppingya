@@ -24,41 +24,39 @@ class WishListController extends AbstractController
     }
 
     /**
-     * @Route("/wishlist/add/{id}", name="add.wishlist", defaults={"id"=0})
+     * @Route("/{locale}/wishlist/add/{id}", name="add.wishlist", defaults={"id"=0, "locale"="en"})
+     * @param $locale
      * @param $id
-     * @param Request $request
      * @return Response
      */
-    public function add($id, Request $request): Response
+    public function add($locale, $id): Response
     {
         $this->wishlist->add($id);
-        if(substr($request->server->get("HTTP_REFERER"), -2) == "ar"){
-            return $this->redirectToRoute('products.ar');
-        }else{
-            return $this->redirectToRoute('products');
-        }
+        return $this->redirectToRoute('products', ['label' => $locale]);
     }
 
     /**
-     * @Route("/wishlist/remove/{route}", name="remove.wishlist")
+     * @Route("/{locale}/wishlist/remove/{route}", name="remove.wishlist", defaults={"locale"="en"})
+     * @param $locale
      * @param $route
      * @return Response
      */
-    public function remove($route): Response
+    public function remove($locale, $route): Response
     {
         $this->wishlist->remove();
-        return $this->redirectToRoute($route);
+        return $this->redirectToRoute($route, ['locale' => $locale]);
     }
 
     /**
-     * @Route("/wishlist/delete/{id}-{route}", name="delete.wishlist")
+     * @Route("/{locale}/wishlist/delete/{id}-{route}", name="delete.wishlist", defaults={"locale"="en"})
+     * @param $locale
      * @param $id
      * @param $route
      * @return Response
      */
-    public function delete($id, $route): Response
+    public function delete($locale, $id, $route): Response
     {
         $this->wishlist->delete($id);
-        return $this->redirectToRoute($route);
+        return $this->redirectToRoute($route, ['locale' => $locale]);
     }
 }

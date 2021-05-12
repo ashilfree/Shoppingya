@@ -53,32 +53,20 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/", name="home")
+     * @Route("/{locale}", name="home", defaults={"locale"="en"})
+     * @param $locale
      * @return Response
      */
-    public function index(): Response
+    public function index($locale): Response
     {
-        return $this->render('home/index.html.twig', [
-            'page' => 'home',
-            'categories' => $this->categoryRepository->findAll(),
-            'slides' => $this->slideRepository->findAll(),
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-        ]);
-    }
+        $path = ($locale == "en") ? 'home/index.html.twig' : 'home/indexAr.html.twig';
+            return $this->render($path, [
+                'page' => 'home',
+                'categories' => $this->categoryRepository->findAll(),
+                'slides' => $this->slideRepository->findAll(),
+                'cart' => $this->cart->getFull($this->cart->get()),
+                'wishlist' => $this->wishlist->getFull(),
+            ]);
 
-    /**
-     * @Route("/ar", name="home.ar")
-     * @return Response
-     */
-    public function indexAr(): Response
-    {
-        return $this->render('home/indexAr.html.twig', [
-            'page' => 'home.ar',
-            'categories' => $this->categoryRepository->findAll(),
-            'slides' => $this->slideRepository->findAll(),
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-        ]);
     }
 }

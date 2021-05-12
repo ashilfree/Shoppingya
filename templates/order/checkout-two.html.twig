@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
-{% block javascript %}
-    <script src="https://js.stripe.com/v3/"></script>
-{% endblock %}
+{#{% block javascript %}#}
+{#    <script src="https://js.stripe.com/v3/"></script>#}
+{#{% endblock %}#}
 {% block body %}
 {% set total = null %}
     {% for orderDetail in cart2order %}
@@ -17,151 +17,167 @@
             <div class="solid_banner_inner">
                 <h3>Cart</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
                     <li><a>CheckOut</a></li>
                 </ul>
             </div>
         </div>
     </section>
     <!--================End Categories Banner Area =================-->
-<div class="container">
-    <div class="row row-pb-md  justify-content-center p-t-75">
-        <div class="col-md-10">
-            <div class="process-wrap">
-                <div class="process text-center active">
-                    <p><span>01</span></p>
-                    <h3>Shopping Cart</h3>
-                </div>
-                <div class="process text-center active">
-                    <p><span>02</span></p>
-                    <h3>Checkout<br>Step Two</h3>
-                </div>
-                <div class="process text-center">
-                    <p><span>03</span></p>
-                    <h3>Order Complete</h3>
+    <div class="container js-checkout">
+            <input type="hidden" id="orderId" value="{{ order.id }}">
+            <input type="hidden" id="locale" value="{{ locale }}">
+        <div class="row row-pb-md  justify-content-center p-t-75">
+            <div class="col-md-10">
+                <div class="process-wrap">
+                    <div class="process text-center active">
+                        <p><span>01</span></p>
+                        <h3>Shopping Cart</h3>
+                    </div>
+                    <div class="process text-center active">
+                        <p><span>02</span></p>
+                        <h3>Checkout<br>Step Two</h3>
+                    </div>
+                    <div class="process text-center">
+                        <p><span>03</span></p>
+                        <h3>Order Complete</h3>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Check Out -->
-    <section class="order_details p_120">
-        <div class="container">
-            <div class="row order_d_inner">
-                <div class="col-lg-4">
-                    <div class="details_item">
-                        <h4>Order Info</h4>
-                        <ul class="list">
-                            <li><a href="#"><span>Order number</span> : {{ order.reference }}</a></li>
-                            <li><a href="#"><span>Date</span> : {{ order.createdAt|date("m/d/Y") }}</a></li>
-                            <li><a href="#"><span>Total</span> : {{ (total + order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</a></li>
-                            <li><a href="#"><span>Shipping Price</span> : {{ order.deliveryPrice/100|number_format(2, '.', ',') ~ currency }}</a></li>
-                        </ul>
+        <!-- Check Out -->
+        <section class="order_details p_120">
+            <div class="container">
+                <div class="row order_d_inner">
+                    <div class="col-lg-4">
+                        <div class="details_item">
+                            <h4>Order Info</h4>
+                            <ul class="list">
+                                <li><a href="#"><span>Order number</span> : {{ order.reference }}</a></li>
+                                <li><a href="#"><span>Date</span> : {{ order.createdAt|date("m/d/Y") }}</a></li>
+                                <li><a href="#"><span>Total</span> : {{ (total + order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</a></li>
+                                <li><a href="#"><span>Shipping Price</span> : {{ order.deliveryPrice/100|number_format(2, '.', ',') ~ currency }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="details_item">
+                            <h4>Billing Info</h4>
+                            <ul class="list">
+                                <li><a href="#"><span>Name</span> : {{ order.shippingFirstName }}</a></li>
+                                <li><a href="#"><span>Last Name</span> : {{ order.shippingLastName }}</a></li>
+                                <li><a href="#"><span>Email</span> : {{ order.shippingEmail }}</a></li>
+                                <li><a href="#"><span>Phone </span> : {{ order.shippingPhone }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="details_item">
+                            <h4>Billing Address</h4>
+                            <ul class="list">
+                                <li><a href="#"><span>Street</span> : {{ order.shippingAddress }}</a></li>
+                                <li><a href="#"><span>City</span> : {{ order.shippingCity }}</a></li>
+                                <li><a href="#"><span>Governorate</span> : {{ order.shippingProvince }}</a></li>
+                                <li><a href="#"><span>Postcode </span> : {{ order.shippingPostalCode }}</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="details_item">
-                        <h4>Billing Info</h4>
-                        <ul class="list">
-                            <li><a href="#"><span>Name</span> : {{ order.shippingFirstName }}</a></li>
-                            <li><a href="#"><span>Last Name</span> : {{ order.shippingLastName }}</a></li>
-                            <li><a href="#"><span>Email</span> : {{ order.shippingEmail }}</a></li>
-                            <li><a href="#"><span>Phone </span> : {{ order.shippingPhone }}</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="details_item">
-                        <h4>Billing Address</h4>
-                        <ul class="list">
-                            <li><a href="#"><span>Street</span> : {{ order.shippingAddress }}</a></li>
-                            <li><a href="#"><span>City</span> : {{ order.shippingCity }}</a></li>
-                            <li><a href="#"><span>Governorate</span> : {{ order.shippingProvince }}</a></li>
-                            <li><a href="#"><span>Postcode </span> : {{ order.shippingPostalCode }}</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="order_details_table">
-                <h2>Order Details</h2>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Product</th>
-                            <th scope="col">Size</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                 <div class="row">
+                <div class="order_details_table col-md-8">
+                    <h2>Order Details</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Size</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        {% for orderDetail in cart2order %}
+                            {% for orderDetail in cart2order %}
+                                <tr>
+                                    <td>
+                                        <p>{{ orderDetail.catalog.product.name|upper }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ orderDetail.catalog.size }}</p>
+                                    </td>
+                                    <td>
+                                        <h5>x {{ orderDetail.quantity }}</h5>
+                                    </td>
+                                    <td>
+                                        <p>
+                                        {% if orderDetail.catalog.product.discountPrice != null %}
+                                        {{ orderDetail.catalog.product.discountPrice * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
+                                        {% else %}
+                                         {{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
+                                        {% endif %}
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             <tr>
                                 <td>
-                                    <p>{{ orderDetail.catalog.product.name|upper }}</p>
+                                    <h4>Subtotal</h4>
                                 </td>
                                 <td>
-                                    <p>{{ orderDetail.catalog.size }}</p>
+                                    <h5></h5>
                                 </td>
                                 <td>
-                                    <h5>x {{ orderDetail.quantity }}</h5>
-                                </td>
-                                <td>
-                                    <p>
-                                    {% if orderDetail.catalog.product.discountPrice != null %}
-                                    {{ orderDetail.catalog.product.discountPrice * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
-                                    {% else %}
-                                     {{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
-                                    {% endif %}
-                                    </p>
+                                    <p>{{ (total)/100|number_format(2, '.', ',') ~ currency }}</p>
                                 </td>
                             </tr>
-                        {% endfor %}
-                        <tr>
-                            <td>
-                                <h4>Subtotal</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>{{ (total)/100|number_format(2, '.', ',') ~ currency }}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>Shipping</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>Flat rate: {{ (order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>Total</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>{{ (total + order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</p>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            <tr>
+                                <td>
+                                    <h4>Shipping</h4>
+                                </td>
+                                <td>
+                                    <h5></h5>
+                                </td>
+                                <td>
+                                    <p>Flat rate: {{ (order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h4>Total</h4>
+                                </td>
+                                <td>
+                                    <h5></h5>
+                                </td>
+                                <td>
+                                    <p>{{ (total + order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+                <div class="col-md-4 m-t-75">
+                     <div class="p-t-15  p-all-30" style="background: #e5ecee;">
+                        <span class="stext-112 cl8">
+                            Payment Method
+                        </span>
+                        <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+                            <select class="js-select2" name="payment" required="required">
+                                <option value="">Select a payment method...</option>
+                                {% for paymentMethod in paymentMethods %}
+                                    <option
 
-        </div>
-        <div class="row">
-                <div class="col-md-12 p-all-40">
-                        <a id="checkout-button" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                                            value="{{ paymentMethod.id }}">{{ paymentMethod.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="dropDownSelect2"></div>
+                        </div>
+                    </div>
+                        <a id="checkout-button" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-t-30">
                             Place an order
                         </a>
-                        {{ form_start(form, {action: path('order')}) }}
+                        {{ form_start(form, {action: path('order', { locale: 'en' })}) }}
                         {{ form_row(form.id) }}
                         <button type="submit" class="flex-c-m stext-101 cl2 size-119 w-full bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                             Back
@@ -170,41 +186,49 @@
                         {{ form_end(form, {'render_rest': false}) }}
                 </div>
             </div>
-    </section>
-
+        </div>
+        </section>
+    </div>
 
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript">
         // Create an instance of the Stripe object with your publishable API key
-        var stripe = Stripe("pk_test_51IU51mLg5TZnbiRrqWBt7NVQhhSsMbzK33P5nDrDkEZbMhZyO3NCThWs6mX7T5AxV8jSptmcd639iYqJYzUJBgWn00qv2gkIyj");
+        // var stripe = Stripe("pk_test_51IU51mLg5TZnbiRrqWBt7NVQhhSsMbzK33P5nDrDkEZbMhZyO3NCThWs6mX7T5AxV8jSptmcd639iYqJYzUJBgWn00qv2gkIyj");
         var checkoutButton = document.getElementById("checkout-button");
-        checkoutButton.addEventListener("click", function () {
-            fetch("/order/create-session/{{ order.id }}", {
-                method: "POST",
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (session) {
-                    if(session.error == 'order'){
-                        window.location.replace({{ path('order') }});
-                    }else{
-                        return stripe.redirectToCheckout({ sessionId: session.id });
-                    }
-                })
-                .then(function (result) {
-                    // If redirectToCheckout fails due to a browser or network
-                    // error, you should display the localized error message to your
-                    // customer using error.message.
-                    if (result.error) {
-                        alert(result.error.message);
-                    }
-                })
-                .catch(function (error) {
-                    console.error("Error:", error);
-                });
-        });
+
+        {#checkoutButton.addEventListener("click", function () {#}
+
+        {#    alert($('.js-select2').select2('data'))#}
+        {#    fetch("/{{ locale }}/order/create-session/{{ order.id }}", {#}
+        {#      method: 'POST', // or 'PUT'#}
+        {#      headers: {#}
+        {#        'Content-Type': 'application/json',#}
+        {#      },#}
+        {#      body: JSON.stringify(data)#}
+        {#    })#}
+        {#        .then(function (response) {#}
+        {#            return response.json();#}
+        {#        })#}
+        {#        .then(function (session) {#}
+        {#            if(session.error === 'order'){#}
+        {#                window.location.replace("/{{ locale }}/order/{{ order.id }}");#}
+        {#            }else{#}
+        {#                // return stripe.redirectToCheckout({ sessionId: session.id });#}
+        {#            }#}
+        {#        })#}
+        {#        .then(function (result) {#}
+        {#            // If redirectToCheckout fails due to a browser or network#}
+        {#            // error, you should display the localized error message to your#}
+        {#            // customer using error.message.#}
+        {#            if (result.error) {#}
+        {#                alert(result.error.message);#}
+        {#            }#}
+        {#        })#}
+        {#        .catch(function (error) {#}
+        {#            console.error("Error:", error);#}
+        {#        });#}
+        {#});#}
     </script>
 {% endblock %}

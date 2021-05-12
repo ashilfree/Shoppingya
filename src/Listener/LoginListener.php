@@ -53,7 +53,7 @@ class LoginListener
 
     public function onKernelResponse(ResponseEvent $event)
     {
-        dd($event);
+        $locale = $event->getRequest()->getSession()->get('locale');
         $user = $this->security->getUser();
         if($user instanceof Customer) {
             $order = $this->em->getRepository(Order::class)->findOneBy([
@@ -62,8 +62,11 @@ class LoginListener
             ]);
             if($order) {
                 $this->cart->createCart2Order($order);
-                $event->setResponse(new RedirectResponse($this->router->generate('order', ['from' => false])));
+                $event->setResponse(new RedirectResponse($this->router->generate('order', ['locale' => $locale,'from' => false])));
+            }else{
+                $event->setResponse(new RedirectResponse($this->router->generate('home', ['locale' => $locale])));
             }
+
         }
     }
 }

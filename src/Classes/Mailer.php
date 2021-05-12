@@ -63,7 +63,7 @@ class Mailer{
 
     public function sendContactEmail(Contact $contact)
     {
-        $body = $this->twig->render('contact/contact.html.twig', [
+        $body = $this->twig->render('emails/contact.html.twig', [
                 'contact' => $contact
             ]
         );

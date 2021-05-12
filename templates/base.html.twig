@@ -33,16 +33,16 @@
                     </a>
 
                     {% if app.user %}
-                        <a href="{{ path('account') }}" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ path('account', { locale: 'en' }) }}" class="flex-c-m trans-04 p-lr-25">
                             My Account
                         </a>
                     {% else %}
-                        <a href="{{ path('register') }}" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ path('register', { locale: 'en' }) }}" class="flex-c-m trans-04 p-lr-25">
                             Register
                         </a>
                     {% endif %}
 
-                    <a href="{{ path('home.ar') }}" class="flex-c-m trans-04 p-lr-25">
+                    <a href="{{ path('home', { locale: 'ar' }) }}" class="flex-c-m trans-04 p-lr-25">
                         AR
                     </a>
 
@@ -53,7 +53,7 @@
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
-                        <a href="{{ path('login') }}" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ path('login', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
 
                             <i class="fa fa-sign-in"></i>
                         </a>
@@ -67,7 +67,7 @@
             <nav class="limiter-menu-desktop container">
 
                 <!-- Logo desktop -->
-                <a href="{{ path('home') }}" class="logo">
+                <a href="{{ path('home', { locale: 'en' }) }}" class="logo">
                     <img src="{{ '/media/images/icons/logo-01.png' }}" width="140" alt="IMG-LOGO">
                 </a>
 
@@ -75,20 +75,20 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li {% if page is defined and page == 'home' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('home') }}">Home</a>
+                            <a href="{{ path('home', { locale: 'en' }) }}">Home</a>
                         </li>
 
                         <li {% if page is defined and page == 'about.us' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('about.us') }}">About us</a>
+                            <a href="{{ path('about.us', { locale: 'en' }) }}">About us</a>
                         </li>
 
                         <li {% if page is defined and page == 'products' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('products') }}">Categories</a>
+                            <a href="{{ path('products', { locale: 'en' }) }}">Categories</a>
                         </li>
 
 
                         <li {% if page is defined and page == 'contact.us' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('contact.us') }}">Contact us</a>
+                            <a href="{{ path('contact.us', { locale: 'en' }) }}">Contact us</a>
                         </li>
                     </ul>
                 </div>
@@ -146,16 +146,16 @@
                     </a>
 
                     {% if app.user %}
-                        <a href="{{ path('account') }}" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ path('account', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                             My Account
                         </a>
                     {% else %}
-                        <a href="{{ path('register') }}" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ path('register', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                             Register
                         </a>
                     {% endif %}
 
-                    <a href="{{ path('home.ar') }}" class="flex-c-m p-lr-10 trans-04">
+                    <a href="{{ path('home' , { locale: 'ar' }) }}" class="flex-c-m p-lr-10 trans-04">
                         AR
                     </a>
 
@@ -166,7 +166,7 @@
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
-                        <a href="{{ path('login') }}" class="flex-c-m p-lr-10 p-t-5 trans-04">
+                        <a href="{{ path('login', { locale: 'en' }) }}" class="flex-c-m p-lr-10 p-t-5 trans-04">
 
                             <i class="fa fa-sign-in"></i>
                         </a>
@@ -178,19 +178,19 @@
 
         <ul class="main-menu-m">
             <li>
-                <a href="{{ path('home') }}">Home</a>
+                <a href="{{ path('home', { locale: 'en' }) }}">Home</a>
             </li>
 
             <li>
-                <a href="{{ path('about.us') }}">About us</a>
+                <a href="{{ path('about.us', { locale: 'en' }) }}">About us</a>
             </li>
 
             <li>
-                <a href="{{ path('products') }}">Categories</a>
+                <a href="{{ path('products', { locale: 'en' }) }}">Categories</a>
             </li>
 
             <li>
-                <a href="{{ path('contact.us') }}">Contact us</a>
+                <a href="{{ path('contact.us', { locale: 'en' }) }}">Contact us</a>
             </li>
         </ul>
     </div>

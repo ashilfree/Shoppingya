@@ -33,16 +33,16 @@
                     </a>
 
                     {% if app.user %}
-                        <a href="{{ path('account.ar') }}" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ path('account', { locale: 'ar' }) }}" class="flex-c-m trans-04 p-lr-25">
                             حسابي
                         </a>
                     {% else %}
-                        <a href="{{ path('register.ar') }}" class="flex-c-m trans-04 p-lr-25">
+                        <a href="{{ path('register', { locale: 'ar'}) }}" class="flex-c-m trans-04 p-lr-25">
                             تسجيل
                         </a>
                     {% endif %}
 
-                    <a href="{{ path('home') }}" class="flex-c-m trans-04 p-lr-25">
+                    <a href="{{ path('home', { locale: 'en' }) }}" class="flex-c-m trans-04 p-lr-25">
                         الإنجليزية
                     </a>
 
@@ -67,7 +67,7 @@
             <nav class="limiter-menu-desktop container">
 
                 <!-- Logo desktop -->
-                <a href="{{ path('home.ar') }}" class="logo">
+                <a href="{{ path('home', { locale: 'ar' }) }}" class="logo">
                     <img src="{{ '/media/images/icons/logo-01.png' }}" width="140" alt="IMG-LOGO">
                 </a>
 
@@ -75,20 +75,20 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li {% if page is defined and page == 'home.ar' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('home.ar') }}">الصفحة الرئيسية</a>
+                            <a href="{{ path('home', { locale: 'ar' }) }}">الصفحة الرئيسية</a>
                         </li>
 
                         <li {% if page is defined and page == 'about.us.ar' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('about.us.ar') }}">عن الشركة</a>
+                            <a href="{{ path('about.us', { locale: 'ar' }) }}">عن الشركة</a>
                         </li>
 
                         <li {% if page is defined and page == 'products.ar' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('products.ar') }}">المنتجات</a>
+                            <a href="{{ path('products', { locale: 'ar' }) }}">المنتجات</a>
                         </li>
 
 
                         <li {% if page is defined and page == 'contact.us.ar' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('contact.us.ar') }}">اتصل بنا</a>
+                            <a href="{{ path('contact.us', { locale: 'ar' }) }}">اتصل بنا</a>
                         </li>
                     </ul>
                 </div>
@@ -109,7 +109,7 @@
     <div class="wrap-header-mobile">
         <!-- Logo moblie -->
         <div class="logo-mobile">
-            <a href="{{ path('home.ar') }}"><img src="{{ '/media/images/icons/logo-01.png' }}" width="120" alt="IMG-LOGO"></a>
+            <a href="{{ path('home', { locale: 'ar' }) }}"><img src="{{ '/media/images/icons/logo-01.png' }}" width="120" alt="IMG-LOGO"></a>
         </div>
 
         <!-- Icon header -->
@@ -146,16 +146,16 @@
                     </a>
 
                     {% if app.user %}
-                        <a href="{{ path('account.ar') }}" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ path('account', { locale: 'ar' }) }}" class="flex-c-m p-lr-10 trans-04">
                             حسابي
                         </a>
                     {% else %}
-                        <a href="{{ path('register.ar') }}" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ path('register', { locale: 'ar'}) }}" class="flex-c-m p-lr-10 trans-04">
                             تسجيل
                         </a>
                     {% endif %}
 
-                    <a href="{{ path('home') }}" class="flex-c-m p-lr-10 trans-04">
+                    <a href="{{ path('home', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                         الإنجليزية
                     </a>
 
@@ -178,19 +178,19 @@
 
         <ul class="main-menu-m text-right">
             <li>
-                <a href="{{ path('home.ar') }}">الصفحة الرئيسية</a>
+                <a href="{{ path('home', { locale: 'ar' }) }}">الصفحة الرئيسية</a>
             </li>
 
             <li>
-                <a href="{{ path('about.us.ar') }}">معلومات عنا</a>
+                <a href="{{ path('about.us', { locale: 'ar' }) }}">معلومات عنا</a>
             </li>
 
             <li>
-                <a href="{{ path('products.ar') }}">التصنيفات</a>
+                <a href="{{ path('products', { locale: 'ar' }) }}">التصنيفات</a>
             </li>
 
             <li>
-                <a href="{{ path('contact.us.ar') }}">اتصل بنا</a>
+                <a href="{{ path('contact.us', { locale: 'ar' }) }}">اتصل بنا</a>
             </li>
         </ul>
     </div>
@@ -238,7 +238,7 @@
                             </a>
 
                             <div class="header-cart-item-txt p-t-8 text-right">
-                                <a href="{{ path('product.ar', {'slug': cartItem.catalog.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
+                                <a href="{{ path('product', {locale: 'ar', 'slug': cartItem.catalog.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
                                     {{ cartItem.catalog.product.nameAr|upper }}
                                 </a>
                                 <span class="header-cart-item-info">
@@ -274,12 +274,12 @@
                 </div>
 
                 <div class="header-cart-buttons flex-w w-full">
-                    <a  href="{{ path('cart.ar') }}"
+                    <a  href="{{ path('cart', { locale: 'ar' }) }}"
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10" >
                         عرض عربة
                     </a>
 
-                    <a {% if cart|length != 0 %} href="{{ path('remove.cart', {route: page}) }}" {% endif %}
+                    <a {% if cart|length != 0 %} href="{{ path('remove.cart', {locale:'ar', route: page}) }}" {% endif %}
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10" {% if cart|length == 0 %} disabled="true" {% endif %}>
                         إفراغ
                     </a>
@@ -327,7 +327,7 @@
 
             <div class="w-full">
                 <div class="header-cart-buttons flex-w w-full align-items-center">
-                    <a {% if wishlist|length != 0 %} href="{{ path('remove.wishlist', {route: page}) }}" {% endif %}
+                    <a {% if wishlist|length != 0 %} href="{{ path('remove.wishlist', {locale: 'ar', route: page}) }}" {% endif %}
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10" {% if wishlist|length == 0 %} disabled="true" {% endif %}>
                         إفراغ القائمة
                     </a>

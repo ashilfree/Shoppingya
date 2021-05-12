@@ -8,8 +8,8 @@
             <div class="solid_banner_inner">
                 <h3>Check Email</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="track.html">Check Email</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
+                    <li><a href="">Check Email</a></li>
                 </ul>
             </div>
         </div>
@@ -25,7 +25,7 @@
                         <div class="login_title">
                             <h2>Check Email</h2>
                             <p>An email has been sent that contains a link that you can click to reset your password. This link will expire in {{ tokenLifetime|date('g') }} hour(s).</p>
-                            <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+                            <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request', { locale: 'en' }) }}">try again</a>.</p>
                         </div>
                     </div>
                 </div>

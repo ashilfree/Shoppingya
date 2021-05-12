@@ -8,8 +8,8 @@
             <div class="solid_banner_inner">
                 <h3>Cart</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Empty Cart</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
+                    <li><a href="">Empty Cart</a></li>
                 </ul>
             </div>
         </div>
@@ -21,7 +21,7 @@
             <div class="emty_cart_inner">
                 <i class="zmdi zmdi-shopping-basket"></i>
                 <h3>Your Cart is Empty</h3>
-                <h4>back to <a href="{{ path('products') }}">shopping</a></h4>
+                <h4>back to <a href="{{ path('products', { locale: 'en' }) }}">shopping</a></h4>
             </div>
         </div>
     </section>

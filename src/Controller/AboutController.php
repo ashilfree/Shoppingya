@@ -14,35 +14,18 @@ class AboutController extends AbstractController
 {
 
     /**
-     * @Route("/about-us", name="about.us")
-     * @param Request $request
+     * @Route("/{locale}/about-us", name="about.us", defaults={"locale"="en"})
+     * @param $locale
      * @param Cart $cart
      * @param WishList $wishlist
      * @param AboutRepository $aboutRepository
      * @return Response
      */
-    public function index(Request $request, Cart $cart, WishList $wishlist, AboutRepository $aboutRepository): Response
+    public function index($locale, Cart $cart, WishList $wishlist, AboutRepository $aboutRepository): Response
     {
-        return $this->render('about/index.html.twig', [
+        $path = ($locale == "en") ? 'about/index.html.twig' : 'about/indexAr.html.twig';
+        return $this->render($path, [
             'page' => 'about.us',
-            'cart' => $cart->getFull($cart->get()),
-            'wishlist' => $wishlist->getFull(),
-            'abouts' => $aboutRepository->findAll()
-        ]);
-    }
-
-    /**
-     * @Route("/about-us-ar", name="about.us.ar")
-     * @param Request $request
-     * @param Cart $cart
-     * @param WishList $wishlist
-     * @param AboutRepository $aboutRepository
-     * @return Response
-     */
-    public function indexAr(Request $request, Cart $cart, WishList $wishlist, AboutRepository $aboutRepository): Response
-    {
-        return $this->render('about/indexAr.html.twig', [
-            'page' => 'about.us.ar',
             'cart' => $cart->getFull($cart->get()),
             'wishlist' => $wishlist->getFull(),
             'abouts' => $aboutRepository->findAll()

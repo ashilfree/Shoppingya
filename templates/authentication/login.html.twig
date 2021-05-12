@@ -8,8 +8,8 @@
             <div class="solid_banner_inner">
                 <h3>Login</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="track.html">Login</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
+                    <li><a href="">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -40,10 +40,10 @@
                             </div>
                             <div class="col-lg-12 form-group">
                                 <div class="creat_account">
-                                    <a href="{{ path('register') }}"><h4>Create Account...</h4></a>
+                                    <a href="{{ path('register', { locale: 'en'}) }}"><h4>Create Account...</h4></a>
                                 </div>
                                 <div>
-                                    <a href="{{ path('app_forgot_password_request') }}"><h4>Forgot your password ?</h4></a>
+                                    <a href="{{ path('app_forgot_password_request', { locale: 'en'}) }}"><h4>Forgot your password ?</h4></a>
                                 </div>
                             </div>
                             <div class="col-lg-12 form-group">

@@ -8,8 +8,8 @@
             <div class="solid_banner_inner">
                 <h3>Confirmation</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="track.html">Confirmation</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
+                    <li><a href="">Confirmation</a></li>
                 </ul>
             </div>
         </div>
@@ -25,7 +25,7 @@
                         <div class="login_title text-center"  >
                             <h2 style="font-size: 25px;">Thank you!</h2>
                             <p>An email has been sent that contains a link that you can click to confirm your Account</p>
-                            <a href="{{ path('home') }}">&larr; go to Home Page</a>
+                            <a href="{{ path('home', { locale: 'en' }) }}">&larr; go to Home Page</a>
                         </div>
                     </div>
                 </div>

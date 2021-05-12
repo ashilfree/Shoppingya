@@ -169,6 +169,18 @@ class OrderRepository extends ServiceEntityRepository
             ;
     }
 
+    public function getOrdersToClean($date)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.createdAt < :date')
+            ->setParameter('date', $date)
+            ->andWhere("o.marking like '%waiting%'")
+            ->orderBy('o.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

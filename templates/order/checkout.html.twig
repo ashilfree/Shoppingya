@@ -7,7 +7,7 @@
             <div class="solid_banner_inner">
                 <h3>Cart</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
                     <li><a>CheckOut</a></li>
                 </ul>
             </div>
@@ -34,7 +34,7 @@
         </div>
     </div>
     <!-- Check Out -->
-    {{ form_start(form, {action: path('order.recap'), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+    {{ form_start(form, {action: path('order.recap', { locale: 'en' }), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
         <div class="col-md-7">
             <div class="colorlib-form">
                 <h2>Billing Details</h2>
@@ -42,35 +42,31 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="fname">First Name</label>
-                            {{ form_widget(form.shippingFirstName, {'attr': {'class': 'form-control', 'placeholder':'Your firstname'}}) }}
+                            {{ form_widget(form.shippingFirstName, {'attr': {'class': 'form-control', 'placeholder':'Your firstname*'}}) }}
                         </div>
                         <div class="col-md-6">
                             <label for="lname">Last Name</label>
-                            {{ form_widget(form.shippingLastName, {'attr': {'class': 'form-control', 'placeholder':'Your lastname'}}) }}
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="fname">Address</label>
-                            {{ form_widget(form.shippingAddress, {'id': 'address', 'attr': {'class': 'form-control text-left', 'placeholder':'Enter Your Address'}}) }}
-                            {{ form_widget(form.shippingLat,{'id': 'lat'}) }}
-                            {{ form_widget(form.shippingLng, {'id': 'lng'}) }}
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="companyname">Town/City</label>
-                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'Town or City'}}) }}
+                            {{ form_widget(form.shippingLastName, {'attr': {'class': 'form-control', 'placeholder':'Your lastname*'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label for="stateprovince">State/Province</label>
-                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'State Province'}}) }}
+                            <label for="fname">Address</label>
+                            {{ form_widget(form.shippingAddress, {'attr': {'class': 'form-control text-left', 'placeholder':'Enter Your Address*'}}) }}
                         </div>
                         <div class="col-md-6">
-                            <label for="lname">Zip/Postal Code</label>
-                            {{ form_widget(form.shippingPostalCode, {'id': 'postalCode', 'attr': {'class': 'form-control', 'placeholder':'Zip / Postal'}}) }}
+                            <label for="lname">Bloc Number</label>
+                            {{ form_widget(form.shippingPostalCode, {'id': 'postalCode', 'attr': {'class': 'form-control', 'placeholder':'Bloc Number'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="companyname">Region</label>
+                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'Region'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="stateprovince">Governorate</label>
+                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'Governorate'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -114,7 +110,7 @@
                         </ul>
                     </li>
                     <li> <span>Subtotal</span> <span>{{ total ~currency }}</span></li>
-                    <li><span>Shipping</span> <span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency}}</span></li>
+                    <li><span>Delivery</span> <span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency}}</span></li>
                     <li><span>Order Total</span> <span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency }}</span></li>
                 </ul>
             </div>
@@ -123,7 +119,7 @@
                     <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                         Next
                     </button>
-                    <a href="{{ path('back.to.cart') }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                    <a href="{{ path('back.to.cart', { locale: 'en' }) }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                         Back To Cart
                     </a>
                 </div>

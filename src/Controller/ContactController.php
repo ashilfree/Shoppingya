@@ -46,11 +46,12 @@ class ContactController extends AbstractController
     }
 
     /**
-     * @Route("/contact-us", name="contact.us")
+     * @Route("/{locale}/contact-us", name="contact.us", defaults={"locale"="en"})
+     * @param $locale
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index($locale, Request $request): Response
     {
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
@@ -58,38 +59,14 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->mailer->sendContactEmail($contact);
-            $this->addFlash('success', 'Your Message has been sent');
-            return $this->redirectToRoute('contact.us');
+            $message = ($locale == "en") ? 'Your Message has been sent' : 'تم ارسال رسالتك';
+            $this->addFlash('success', $message);
+            return $this->redirectToRoute('contact.us', ['locale' => $locale]);
         }
-
-        return $this->render('contact/index.html.twig', [
+        $path = ($locale == "en") ? 'contact/index.html.twig' : 'contact/indexAr.html.twig';
+        return $this->render($path, [
             'form' => $form->createView(),
             'page' => 'contact.us',
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-        ]);
-    }
-
-    /**
-     * @Route("/contact-us-ar", name="contact.us.ar")
-     * @param Request $request
-     * @return Response
-     */
-    public function indexAr(Request $request): Response
-    {
-        $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->mailer->sendContactEmail($contact);
-            $this->addFlash('success', 'تم ارسال رسالتك');
-            return $this->redirectToRoute('contact.us.ar');
-        }
-
-        return $this->render('contact/indexAr.html.twig', [
-            'form' => $form->createView(),
-            'page' => 'contact.us.ar',
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
         ]);

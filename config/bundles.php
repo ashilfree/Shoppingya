@@ -21,4 +21,5 @@ return [
     Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     NotFloran\MjmlBundle\MjmlBundle::class => ['all' => true],
+    Cron\CronBundle\CronCronBundle::class => ['all' => true],
 ];

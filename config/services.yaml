@@ -4,7 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
     app.path.product.images: /media/images/product
     app.path.slide.images: /media/images/slide
     app.path.about.images: /media/images/about
@@ -38,9 +37,9 @@ services:
         tags:
             name: doctrine.event_subscriber
 
-    App\Listener\LoginListener:
-        tags:
-            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+#    App\Listener\LoginListener:
+#        tags:
+#            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
 
     App\Listener\MaintenanceListener:
         arguments:
@@ -51,3 +50,6 @@ services:
     App\Listener\ListenerForAnyRequest:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    App\Listener\LocaleSubscriber:
+        arguments: [ '%kernel.default_locale%' ]

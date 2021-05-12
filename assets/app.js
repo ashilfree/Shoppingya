@@ -15,6 +15,7 @@ import 'bootstrap-select/dist/js/bootstrap-select';
 import Filter from './controllers/modules/Filter'
 import Global from './controllers/modules/Global'
 import Cart from './controllers/modules/Cart'
+import Checkout from './controllers/modules/Checkout'
 import './controllers/comments/Comment.jsx'
 
 
@@ -31,6 +32,7 @@ $(".js-select2").each(function () {
         dropdownParent: $(this).next('.dropDownSelect2')
     });
 });
+new Checkout(document.querySelector('.js-checkout'));
 import 'moment'
 import 'daterangepicker/daterangepicker'
 import './controllers/js/slick.min';

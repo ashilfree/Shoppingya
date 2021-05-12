@@ -5,6 +5,12 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },
+    "cron/cron": {
+        "version": "1.5.0"
+    },
+    "cron/cron-bundle": {
+        "version": "2.6.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -31,6 +37,9 @@
     },
     "doctrine/dbal": {
         "version": "2.12.1"
+    },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
     },
     "doctrine/doctrine-bundle": {
         "version": "2.0",

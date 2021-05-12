@@ -60,7 +60,8 @@ class MainSecurityController extends AbstractController
 
 
     /**
-     * @Route("/login/{locale}", name="login", defaults={"locale"="en"})
+     * @Route("/{locale}/login", name="login", defaults={"locale"="en"})
+     * @param $locale
      * @return Response
      */
     // TODO: Use Facebook and Google to Login
@@ -68,35 +69,26 @@ class MainSecurityController extends AbstractController
     {
         $error = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
-        if($locale == "en"){
-            return $this->render('authentication/login.html.twig', [
+        $path = ($locale == "en") ? 'authentication/login.html.twig' : 'authentication/loginAr.html.twig';
+            return $this->render($path, [
                 'page' => 'login',
                 'last_username' => $lastUsername,
                 'error' => $error,
                 'cart' => $this->cart->getFull($this->cart->get()),
                 'wishlist' => $this->wishlist->getFull()
             ]);
-        }else{
-            return $this->render('authentication/loginAr.html.twig', [
-                'page' => 'login',
-                'last_username' => $lastUsername,
-                'error' => $error,
-                'cart' => $this->cart->getFull($this->cart->get()),
-                'wishlist' => $this->wishlist->getFull()
-            ]);
-        }
-
     }
 
     /**
-     * @Route("/register", name="register")
+     * @Route("/{locale}/register", name="register", defaults={"locale"="en"})
+     * @param $locale
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param TokenGenerator $tokenGenerator
      * @return Response
      */
     // TODO: Use Facebook and Google to Register
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, TokenGenerator $tokenGenerator): Response
+    public function register($locale, Request $request, UserPasswordEncoderInterface $passwordEncoder, TokenGenerator $tokenGenerator): Response
     {
         $customer = new Customer();
         $form = $this->createForm(CustomerRegisterType::class, $customer);
@@ -115,57 +107,16 @@ class MainSecurityController extends AbstractController
             //send mail to customer
             $this->mailer->sendConfirmationEmail($customer);
             //return $this->redirectToRoute('login');
-            return $this->render('authentication/check-email-register.html.twig', [
+            $path = ($locale == "en") ? 'authentication/check-email-register.html.twig' : 'authentication/check-email-registerAr.html.twig';
+            return $this->render($path, [
                 'cart' => $this->cart->getFull($this->cart->get()),
                 'wishlist' => $this->wishlist->getFull(),
                 'page'=> 'register',
             ]);
         }
-
-        return $this->render('authentication/register.html.twig', [
+        $path = ($locale == "en") ? 'authentication/register.html.twig' : 'authentication/registerAr.html.twig';
+        return $this->render($path, [
             'page'=> 'register',
-            'form'=>$form->createView(),
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-        ]);
-    }
-
-    /**
-     * @Route("/register-ar", name="register.ar")
-     * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param TokenGenerator $tokenGenerator
-     * @return Response
-     */
-    // TODO: Use Facebook and Google to Register
-    public function registerAr(Request $request, UserPasswordEncoderInterface $passwordEncoder, TokenGenerator $tokenGenerator): Response
-    {
-        $customer = new Customer();
-        $form = $this->createForm(CustomerRegisterType::class, $customer);
-        // 2) handle the submit (will only happen on POST)
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($customer, $customer->getPassword());
-            $customer->setPassword($password);
-            $customer->setConfirmationToken($tokenGenerator->getRandomSecureToken());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($customer);
-            $entityManager->flush();
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
-//            $this->addFlash('success', 'Your account has been registered.');
-            //send mail to customer
-            $this->mailer->sendConfirmationEmail($customer);
-            //return $this->redirectToRoute('login');
-            return $this->render('authentication/confirmationAr.html.twig', [
-                'cart' => $this->cart->getFull($this->cart->get()),
-                'wishlist' => $this->wishlist->getFull(),
-                'page'=> 'register.ar',
-            ]);
-        }
-
-        return $this->render('authentication/registerAr.html.twig', [
-            'page'=> 'register.ar',
             'form'=>$form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),

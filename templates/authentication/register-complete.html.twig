@@ -8,7 +8,7 @@
             <div class="solid_banner_inner">
                 <h3>Register</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{ path('home', { locale: 'en' }) }}">Home</a></li>
                     <li><a>Register</a></li>
                 </ul>
             </div>
@@ -23,8 +23,8 @@
                         <span class="icon"><i class="zmdi zmdi-shopping-cart"></i></span>
                         <h2>Thank you for purchasing, Your order is complete</h2>
                         <p>
-                            <a href="{{ path('home') }}"class=" stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-25 p-tb-10 m-r-5 trans-04 pointer">Home</a>
-                            <a href="{{ path('products') }}"class="stext-101 cl2 size-119 bg8 bor13 hov-btn3  p-lr-25 p-tb-10 trans-04 pointer m-tb-10">Continue Shopping</a>
+                            <a href="{{ path('home', { locale: 'en' }) }}" class=" stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-25 p-tb-10 m-r-5 trans-04 pointer">Home</a>
+                            <a href="{{ path('products', { locale: 'en' }) }}" class="stext-101 cl2 size-119 bg8 bor13 hov-btn3  p-lr-25 p-tb-10 trans-04 pointer m-tb-10">Continue Shopping</a>
                         </p>
                     </div>
                 </div>
