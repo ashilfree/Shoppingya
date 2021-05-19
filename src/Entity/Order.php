@@ -6,6 +6,7 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -62,12 +63,7 @@ class Order
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $shippingFirstName;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $shippingLastName;
+    private $shippingFullName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -87,15 +83,11 @@ class Order
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $shippingPostalCode;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $shippingEmail;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max="8")
      */
     private $shippingPhone;
 
@@ -113,6 +105,11 @@ class Order
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $paid_at;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $ordered_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -275,26 +272,14 @@ class Order
         return $this;
     }
 
-    public function getShippingFirstName(): ?string
+    public function getShippingFullName(): ?string
     {
-        return $this->shippingFirstName;
+        return $this->shippingFullName;
     }
 
-    public function setShippingFirstName(string $shippingFirstName): self
+    public function setShippingFullName(string $shippingFullName): self
     {
-        $this->shippingFirstName = $shippingFirstName;
-
-        return $this;
-    }
-
-    public function getShippingLastName(): ?string
-    {
-        return $this->shippingLastName;
-    }
-
-    public function setShippingLastName(string $shippingLastName): self
-    {
-        $this->shippingLastName = $shippingLastName;
+        $this->shippingFullName = $shippingFullName;
 
         return $this;
     }
@@ -331,18 +316,6 @@ class Order
     public function setShippingProvince(string $shippingProvince): self
     {
         $this->shippingProvince = $shippingProvince;
-
-        return $this;
-    }
-
-    public function getShippingPostalCode(): ?string
-    {
-        return $this->shippingPostalCode;
-    }
-
-    public function setShippingPostalCode(string $shippingPostalCode): self
-    {
-        $this->shippingPostalCode = $shippingPostalCode;
 
         return $this;
     }
@@ -415,6 +388,18 @@ class Order
     public function setPaidAt(?\DateTimeInterface $paid_at): self
     {
         $this->paid_at = $paid_at;
+
+        return $this;
+    }
+
+    public function getOrderedAt(): ?\DateTimeInterface
+    {
+        return $this->ordered_at;
+    }
+
+    public function setOrderedAt(?\DateTimeInterface $ordered_at): self
+    {
+        $this->ordered_at = $ordered_at;
 
         return $this;
     }

@@ -10,10 +10,13 @@ use App\Entity\Order;
 use App\Entity\OrderDetails;
 use App\Entity\PaymentMethods;
 use App\Form\OrderType;
+use App\Form\PaymentMethodType;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -40,51 +43,66 @@ class OrderController extends AbstractController
      * @var WishList
      */
     private $wishlist;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
     public function __construct
     (
         EntityManagerInterface $entityManager,
         Security $security,
         Cart $cart,
-        WishList $wishlist
+        CategoryRepository $categoryRepository,
+        WishList $wishlist,
+        SessionInterface $session
     )
     {
         $this->entityManager = $entityManager;
         $this->cart = $cart;
         $this->security = $security;
         $this->wishlist = $wishlist;
+        $this->session = $session;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
-     * @Route("/{locale}/order", name="order", defaults={"locale"="en"})
+     * @Route("/{locale}/order/{errors}", name="order", defaults={"locale"="en", "errors"= false})
      * @param $locale
+     * @param $errors
      * @param Request $request
      * @return Response
      */
-    public function index($locale, Request $request): Response
+    public function index($locale, $errors, Request $request): Response
     {
 
         if (!empty($this->cart->get())) {
             $this->cart->switch();
-        }else{
-            if(empty($this->cart->getCart2Order()))
+        } else {
+            if (empty($this->cart->getCart2Order()))
                 return $this->redirectToRoute('cart', ['locale' => $locale]);
         }
 
-//        if ($request->get('from') != null) {
-//            $user = $this->security->getUser();
-//            $order = $this->entityManager->getRepository(Order::class)->findOneBy([
-//                'customer' => $user,
-//                'stripeSessionId' => null
-//            ]);
-//        }else {
-            if (empty($request->request->all())) {
-                $order = new Order();
-            } else {
-                $id = $request->request->get('order')["id"];
-                $order = $this->entityManager->getRepository(Order::class)->find($id);
-            }
-//        }
+        $order = new Order();
+        /**
+         * @var Customer $user
+         */
+        $user = $this->security->getUser();
+        if ($user) {
+            $order->setShippingEmail($user->getEmail());
+            $order->setShippingFullName($user->getFullName());
+            $order->setShippingPhone($user->getPhone());
+            $order->setShippingAddress($user->getAddress());
+            $order->setShippingCity($user->getRegion());
+            $order->setShippingProvince($user->getGovernorate());
+        }
+        if ($this->session->get('orderId')) {
+            $order = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
+        }
         $form = $this->createForm(OrderType::class, $order);
         $path = ($locale == "en") ? 'order/checkout.html.twig' : 'order/checkoutAr.html.twig';
         return $this->render($path, [
@@ -94,12 +112,13 @@ class OrderController extends AbstractController
             'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
             'delivery' => $this->cart->getDelivery(),
             'delivery2order' => $this->cart->getDelivery2Order(),
-            'page' => 'checkout'
+            'page' => 'checkout',
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/{locale}/order/recap/", name="order.recap", defaults={"locale"="en"})
+     * @Route("/{locale}/order/recap", name="order.recap", defaults={"locale"="en"})
      * @param $locale
      * @param Request $request
      * @param Transaction $transaction
@@ -107,18 +126,17 @@ class OrderController extends AbstractController
      */
     public function add($locale, Request $request, Transaction $transaction): Response
     {
-            $id = $request->request->get('order')["id"];
-            if ($id == "") {
-                $order = new Order();
-                if ($this->cart->checkStock()) {
-                    $this->cart->decreaseStock();
-                } else {
-                    return $this->redirectToRoute('back.to.cart', ['locale' => $locale]);
-                }
 
+        if ($this->session->get('orderId')) {
+            $order = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
+        } else {
+            $order = new Order();
+            if ($this->cart->checkStock()) {
+                $this->cart->decreaseStock();
             } else {
-                $order = $this->entityManager->getRepository(Order::class)->find($id);
+                return $this->redirectToRoute('back.to.cart', ['locale' => $locale]);
             }
+        }
         $form = $this->createForm(OrderType::class, $order);
 
         $form->handleRequest($request);
@@ -154,6 +172,8 @@ class OrderController extends AbstractController
             }
 
             $this->entityManager->flush();
+            $paymentMethodForm = $this->createForm(PaymentMethodType::class, $order);
+            $this->session->set('orderId', $order->getId());
             $path = ($locale == "en") ? 'order/checkout-two.html.twig' : 'order/checkout-twoAr.html.twig';
             return $this->render($path, [
                     'cart' => $this->cart->getFull($this->cart->get()),
@@ -162,15 +182,18 @@ class OrderController extends AbstractController
                     'order' => $order,
                     'page' => 'order.recap',
                     'form' => $this->createForm(OrderType::class, $order)->createView(),
+                    'payment_method_form' => $paymentMethodForm->createView(),
                     'locale' => $locale,
                     'paymentMethods' => $this->entityManager->getRepository(PaymentMethods::class)->findAll(),
+                    'categories' => $this->categoryRepository->findAll(),
                 ]
             );
 
+        }elseif (!$form->isValid()){
+            return $this->redirectToRoute('order', ['locale' => $locale, 'errors' => true]);
+        }else{
+            return $this->redirectToRoute('cart', ['locale' => $locale]);
         }
-
-        return $this->redirectToRoute('cart', ['locale' => $locale]);
-
     }
 
     /**

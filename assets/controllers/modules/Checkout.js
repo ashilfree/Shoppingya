@@ -3,8 +3,6 @@ import $ from "jquery";
 /**
  * @property {HTMLElement} select
  * @property {HTMLElement} checkoutButton
- * @property {HTMLElement} locale
- * @property {HTMLElement} orderId
  */
 
 export default class Checkout {
@@ -18,8 +16,6 @@ export default class Checkout {
         }
         this.checkoutButton = document.querySelector('#checkout-button');
         this.select = document.querySelector('.js-select2');
-        this.locale = document.getElementById('#locale');
-        this.orderId = document.getElementById('#orderId');
         this.bindEvents();
     }
 
@@ -43,12 +39,14 @@ export default class Checkout {
         if (this.checkoutButton) {
 
             checkoutButton.addEventListener("click", function () {
-            console.log(this.locale);
+            console.log(this.dataset.id);
+            let id = this.dataset.id;
+            let locale = this.dataset.locale;
                 if($('.js-select2').val()) {
                     let data = {
                         payment: $('.js-select2').select2('data')[0].text
                     };
-                    let url = "/" + this.locale.value +"/order/create-session/" + this.orderId.value
+                    let url = "/" + locale +"/order/create-session/" + id
                     fetch(url, {
                         method: 'POST', // or 'PUT'
                         headers: {
@@ -57,11 +55,11 @@ export default class Checkout {
                         body: JSON.stringify(data)
                     })
                         .then(function (response) {
-                            return response.json();
+                            window.location.replace(response.url);
                         })
                         .then(function (session) {
                             if(session.error === 'order'){
-                                window.location.replace("/{{ locale }}/order/{{ order.id }}");
+                                window.location.replace("/" + locale +"/order/" + id);
                             }else{
                                 // return stripe.redirectToCheckout({ sessionId: session.id });
                             }
@@ -80,80 +78,6 @@ export default class Checkout {
                 }
             });
         }
-    }
-
-    reinitializeModal() {
-
-        $('.js-show-modal1').on('click',function(e){
-
-            e.preventDefault();
-            let discount = $(this).data('discount');
-            if(discount === '0.00 KWD' || discount === '0.00 دينار كويتي'){
-                $('#price-block1').css('display','none')
-                $('#price-block2').css('display','block')
-            }else{
-                $('#price-block2').css('display','none')
-                $('#price-block1').css('display','block')
-            }
-            $('#name').text($(this).data('name'));
-            $('#price').text($(this).data('price'));
-            $('#price2').text($(this).data('price'));
-            $('#discount').text($(this).data('discount'));
-            $('#description').text($(this).data('description'));
-            $('#cart-add-button').attr('href', $(this).data('href-a'));
-
-            var i = 1;
-            var access = true;
-
-            $('.js-select2').empty();
-            if(document.dir === 'ltr'){
-                $('.js-select2').append('<option value="-1">Choose an option</option>');
-                while (access){
-
-                    var size = $(this).data('size' + i);
-                    var catalog = $(this).data('catalog' + i);
-                    var quantity = $(this).data('quantity' + i);
-                    if(!size)
-                        break;
-
-                    $('.js-select2').append("<option value='" + catalog + "' data-quantity='" + quantity + "'> Size " + size + "</option>");
-                    i++;
-                }
-            }else{
-                $('.js-select2').append('<option value="-1">اختر أحد الخيارات أدناه</option>');
-                while (access){
-
-                    var size = $(this).data('size' + i);
-                    var catalog = $(this).data('catalog' + i);
-                    var quantity = $(this).data('quantity' + i);
-                    if(!size)
-                        break;
-
-                    $('.js-select2').append("<option value='" + catalog + "' data-quantity='" + quantity + "'> الحجم " + size + "</option>");
-                    i++;
-                }
-            }
-
-
-            i = 1;
-            $('.slick3.gallery-lb').empty();
-            $('.slick3').slick('removeSlide', null, null, true);
-            while (access){
-
-                var picture = $(this).data('image' + i);
-                if(!picture)
-                    break;
-                var picturePath = "/media/images/product/"+picture;
-                var sold_out = (document.dir === "ltr")?'Sold out' :'نفاذ المخزون';
-                $('.slick3.gallery-lb').append('<div class="item-slick3" data-thumb=" ' + picturePath +' "><a class="sold_out" style="display:none" href="https://abc.com/">'+sold_out+'</a><div class="wrap-pic-w pos-relative"><img src=" ' + picturePath + ' " alt="IMG-PRODUCT"><a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href=" ' + picturePath + ' "><i class="fa fa-expand"></i></a></div></div>')
-                // $('div.img'+i).data('thumb', picturePath);
-                // $('img.img'+i).attr('src', picturePath);
-                // $('a.img'+i).attr('href', picturePath);
-                i++;
-            }
-            $('.slick3').slick('refresh');
-            $('.js-modal1').addClass('show-modal1');
-        });
     }
 
     async loadUrl(a, method = 'GET', clear = false) {

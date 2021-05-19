@@ -34,29 +34,22 @@
         </div>
     </div>
     <!-- Check Out -->
-    {{ form_start(form, {action: path('order.recap', { locale: 'en' }), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+    {{ form_start(form, {action: path('order.recap', { locale: 'en', errors: false }), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
         <div class="col-md-7">
             <div class="colorlib-form">
                 <h2>Billing Details</h2>
+
                 <div class="row">
                     <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="fname">First Name</label>
-                            {{ form_widget(form.shippingFirstName, {'attr': {'class': 'form-control', 'placeholder':'Your firstname*'}}) }}
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lname">Last Name</label>
-                            {{ form_widget(form.shippingLastName, {'attr': {'class': 'form-control', 'placeholder':'Your lastname*'}}) }}
+                        <div class="col">
+                            <label for="fname">Full Name</label>
+                            {{ form_widget(form.shippingFullName, {'attr': {'class': 'form-control', 'placeholder':'Your Full Name*'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col">
                             <label for="fname">Address</label>
                             {{ form_widget(form.shippingAddress, {'attr': {'class': 'form-control text-left', 'placeholder':'Enter Your Address*'}}) }}
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lname">Bloc Number</label>
-                            {{ form_widget(form.shippingPostalCode, {'id': 'postalCode', 'attr': {'class': 'form-control', 'placeholder':'Bloc Number'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -76,7 +69,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="Phone">Phone Number</label>
-                            {{ form_widget(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'Your Phone'}}) }}
+                            {{ form_row(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'Your Phone'}}) }}
                         </div>
                         {{ form_rest(form) }}
                     </div>
@@ -94,14 +87,14 @@
                                 <li>
                                     <span>{{' ¤ ' ~ productCart.quantity }} x {{ productCart.catalog.product.name }}</span>
                                     <span>
-                                         {% if productCart.catalog.product.discountPrice != null %}
+                                         {% if productCart.catalog.product.discountPrice != 0 %}
                                         {{ (productCart.quantity * productCart.catalog.product.discountPrice/100) |number_format(2, '.', ',')~ currency}}
                             {% else %}
                                 {{ (productCart.quantity * productCart.catalog.product.price/100) |number_format(2, '.', ',')~ currency}}
                                 {% endif %}
                                     </span>
                                 </li>
-                                {% if productCart.catalog.product.discountPrice != null %}
+                                {% if productCart.catalog.product.discountPrice != 0 %}
                                 {% set total = total + ((productCart.quantity * productCart.catalog.product.discountPrice)/100) %}
                                 {% else %}
                                 {% set total = total + ((productCart.quantity * productCart.catalog.product.price)/100) %}
@@ -109,7 +102,7 @@
                             {% endfor %}
                         </ul>
                     </li>
-                    <li> <span>Subtotal</span> <span>{{ total ~currency }}</span></li>
+                    <li> <span>Subtotal</span> <span>{{ total |number_format(2, '.', ',')  ~currency }}</span></li>
                     <li><span>Delivery</span> <span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency}}</span></li>
                     <li><span>Order Total</span> <span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency }}</span></li>
                 </ul>

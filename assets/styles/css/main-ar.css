@@ -239,7 +239,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   border-right: 1px solid rgba(255,255,255,0.3);
 }
 
-.right-top-bar a:first-child {
+.right-top-bar a:last-child {
   border-left: 1px solid rgba(255,255,255,0.3);
 }
 
@@ -307,7 +307,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
 /*------------------------------------------------------------------
 [ Logo ]*/
-.logo {
+.limiter-menu-desktop .logo {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -315,7 +315,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   display: flex;
   align-items: center;
   height: 65%;
-  margin-right: 55px;
+  margin-left: 55px;
 }
 
 .logo img {

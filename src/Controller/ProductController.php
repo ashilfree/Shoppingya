@@ -110,6 +110,7 @@ class ProductController extends AbstractController
             'products' => $products,
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 }

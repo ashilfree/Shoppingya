@@ -10,6 +10,7 @@ use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -19,31 +20,25 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class LoginListener
 {
-    private $em;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var Cart
-     */
-    private $cart;
+
     /**
      * @var UrlGeneratorInterface
      */
     private $router;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
 
-    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $dispatcher, Security $security, Cart $cart, UrlGeneratorInterface $router)
+    public function __construct(UrlGeneratorInterface $router, SessionInterface $session, EventDispatcherInterface $dispatcher)
     {
-        $this->em = $em;
-        $this->dispatcher = $dispatcher;
-        $this->security = $security;
-        $this->cart = $cart;
         $this->router = $router;
+        $this->session = $session;
+        $this->dispatcher = $dispatcher;
     }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
@@ -53,20 +48,7 @@ class LoginListener
 
     public function onKernelResponse(ResponseEvent $event)
     {
-        $locale = $event->getRequest()->getSession()->get('locale');
-        $user = $this->security->getUser();
-        if($user instanceof Customer) {
-            $order = $this->em->getRepository(Order::class)->findOneBy([
-                'customer' => $user,
-                'stripeSessionId' => null
-            ]);
-            if($order) {
-                $this->cart->createCart2Order($order);
-                $event->setResponse(new RedirectResponse($this->router->generate('order', ['locale' => $locale,'from' => false])));
-            }else{
-                $event->setResponse(new RedirectResponse($this->router->generate('home', ['locale' => $locale])));
-            }
-
-        }
+        $locale = $this->session->get('locale','en');
+        $event->setResponse(new RedirectResponse($this->router->generate('home', ['locale' => $locale])));
     }
 }

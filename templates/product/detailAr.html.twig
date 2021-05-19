@@ -57,7 +57,7 @@
                             {{ product.nameAr|upper }}
                         </h4>
 
-                        {% if product.discountPrice != null %}
+                        {% if product.discountPrice != 0 %}
                             <div class="style-1">
                                 <del>
                         <span class="stext-105 cl3">
@@ -280,7 +280,7 @@
                                                 {{ product.nameAr|upper }}
                                             </a>
 
-                                            {% if product.discountPrice != null %}
+                                            {% if product.discountPrice != 0 %}
                                                 <div class="style-1">
                                                     <del>
                                                     <span class="stext-105 cl3">

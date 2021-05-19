@@ -210,7 +210,7 @@ class Product
 
     public function getDiscountPrice(): ?float
     {
-        return $this->discountPrice;
+        return $this->discountPrice ?? 0;
     }
 
     public function setDiscountPrice(?float $discountPrice): self

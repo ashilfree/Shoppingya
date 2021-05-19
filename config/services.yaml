@@ -37,9 +37,9 @@ services:
         tags:
             name: doctrine.event_subscriber
 
-#    App\Listener\LoginListener:
-#        tags:
-#            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+    App\Listener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
 
     App\Listener\MaintenanceListener:
         arguments:
@@ -53,3 +53,9 @@ services:
 
     App\Listener\LocaleSubscriber:
         arguments: [ '%kernel.default_locale%' ]
+
+    App\Listener\LogoutListener:
+        tags:
+            - name: 'kernel.event_listener'
+              event: 'Symfony\Component\Security\Http\Event\LogoutEvent'
+              dispatcher: security.event_dispatcher.main

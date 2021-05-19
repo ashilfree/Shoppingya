@@ -11,6 +11,7 @@ framework:
                 - created
                 - waiting
                 - in_payment
+                - pay_en_delivery
                 - paid
                 - checkout_canceled
                 - in_delivering
@@ -23,10 +24,16 @@ framework:
                 proceed_checkout:
                     from: waiting
                     to: in_payment
+                pay_en_delivery:
+                    from: waiting
+                    to: pay_en_delivery
                 checkout:
                     from: in_payment
                     to: paid
                 checkout_canceled:
+                    from: waiting
+                    to: checkout_canceled
+                checkout_canceled2:
                     from: in_payment
                     to: checkout_canceled
                 in_delivering:

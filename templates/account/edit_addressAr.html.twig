@@ -1,0 +1,76 @@
+{% extends 'baseAr.html.twig' %}
+
+{% block body %}
+
+<!--================Categories Banner Area =================-->
+<section class="solid_banner_area">
+    <div class="container">
+        <div class="solid_banner_inner">
+            <h3>حسابي</h3>
+            <ul>
+                <li><a href="#">الصفحة الرئيسية</a></li>
+                <li><a>عنواني</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!--================End Categories Banner Area =================-->
+
+<!--================login Area =================-->
+<div class="p-all-40">
+
+    <!--====== Section Content ======-->
+    <div class="section__content">
+        <div class="dash">
+            <div class="container">
+                <div class="row">
+                    {% include 'account/side_barAr.html.twig' %}
+                    <div class="col-lg-9 col-md-12">
+                        <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+                            <div class="dash__pad-2 text-right">
+                                <h1 class="dash__h1 u-s-m-b-14">تعديل العنوان</h1>
+
+                                <span class="dash__text u-s-m-b-30">يبدو أنك لم تقم بتحديث عنوانك</span>
+                                <div class="dash__link dash__link--secondary u-s-m-b-30">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            {{ form_start(form, {'attr': {'class': 'dash-edit-p'}}) }}
+                                            <div class="gl-inline">
+                                                <div class="u-s-m-b-30">
+
+                                                    <label class="gl-label" for="reg-fname">عنوان </label>
+
+                                                    {{ form_row(form.address, {'attr': {'class': 'input-text input-text--primary-style', 'placeholder':'عنوان'}}) }}
+                                                </div>
+                                                <div class="u-s-m-b-30">
+
+                                                    <label class="gl-label" for="reg-lname">منطقة </label>
+
+                                                    {{ form_row(form.region, {'attr': {'class': 'input-text input-text--primary-style', 'placeholder':'منطقة'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="gl-inline">
+                                                <div class="u-s-m-b-30">
+
+                                                    <label class="gl-label" for="reg-fname">محافظة</label>
+
+                                                    {{ form_row(form.governorate, {'attr': {'class': 'input-text input-text--primary-style', 'placeholder':'محافظة'}}) }}
+                                                </div>
+                                            </div>
+                                            {{ form_row(form.submit, {'attr': {'class': 'btn btn--e-brand-b-2'}}) }}
+                                            {{ form_end(form) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--================End login Area =================-->
+
+    {% endblock %}

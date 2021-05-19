@@ -29,7 +29,7 @@ class GovernorateCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name'),
-            TextField::new('nameAr'),
+            TextField::new('nameAr', 'الاسم')->addCssClass('text-right'),
             MoneyField::new('price')->setCurrency('KWD'),
         ];
     }

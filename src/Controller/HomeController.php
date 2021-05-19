@@ -66,6 +66,7 @@ class HomeController extends AbstractController
                 'slides' => $this->slideRepository->findAll(),
                 'cart' => $this->cart->getFull($this->cart->get()),
                 'wishlist' => $this->wishlist->getFull(),
+
             ]);
 
     }

@@ -7,8 +7,10 @@ use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Entity\Order;
 use App\Entity\OrderDetails;
+use App\Form\EditAddressType;
 use App\Form\EditPasswordType;
 use App\Form\EditProfileType;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,12 +37,17 @@ class AccountController extends AbstractController
      * @var WishList
      */
     private $wishlist;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, Cart $cart, WishList $wishlist)
+    public function __construct(EntityManagerInterface $entityManager, CategoryRepository $categoryRepository, Cart $cart, WishList $wishlist)
 	{
 		$this->entityManager = $entityManager;
         $this->cart = $cart;
         $this->wishlist = $wishlist;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -66,6 +73,7 @@ class AccountController extends AbstractController
             'pendingOrders' => $pendingOrders,
             'successOrders' => $successOrders,
             'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
         ]);
 	}
 
@@ -97,6 +105,7 @@ class AccountController extends AbstractController
             'pendingOrders' => $pendingOrders,
             'successOrders' => $successOrders,
             'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
@@ -125,6 +134,7 @@ class AccountController extends AbstractController
             'pendingOrders' => $pendingOrders,
             'successOrders' => $successOrders,
             'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
@@ -155,6 +165,7 @@ class AccountController extends AbstractController
             'pendingOrders' => $pendingOrders,
             'successOrders' => $successOrders,
             'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
@@ -203,7 +214,66 @@ class AccountController extends AbstractController
             'pendingOrders' => $pendingOrders,
             'successOrders' => $successOrders,
             'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
+    /**
+     * @Route("/{locale}/account/my-address", name="address", defaults={"locale"="en"})
+     * @param $locale
+     * @return Response
+     */
+    public function address($locale): Response
+    {
+        /**
+         * @var Customer $customer
+         */
+        $customer = $this->getUser();
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders($customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
+        $path = ($locale == "en") ? 'account/my_address.html.twig' : 'account/my_addressAr.html.twig';
+        return $this->render($path, [
+            'page' => 'address',
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+            'customer' => $customer,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/{locale}/account/edit-address", name="edit.address", defaults={"locale"="en"})
+     * @param $locale
+     * @param Request $request
+     * @return Response
+     */
+    public function editAddress($locale, Request $request): Response
+    {
+        $customer = $this->getUser();
+        $pendingOrders = $this->entityManager->getRepository(Order::class)->findPendingOrders( $customer);
+        $successOrders = $this->entityManager->getRepository(Order::class)->findSuccessOrders($customer);
+        $canceledOrders = $this->entityManager->getRepository(Order::class)->findCanceledOrders($customer);
+        $form = $this->createForm(EditAddressType::class, $customer);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+            return $this->redirectToRoute('address', ['locale' => $locale]);
+        }
+        $path = ($locale == "en") ? 'account/edit_address.html.twig' : 'account/edit_addressAr.html.twig';
+        return $this->render($path, [
+            'page' => 'edit.address',
+            'form' => $form->createView(),
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+            'customer' => $customer,
+            'pendingOrders' => $pendingOrders,
+            'successOrders' => $successOrders,
+            'canceledOrders' => $canceledOrders,
+            'categories' => $this->categoryRepository->findAll(),
+        ]);
+    }
 }

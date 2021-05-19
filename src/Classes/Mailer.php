@@ -31,16 +31,19 @@ class Mailer{
         $this->twig = $twig;
     }
 
-    public function sendConfirmationEmail(Customer $customer)
+    public function sendConfirmationEmail(Customer $customer, string $locale)
     {
-        $body = $this->twig->render('emails/register-confirmation.html.twig',
+        $path = ($locale == "en") ? 'emails/register-confirmation.mjml.twig' : 'emails/register-confirmationAr.html.twig';
+        $body = $this->twig->render($path,
             [
-                'customer' => $customer
+                'customer' => $customer,
+                'locale' => $locale
             ]
         );
-        $message = (new \Swift_Message('Please confirm your account'))
-            ->setFrom('noreply@agence.fr')
+        $message = (new \Swift_Message('Confirmation Email'))
+            ->setFrom('shoppinga@genesistech-dz.com')
             ->setTo($customer->getEmail())
+            ->setReplyTo($customer->getEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);
@@ -48,14 +51,15 @@ class Mailer{
 
     public function sendResetPasswordEmail($customer, $resetToken, $tokenLifetime)
     {
-        $body = $this->twig->render('emails/reset-password.html.twig', [
+        $body = $this->twig->render('emails/reset-password.mjml.twig', [
                 'resetToken' => $resetToken,
                 'tokenLifetime' => $tokenLifetime,
             ]
         );
-        $message = (new \Swift_Message('Your password reset request'))
-            ->setFrom('noreply@agence.fr')
+        $message = (new \Swift_Message('Reset Password Email'))
+            ->setFrom('shoppinga@genesistech-dz.com')
             ->setTo($customer->getEmail())
+            ->setReplyTo($customer->getEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);
@@ -63,12 +67,12 @@ class Mailer{
 
     public function sendContactEmail(Contact $contact)
     {
-        $body = $this->twig->render('emails/contact.html.twig', [
+        $body = $this->twig->render('emails/contact-customer.mjml.twig', [
                 'contact' => $contact
             ]
         );
-        $message = (new \Swift_Message('Agency : ' . $contact->getSubject()))
-            ->setFrom('noreply@agence.fr')
+        $message = (new \Swift_Message('Contact Us : '))
+            ->setFrom('shoppinga@genesistech-dz.com')
             ->setTo($contact->getEmail())
             ->setReplyTo($contact->getEmail())
             ->setBody($body, 'text/html');
@@ -78,13 +82,13 @@ class Mailer{
 
     public function sendSuccessOrderEmail(Order $order)
     {
-        $body = $this->twig->render('order/success.html.twig',
+        $body = $this->twig->render('emails/order-success.mjml.twig',
             [
                 'order' => $order
             ]
         );
-        $message = (new \Swift_Message('Please confirm your account'))
-            ->setFrom('noreply@agence.fr')
+        $message = (new \Swift_Message('Successful Order'))
+            ->setFrom('shoppinga@genesistech-dz.com')
             ->setTo($order->getShippingEmail())
             ->setReplyTo($order->getShippingEmail())
             ->setBody($body, 'text/html');
@@ -94,14 +98,15 @@ class Mailer{
 
     public function sendFailureOrderEmail(Order $order)
     {
-        $body = $this->twig->render('order/failure.html.twig',
+        $body = $this->twig->render('emails/order-failure.mjml.twig',
             [
                 'order' => $order
             ]
         );
-        $message = (new \Swift_Message('Please confirm your account'))
-            ->setFrom('noreply@agence.fr')
+        $message = (new \Swift_Message('Unsuccessful Order'))
+            ->setFrom('shoppinga@genesistech-dz.com')
             ->setTo($order->getShippingEmail())
+            ->setReplyTo($order->getShippingEmail())
             ->setBody($body, 'text/html');
 
         $this->mailer->send($message);

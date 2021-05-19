@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>My Address</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="track.html">My Address</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+
+    <!--================login Area =================-->
+    <div class="p-all-40">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="dash">
+                <div class="container">
+                    <div class="row">
+                        {% include 'account/side_bar.html.twig' %}
+                        <div class="col-lg-9 col-md-12">
+                            <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                <div class="dash__pad-2">
+                                    <h1 class="dash__h1 u-s-m-b-14">My Profile</h1>
+
+                                    <span class="dash__text u-s-m-b-30">Look all your info, you could customize your address.</span>
+                                    <div class="row">
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Address</h2>
+
+                                            <span class="dash__text">{{ customer.address }}</span>
+                                        </div>
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Region</h2>
+
+                                            <span class="dash__text">{{ customer.region }}</span>
+                                        </div>
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Governorate</h2>
+
+                                            <span class="dash__text">{{ customer.governorate }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="dash__link dash__link--secondary u-s-m-b-30">
+                                            <div class="u-s-m-b-16">
+
+                                                <a class="dash__custom-link btn--e-transparent-brand-b-2" href="{{ path('edit.address', { locale: 'en' }) }}">Edit Address</a></div>
+                                            <div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--================End login Area =================-->
+
+{% endblock %}
+

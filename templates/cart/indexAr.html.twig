@@ -67,7 +67,7 @@
                                             <td class="column-2">{{ cartItem.catalog.product.nameAr|upper }} <br> الحجم
                                                 : {{ cartItem.catalog.size }} </td>
                                             <td class="column-3">
-                                                {% if cartItem.catalog.product.discountPrice != null %}
+                                                {% if cartItem.catalog.product.discountPrice != 0 %}
                                                     {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
                                                 {% else %}
                                                     {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} {{ currency_ar }}
@@ -92,14 +92,14 @@
                                             </td>
                                             <td class="column-5">
 
-                                                {% if cartItem.catalog.product.discountPrice != null %}
+                                                {% if cartItem.catalog.product.discountPrice != 0 %}
                                                     <span> {{ (cartItem.catalog.product.discountPrice * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span> {{ currency_ar }}
                                                 {% else %}
                                                     <span> {{ (cartItem.catalog.product.price * cartItem.quantity  / 100) |number_format(2, '.', ',') }}</span> {{ currency_ar }}
                                                 {% endif %}
                                             </td>
                                         </tr>
-                                        {% if cartItem.catalog.product.discountPrice != null %}
+                                        {% if cartItem.catalog.product.discountPrice != 0 %}
                                             {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice)/100 %}
                                         {% else %}
                                             {% set total = total + (cartItem.quantity * cartItem.catalog.product.price)/100 %}
@@ -169,11 +169,11 @@
                             </div>
                             <div class="p-t-15 text-right size-209">
 									<span class="stext-112 cl8">
-										احسب التسليم
+										احسب التوصيل
 									</span>
                                 <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9 ">
                                     <select class="js-select2" name="delivery" required="required">
-                                        <option value="">حدد منطقة ...</option>
+                                        <option value="">حدد المحافظة ...</option>
                                         {% for governorate in governorates %}
                                             <option {% if delivery is defined and delivery == governorate.price %}  selected {% endif %}
                                                     value="{{ governorate.price }}">{{ governorate.nameAr }}</option>

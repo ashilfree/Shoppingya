@@ -1,0 +1,163 @@
+{% extends 'baseAr.html.twig' %}
+
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>طلباتي</h3>
+                <ul>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a >طلباتي</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+
+    <!--================login Area =================-->
+    <div class="p-all-40">
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="dash">
+                <div class="container">
+                    <div class="row">
+                        {% include 'account/side_barAr.html.twig' %}
+                        <div class="col-lg-9 col-md-12 text-right">
+                            <h1 class="dash__h1 u-s-m-b-30">تفاصيل الطلب</h1>
+                            <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                <div class="dash__pad-2">
+                                    <div class="dash-l-r">
+                                        <div>
+                                            <div class="manage-o__text-2 u-c-secondary">الطلب
+                                                #{{ order.reference }}</div>
+                                            <div class="manage-o__text u-c-silver">تم وضعها {{ order.createdAt|date("F jS \\a\\t g:ia") }}</div>
+                                        </div>
+                                        <div>
+                                            <div class="manage-o__text-2 u-c-silver">مجموع:
+
+                                                <span class="manage-o__text-2 u-c-secondary">{{ ((order.total+order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency_ar }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                <div class="dash__pad-2">
+                                    <div class="manage-o">
+                                        <div class="manage-o__header u-s-m-b-30">
+                                            <div class="manage-o__icon"><i class="fa fa-box u-s-m-r-5"></i>
+
+                                                <span class="manage-o__text">العبوة 1</span></div>
+                                        </div>
+                                        <div class="dash-l-r">
+                                            <div class="manage-o__text u-c-secondary">تم التسليم 26 Oct 2016</div>
+                                            <div class="manage-o__icon"><i class="fa fa-truck u-s-m-r-5"></i>
+
+                                                <span class="manage-o__text">قياسي</span></div>
+                                        </div>
+                                        <div class="manage-o__timeline">
+                                            <div class="timeline-row">
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <div class="timeline-step">
+                                                        <div class="timeline-l-i timeline-l-i--finish">
+
+                                                            <span class="timeline-circle"></span></div>
+
+                                                        <span class="timeline-text">يتم المعالجة</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <div class="timeline-step">
+                                                        <div class="timeline-l-i timeline-l-i--finish">
+
+                                                            <span class="timeline-circle"></span></div>
+
+                                                        <span class="timeline-text">في التسليم</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <div class="timeline-step">
+                                                        <div class="timeline-l-i">
+
+                                                            <span class="timeline-circle"></span></div>
+
+                                                        <span class="timeline-text">تم التوصيل</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% for orderDetail in orderDetails %}
+                                            <div class="manage-o__description">
+                                                <div class="description__container">
+                                                    <div>
+                                                        <span>{{ loop.index }}</span>
+                                                    </div>
+                                                    <div class="description-title">{{ orderDetail.product|upper }}</div>
+                                                </div>
+                                                <div class="description__info-wrap">
+                                                    <div>
+
+                                                            <span class="manage-o__text-2 u-c-silver">كمية:
+
+                                                                <span class="manage-o__text-2 u-c-secondary">{{ orderDetail.quantity }}</span></span>
+                                                    </div>
+                                                    <div>
+
+                                                            <span class="manage-o__text-2 u-c-silver">مجموع:
+
+                                                                <span class="manage-o__text-2 u-c-secondary">{{ (orderDetail.total/100)|number_format(2, '.', ',') }} {{ currency_ar }}</span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
+                                        <div class="dash__pad-3">
+                                            <h2 class="dash__h2 u-s-m-b-8">عنوان الشحن</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">{{ order.shippingFullName}}</h2>
+
+                                            <span class="dash__text-2">{{ order.shippingAddress}} - {{ order.shippingCity}}  - {{ order.shippingProvince}} </span>
+
+                                            <span class="dash__text-2">{{ order.shippingEmail}} </span>
+
+                                            <span class="dash__text-2">{{ order.shippingPhone}} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="dash__box dash__box--bg-white dash__box--shadow u-h-100">
+                                        <div class="dash__pad-3">
+                                            <h2 class="dash__h2 u-s-m-b-8">إجمالي الملخص</h2>
+                                            <div class="dash-l-r u-s-m-b-8">
+                                                <div class="manage-o__text-2 u-c-secondary">المجموع الفرعي</div>
+                                                <div class="manage-o__text-2 u-c-secondary">{{ (order.total/100)|number_format(2, '.', ',') }} {{ currency_ar }}</div>
+                                            </div>
+                                            <div class="dash-l-r u-s-m-b-8">
+                                                <div class="manage-o__text-2 u-c-secondary">رسوم التوصيل</div>
+                                                <div class="manage-o__text-2 u-c-secondary">{{ (order.deliveryPrice/100)|number_format(2, '.', ',') }} {{ currency_ar }}</div>
+                                            </div>
+                                            <div class="dash-l-r u-s-m-b-8">
+                                                <div class="manage-o__text-2 u-c-secondary">مجموع</div>
+                                                <div class="manage-o__text-2 u-c-secondary">{{ ((order.total+order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency_ar }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--================End login Area =================-->
+
+{% endblock %}
+

@@ -38,6 +38,7 @@
     {% block head_javascript %}
         <!-- BEGIN PAGE LEVEL STYLES -->
         <link href="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
+        <script src="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
         <!-- END PAGE LEVEL STYLES -->
     {% endblock head_javascript %}
 {% block content_title %}
@@ -62,7 +63,7 @@
                     {{ form_row(edit_form.title, {'attr': {'class': 'form-control', 'placeholder':'Title'}}) }}
                 </div>
                 <div class="col">
-                    {{ form_row(edit_form.titleAr, {'attr': {'class': 'form-control', 'placeholder':'العنوان'}}) }}
+                    {{ form_row(edit_form.titleAr, {'attr': {'class': 'form-control text-right', 'placeholder':'العنوان'}}) }}
                 </div>
             </div>
             <div class="row mb-4">
@@ -70,7 +71,7 @@
                     {{ form_row(edit_form.content, {'attr': {'class': 'form-control', 'placeholder':'Content'}}) }}
                 </div>
                 <div class="col">
-                    {{ form_row(edit_form.contentAr, {'attr': {'class': 'form-control', 'placeholder':'المحتوى'}}) }}
+                    {{ form_row(edit_form.contentAr, {'attr': {'class': 'form-control text-right', 'placeholder':'المحتوى'}}) }}
                 </div>
             </div>
             <div class="row mb-4">
@@ -78,7 +79,7 @@
                     {{ form_row(edit_form.btnTitle, {'attr': {'class': 'form-control', 'placeholder':'Button Title'}}) }}
                 </div>
                 <div class="col">
-                    {{ form_row(edit_form.btnTitleAr, {'attr': {'class': 'form-control', 'placeholder':'عنوان الزر'}}) }}
+                    {{ form_row(edit_form.btnTitleAr, {'attr': {'class': 'form-control text-right', 'placeholder':'عنوان الزر'}}) }}
                 </div>
             </div>
             <div class="row mb-4">

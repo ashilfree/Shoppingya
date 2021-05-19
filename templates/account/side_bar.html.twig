@@ -5,15 +5,13 @@
         <div class="dash__pad-1">
 
             <span class="dash__text u-s-m-b-16">Hello, {{ customer.username }}</span>
-            <ul class="dash__f-list">
+            <ul class="dash__w-list">
                 <li>
-
-                    <a class="dash-active" href="{{ path('account') }}">My Profile</a></li>
-
+                    <a class="dash-active" href="{{ path('account', { locale: 'en' }) }}">My Profile</a></li>
                 <li>
-
-                    <a href="{{ path('my.orders') }}">My Orders</a></li>
-
+                    <a href="{{ path('my.orders', { locale: 'en' }) }}">My Orders</a></li>
+                <li>
+                    <a href="{{ path('address', { locale: 'en' }) }}">My Address</a></li>
             </ul>
         </div>
     </div>
@@ -52,3 +50,8 @@
     </div>
     <!--====== End - Dashboard Features ======-->
 </div>
+<style>
+    .dash__w-list a{
+        color:#D97591;
+    }
+</style>

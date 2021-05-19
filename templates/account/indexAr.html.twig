@@ -6,10 +6,10 @@
     <section class="solid_banner_area">
         <div class="container">
             <div class="solid_banner_inner">
-                <h3>My Account</h3>
+                <h3>حسابي</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="track.html">My Account</a></li>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a>حسابي</a></li>
                 </ul>
             </div>
         </div>
@@ -24,31 +24,31 @@
             <div class="dash">
                 <div class="container">
                     <div class="row">
-                        {% include 'account/side_bar.html.twig' %}
+                        {% include 'account/side_barAr.html.twig' %}
                         <div class="col-lg-9 col-md-12">
-                            <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                            <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30 text-right">
                                 <div class="dash__pad-2">
-                                    <h1 class="dash__h1 u-s-m-b-14">My Profile</h1>
+                                    <h1 class="dash__h1 u-s-m-b-14">ملفي الشخصي</h1>
 
-                                    <span class="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
+                                    <span class="dash__text u-s-m-b-30">انظر إلى جميع معلوماتك ، يمكنك تخصيص ملفك الشخصي.</span>
                                     <div class="row">
                                         <div class="col-lg-4 u-s-m-b-30">
-                                            <h2 class="dash__h2 u-s-m-b-8">Full Name</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">الاسم بالكامل</h2>
 
                                             <span class="dash__text">{{ customer.fullName }}</span>
                                         </div>
                                         <div class="col-lg-4 u-s-m-b-30">
-                                            <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">بريد إلكتروني</h2>
 
                                             <span class="dash__text">{{ customer.email }}</span>
                                         </div>
                                         <div class="col-lg-4 u-s-m-b-30">
-                                            <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">هاتف</h2>
 
                                             <span class="dash__text">{{ customer.phone }}</span>
                                         </div>
                                         <div class="col-lg-4 u-s-m-b-30">
-                                            <h2 class="dash__h2 u-s-m-b-8">UserName</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">اسم االمستخدم</h2>
 
                                             <span class="dash__text">{{ customer.username }}</span>
                                         </div>
@@ -57,13 +57,12 @@
                                         <div class="col-lg-12">
                                             <div class="dash__link dash__link--secondary u-s-m-b-30">
 
-                                                <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
                                             <div class="u-s-m-b-16">
 
-                                                <a class="dash__custom-link btn--e-transparent-brand-b-2" href="{{ path('edit.account') }}">Edit Profile</a></div>
+                                                <a class="dash__custom-link btn--e-transparent-brand-b-2" href="{{ path('edit.account', { locale: 'ar' }) }}">تعديل الملف الشخصي</a></div>
                                             <div>
 
-                                                <a class="dash__custom-link btn--e-brand-b-2" href="{{ path('edit.password') }}">Change Password</a></div>
+                                                <a class="dash__custom-link btn--e-brand-b-2" href="{{ path('edit.password', { locale: 'ar' }) }}">تغيير كلمة المرور</a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -78,4 +77,3 @@
     <!--================End login Area =================-->
 
 {% endblock %}
-

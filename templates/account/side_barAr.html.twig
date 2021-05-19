@@ -1,0 +1,58 @@
+<div class="col-lg-3 col-md-12">
+
+    <!--====== Dashboard Features ======-->
+    <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
+        <div class="dash__pad-1 text-right">
+
+            <span class="dash__text u-s-m-b-16">مرحبا, {{ customer.username }}</span>
+            <ul class="dash__w-list">
+                <li>
+                    <a class="dash-active" href="{{ path('account', { locale: 'ar' }) }}">ملفي الشخصي</a></li>
+                <li>
+                    <a href="{{ path('my.orders', { locale: 'ar' }) }}">طلباتي</a></li>
+                <li>
+                    <a href="{{ path('address', { locale: 'ar' }) }}">عنواني</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
+        <div class="dash__pad-1">
+            <ul class="dash__w-list">
+                <li>
+                    <div class="dash__w-wrap">
+
+                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fa fa-cart-arrow-down"></i></span>
+
+                        <span class="dash__w-text">{{ pendingOrders|length }}</span>
+
+                        <span class="dash__w-name">الأوامر المعلقة</span></div>
+                </li>
+                <li>
+                    <div class="dash__w-wrap">
+
+                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fa fa-cart-arrow-down"></i></span>
+
+                        <span class="dash__w-text">{{ successOrders|length }}</span>
+
+                        <span class="dash__w-name">الطلبات</span></div>
+                </li>
+                <li>
+                    <div class="dash__w-wrap">
+
+                        <span class="dash__w-icon dash__w-icon-style-3"><i class="fa fa-times"></i></span>
+
+                        <span class="dash__w-text">{{ canceledOrders|length }}</span>
+
+                        <span class="dash__w-name">الطلبات ملغاة</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--====== End - Dashboard Features ======-->
+</div>
+
+<style>
+    .dash__w-list a{
+        color:#D97591;
+    }
+</style>

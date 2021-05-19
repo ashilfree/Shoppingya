@@ -3,10 +3,14 @@
 
 namespace App\Listener;
 
+use App\Classes\Cart;
+use App\Classes\Transaction;
 use App\Entity\Connected;
+use App\Entity\Order;
 use App\Entity\VisitStats;
 use App\Repository\VisitStatsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -26,16 +30,43 @@ class ListenerForAnyRequest
      * @var SessionInterface
      */
     private $session;
+    /**
+     * @var Transaction
+     */
+    private $transaction;
+    /**
+     * @var Cart
+     */
+    private $cart;
 
-    public function __construct(EntityManagerInterface $entityManager, VisitStatsRepository $visitStatsRepository, SessionInterface $session)
+    public function __construct(EntityManagerInterface $entityManager, VisitStatsRepository $visitStatsRepository, SessionInterface $session, Transaction $transaction, Cart $cart)
     {
         $this->entityManager = $entityManager;
         $this->visitStatsRepository = $visitStatsRepository;
         $this->session = $session;
+        $this->transaction = $transaction;
+        $this->cart = $cart;
     }
 
     public function onKernelRequest(RequestEvent $event)
     {
+        if($event->getRequest()->headers->get('referer')){
+            $route = $event->getRequest()->attributes->get('_route');
+            if($route !== '_wdt') {
+                $refererPathInfo = Request::create($event->getRequest()->headers->get('referer'))->getPathInfo();
+                if (($refererPathInfo == '/en/order/recap' && $route !== 'order' && $route !== 'my.fatoorah.create.session') || ($refererPathInfo == '/en/order' && $route !== 'order.recap' && $route != 'order')) {
+                    if ($this->session->get('orderId')) {
+                        $oldOrder = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
+                        if($this->transaction->check($oldOrder, 'order_canceled2'))
+                            $this->transaction->applyWorkFlow($oldOrder, 'order_canceled2');
+                        if($this->transaction->check($oldOrder, 'order_canceled'))
+                            $this->transaction->applyWorkFlow($oldOrder, 'order_canceled');
+                        $this->cart->increaseStock();
+                    }
+                    $this->session->clear();
+                }
+            }
+        }
         $ip = $_SERVER['REMOTE_ADDR'];
         $date = date('Y-m-d');
         $page = substr($_SERVER['PHP_SELF'], 1);

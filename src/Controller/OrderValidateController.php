@@ -7,10 +7,12 @@ use App\Classes\Mailer;
 use App\Classes\Transaction;
 use App\Classes\WishList;
 use App\Entity\Order;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OrderValidateController extends AbstractController
@@ -36,68 +38,82 @@ class OrderValidateController extends AbstractController
      * @var WishList
      */
     private $wishlist;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, Transaction $transaction, Cart $cart, WishList $wishlist, Mailer $mailer)
+    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session, CategoryRepository $categoryRepository, Transaction $transaction, Cart $cart, WishList $wishlist, Mailer $mailer)
 	{
 		$this->entityManager = $entityManager;
 		$this->transaction = $transaction;
         $this->cart = $cart;
         $this->mailer = $mailer;
         $this->wishlist = $wishlist;
+        $this->session = $session;
+        $this->categoryRepository = $categoryRepository;
     }
 
 	/**
-	 * @Route("/order/thank/{stripeSessionId}", name="order.validate.thank")
-	 * @param $stripeSessionId
+	 * @Route("/{locale}/order/thank/{reference}", name="order.validate.thank")
+	 * @param $reference
 	 * @return Response
 	 */
-    public function success($stripeSessionId): Response
+    public function success($reference): Response
     {
-	    $order = $this->entityManager->getRepository(Order::class)->findOneBy(['stripeSessionId' => $stripeSessionId]);
-		if(!$order || $order->getUser() != $this->getUser()){
+        $locale = $this->session->get("locale");
+	    $order = $this->entityManager->getRepository(Order::class)->findOneBy(['reference' => $reference]);
+		if(!$order || $order->getCustomer() != $this->getUser()){
 			return $this->redirectToRoute('home');
 		}
 
 		if ($this->transaction->check($order, 'checkout')){
-			$this->cart->remove2Order();
+            $this->session->clear();
 			$this->transaction->applyWorkFlow($order, 'checkout');
             $order->setPaidAt(new \DateTime());
 			$this->entityManager->flush();
             $this->mailer->sendSuccessOrderEmail($order);
 		}
-
-        return $this->render('order/order-complete.html.twig', [
+        $path = ($locale == "en") ? 'order/order-complete.html.twig' : 'order/order-completeAr.html.twig';
+        return $this->render($path, [
         	'order' => $order,
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
-            'page' => 'order-complete'
+            'page' => 'order-complete',
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/order/error/{stripeSessionId}", name="order.validate.error")
-     * @param $stripeSessionId
-     * @param Request $request
+     * @Route("/{locale}/order/error/{reference}", name="order.validate.error")
+     * @param $reference
      * @return Response
      */
-	public function cancel($stripeSessionId, Request $request): Response
+	public function cancel($reference): Response
 	{
-		$order = $this->entityManager->getRepository(Order::class)->findOneBy(['stripeSessionId' => $stripeSessionId]);
+        $locale = $this->session->get("locale");
+		$order = $this->entityManager->getRepository(Order::class)->findOneBy(['reference' => $reference]);
 		if(!$order || $order->getCustomer() != $this->getUser()){
 			return $this->redirectToRoute('home');
 		}
 		if ($this->transaction->check($order, 'checkout_canceled'))
 			$this->transaction->applyWorkFlow($order, 'checkout_canceled');
         $this->cart->increaseStock();
-        $this->cart->remove2Order();
+        $this->session->clear();
         $order->setCancelledAt(new \DateTime());
 		$this->entityManager->flush();
         $this->mailer->sendFailureOrderEmail($order);
-		return $this->render('order/order-canceled.html.twig', [
+        $path = ($locale == "en") ? 'order/order-canceled.html.twig' : 'order/order-canceledAr.html.twig';
+		return $this->render($path, [
 			'order' => $order,
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
-            'page' => 'order-canceled'
+            'page' => 'order-canceled',
+            'categories' => $this->categoryRepository->findAll(),
 		]);
 	}
 }

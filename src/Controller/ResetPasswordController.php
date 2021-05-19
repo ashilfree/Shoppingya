@@ -8,6 +8,7 @@ use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,12 +33,17 @@ class ResetPasswordController extends AbstractController
      * @var WishList
      */
     private $wishlist;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, Cart $cart, WishList $wishlist)
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, Cart $cart, CategoryRepository $categoryRepository, WishList $wishlist)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->cart = $cart;
         $this->wishlist = $wishlist;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -66,7 +72,8 @@ class ResetPasswordController extends AbstractController
             'requestForm' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
-            'page' => 'reset_password'
+            'page' => 'reset_password',
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
@@ -88,7 +95,8 @@ class ResetPasswordController extends AbstractController
             'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
-            'page' => 'check_email'
+            'page' => 'check_email',
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
@@ -157,7 +165,8 @@ class ResetPasswordController extends AbstractController
             'resetForm' => $form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
-            'page'=> 'reset'
+            'page'=> 'reset',
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 

@@ -316,7 +316,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
 /*------------------------------------------------------------------
 [ Logo ]*/
-.logo {
+.limiter-menu-desktop .logo {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;

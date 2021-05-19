@@ -1,0 +1,51 @@
+{% extends 'baseAr.html.twig' %}
+
+{% block body %}
+
+    <!--================Categories Banner Area =================-->
+    <section class="solid_banner_area">
+        <div class="container">
+            <div class="solid_banner_inner">
+                <h3>عربة التسوق</h3>
+                <ul>
+                    <li><a href="{{ path('home', { locale: 'ar' }) }}">الصفحة الرئيسية</a></li>
+                    <li><a>الطلب ملغى</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--================End Categories Banner Area =================-->
+    <div class="lhaj-grifa-shop">
+        <div class="container">
+            <div class="row row-pb-md  justify-content-center p-t-75">
+                <div class="col-md-10">
+                    <div class="process-wrap">
+                        <div class="process text-center active">
+                            <p><span>01</span></p>
+                            <h3>عربة التسوق</h3>
+                        </div>
+                        <div class="process text-center active">
+                            <p><span>02</span></p>
+                            <h3>الدفع</h3>
+                        </div>
+                        <div class="process text-center active">
+                            <p><span>03</span></p>
+                            <h3>الطلب جاهز</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Order Complete -->
+            <div class="row p-t-75 p-b-85 justify-content-center">
+                <div class="col-md-10 text-center">
+                    <span class="icon"><i class="zmdi zmdi-alert-polygon"></i></span>
+                    <h2>عذرا ، تم إلغاء طلبك</h2>
+                    <p>
+                        <a href="{{ path('home', { locale: 'ar' }) }}" class=" stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-25 p-tb-10 m-r-5 trans-04 pointer">الصفحة الرئيسية</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -2,10 +2,14 @@
 {#{% block javascript %}#}
 {#    <script src="https://js.stripe.com/v3/"></script>#}
 {#{% endblock %}#}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+{% endblock %}
 {% block body %}
 {% set total = null %}
     {% for orderDetail in cart2order %}
-     {% if orderDetail.catalog.product.discountPrice != null %}
+     {% if orderDetail.catalog.product.discountPrice != 0 %}
         {% set total = total + ((orderDetail.quantity * orderDetail.catalog.product.discountPrice)) %}
         {% else %}
         {% set total = total + ((orderDetail.quantity * orderDetail.catalog.product.price)) %}
@@ -25,8 +29,6 @@
     </section>
     <!--================End Categories Banner Area =================-->
     <div class="container js-checkout">
-            <input type="hidden" id="orderId" value="{{ order.id }}">
-            <input type="hidden" id="locale" value="{{ locale }}">
         <div class="row row-pb-md  justify-content-center p-t-75">
             <div class="col-md-10">
                 <div class="process-wrap">
@@ -64,8 +66,7 @@
                         <div class="details_item">
                             <h4>Billing Info</h4>
                             <ul class="list">
-                                <li><a href="#"><span>Name</span> : {{ order.shippingFirstName }}</a></li>
-                                <li><a href="#"><span>Last Name</span> : {{ order.shippingLastName }}</a></li>
+                                <li><a href="#"><span>Name</span> : {{ order.shippingFullName }}</a></li>
                                 <li><a href="#"><span>Email</span> : {{ order.shippingEmail }}</a></li>
                                 <li><a href="#"><span>Phone </span> : {{ order.shippingPhone }}</a></li>
                             </ul>
@@ -75,10 +76,9 @@
                         <div class="details_item">
                             <h4>Billing Address</h4>
                             <ul class="list">
-                                <li><a href="#"><span>Street</span> : {{ order.shippingAddress }}</a></li>
+                                <li><a href="#"><span>Address</span> : {{ order.shippingAddress }}</a></li>
                                 <li><a href="#"><span>City</span> : {{ order.shippingCity }}</a></li>
                                 <li><a href="#"><span>Governorate</span> : {{ order.shippingProvince }}</a></li>
-                                <li><a href="#"><span>Postcode </span> : {{ order.shippingPostalCode }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                                     </td>
                                     <td>
                                         <p>
-                                        {% if orderDetail.catalog.product.discountPrice != null %}
+                                        {% if orderDetail.catalog.product.discountPrice != 0 %}
                                         {{ orderDetail.catalog.product.discountPrice * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
                                         {% else %}
                                          {{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency }}
@@ -133,13 +133,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h4>Shipping</h4>
+                                    <h4>Delivery</h4>
                                 </td>
                                 <td>
                                     <h5></h5>
                                 </td>
                                 <td>
-                                    <p>Flat rate: {{ (order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</p>
+                                    <p>{{ (order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency }}</p>
                                 </td>
                             </tr>
                             <tr>
@@ -158,32 +158,57 @@
                     </div>
                 </div>
                 <div class="col-md-4 m-t-75">
-                     <div class="p-t-15  p-all-30" style="background: #e5ecee;">
+                    {{ form_start(payment_method_form, {action: path('my.fatoorah.create.session', { id: order.id , locale: 'en' }), 'attr': {'onsubmit': 'setFormSubmitting()'}}) }}
+                     <div class="p-t-15 p-all-30" style="background: #e5ecee;">
                         <span class="stext-112 cl8">
                             Payment Method
                         </span>
-                        <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-                            <select class="js-select2" name="payment" required="required">
-                                <option value="">Select a payment method...</option>
-                                {% for paymentMethod in paymentMethods %}
-                                    <option
+                         <div class="payment-type">
 
-                                            value="{{ paymentMethod.id }}">{{ paymentMethod.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <div class="dropDownSelect2"></div>
+                             <div class="types flex justify-space-between">
+                                 <div class="type type1 selected">
+                                     <div class="logo">
+                                         <i class="fas fa-handshake"></i>
+                                     </div>
+                                     <div class="text">
+                                         <p>Pay on Delivery</p>
+                                     </div>
+                                 </div>
+                                 <div class="type type2">
+                                     <div class="logo">
+                                         <i class="far fa-credit-card"></i>
+                                     </div>
+                                     <div class="text">
+                                         <p>Pay with Credit Card</p>
+                                     </div>
+                                 </div>
+
+                             </div>
+                         </div>
+                        <div class="select-wrapper m-b-15 m-t-15" style="display: none">
+
+{#                            <select class="js-select2" name="payment" required="required">#}
+{#                                <option value="">Select a payment method...</option>#}
+{#                                {% for paymentMethod in paymentMethods %}#}
+{#                                    <option#}
+
+{#                                            value="{{ paymentMethod.id }}">{{ paymentMethod.name }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#                            <div class="dropDownSelect2"></div>#}
+
+                            {{ form_widget(payment_method_form.paymentMethod, {'attr': {'class': 'select', 'placeholder':'Choose a Credit Card *'}}) }}
+
                         </div>
-                    </div>
-                        <a id="checkout-button" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-t-30">
-                            Place an order
-                        </a>
-                        {{ form_start(form, {action: path('order', { locale: 'en' })}) }}
-                        {{ form_row(form.id) }}
-                        <button type="submit" class="flex-c-m stext-101 cl2 size-119 w-full bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                            Back
-                        </button>
 
-                        {{ form_end(form, {'render_rest': false}) }}
+                    </div>
+                        <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-t-30" data-id="{{ order.id }}" data-locale="{{ locale }}">
+                            Place an order
+                        </button>
+                    {{ form_end(payment_method_form) }}
+                        <a href="{{ path('order', { locale: 'en' }) }}" onclick="setFormSubmitting();" class="flex-c-m stext-101 cl2 size-119 w-full bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                            Back
+                        </a>
                 </div>
             </div>
         </div>
@@ -197,7 +222,6 @@
         // Create an instance of the Stripe object with your publishable API key
         // var stripe = Stripe("pk_test_51IU51mLg5TZnbiRrqWBt7NVQhhSsMbzK33P5nDrDkEZbMhZyO3NCThWs6mX7T5AxV8jSptmcd639iYqJYzUJBgWn00qv2gkIyj");
         var checkoutButton = document.getElementById("checkout-button");
-
         {#checkoutButton.addEventListener("click", function () {#}
 
         {#    alert($('.js-select2').select2('data'))#}
@@ -230,5 +254,165 @@
         {#            console.error("Error:", error);#}
         {#        });#}
         {#});#}
+        var formSubmitting = false;
+        var setFormSubmitting = function() { formSubmitting = true; };
+
+        window.onload = function() {
+            window.addEventListener("beforeunload", function (e) {
+                if (formSubmitting) {
+                    return undefined;
+                }
+
+                var confirmationMessage = 'It looks like you have been editing something. '
+                    + 'If you leave before saving, your changes will be lost.';
+
+                (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+            });
+        };
     </script>
+    <script>
+        let type1 = document.querySelector('.type1');
+        let type2 = document.querySelector('.type2');
+
+        type1.addEventListener('click', function(){
+            this.classList.add('selected');
+            this.nextElementSibling.classList.remove('selected');
+            document.querySelector('.select-wrapper').style.display = 'none';
+            document.querySelector('#payment_method_paymentMethod').required = false;
+            document.querySelector('#payment_method_paymentMethod').selectedIndex = null;
+
+        })
+        type2.addEventListener('click', function(){
+            this.classList.add('selected');
+            this.previousElementSibling.classList.remove('selected');
+            document.querySelector('.select-wrapper').style.display = 'block';
+            document.querySelector('#payment_method_paymentMethod').required = true;
+        })
+        // let getSiblings = function (e) {
+        //     // for collecting siblings
+        //     let siblings = [];
+        //     // if no parent, return no sibling
+        //     if(!e.parentNode) {
+        //         return siblings;
+        //     }
+        //     // first child of the parent node
+        //     let sibling  = e.parentNode.firstChild;
+        //     // collecting siblings
+        //     while (sibling) {
+        //         if (sibling.nodeType === 1 && sibling !== e) {
+        //             siblings.push(sibling);
+        //         }
+        //         sibling = sibling.nextSibling;
+        //     }
+        //     return siblings;
+        // };
+    </script>
+    <style>
+        .card-body .payment-type .types {
+            margin: 25px 0;
+        }
+        .flex.justify-space-between {
+            justify-content: space-between;
+        }
+        .flex {
+            display: flex;
+            flex-direction: row wrap;
+            align-items: center;
+        }
+        .payment-type .types .type.selected {
+            border-color: #D97591;
+            background: rgba(64,179,255,0.1);
+        }
+
+        .payment-type .types .type {
+            width: 45%;
+            position: relative;
+            background: #f2f4f7;
+            border: 2px solid #e8ebed;
+            padding: 25px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.5s ease;
+
+        }
+
+        .payment-type .types .type.selected .logo {
+            color: #D97591;
+        }
+
+        .payment-type .types .type .logo {
+            font-size: 48px;
+            color: #8a959c;
+            justify-content: center;
+        }
+        .payment-type .types .type .logo, .card .card-body .payment-type .types .type p {
+            transition: all 0.5s ease;
+        }
+        .payment-type .types .type.selected p {
+            color: #28333b;
+        }
+        .payment-type .types .type p {
+            margin-bottom: 0;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #8a959c;
+        }
+        .payment-type .types .type .logo, .card .card-body .payment-type .types .type p {
+            transition: all 0.5s ease;
+        }
+        .payment-type .types .type.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            height: 40px;
+            width: 40px;
+            top: -21px;
+            right: -21px;
+            background: #fff;
+            border: 2px solid #D97591;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .select-wrapper::after {
+            color: black;
+            content: "▾";
+            margin-right: 10px;
+            pointer-events: none;
+            position: absolute;
+            right: 10px;
+            top: 7px;
+            font-size: 20px;
+        }
+
+        .select {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            background: white;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            padding: 12px;
+            width: 100%;
+            font-size: 18px;
+        }
+        .select:focus {
+            color: black;
+        }
+        .select::-ms-expand {
+            display: none;
+        }
+    </style>
+
 {% endblock %}

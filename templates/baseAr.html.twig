@@ -24,13 +24,13 @@
         <div class="top-bar">
             <div class="content-topbar flex-sb-m h-full container">
                 <div class="left-top-bar">
-                    التوصيل المجاني للطلب فوق 20 {{ currency_ar }}
+                    التوصيل المجاني للطلب 20 {{ currency_ar }} أو أكثر
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        المساعدة والأسئلة الشائعة
-                    </a>
+{#                    <a href="#" class="flex-c-m trans-04 p-lr-25">#}
+{#                        المساعدة والأسئلة الشائعة#}
+{#                    </a>#}
 
                     {% if app.user %}
                         <a href="{{ path('account', { locale: 'ar' }) }}" class="flex-c-m trans-04 p-lr-25">
@@ -38,24 +38,27 @@
                         </a>
                     {% else %}
                         <a href="{{ path('register', { locale: 'ar'}) }}" class="flex-c-m trans-04 p-lr-25">
-                            تسجيل
+                            مستخدم جديد
                         </a>
                     {% endif %}
 
                     <a href="{{ path('home', { locale: 'en' }) }}" class="flex-c-m trans-04 p-lr-25">
                         الإنجليزية
                     </a>
-
+                    {% if app.user %}
+                    <a href="{{ path('account', { locale: 'ar' }) }}" class="flex-c-m trans-04 p-lr-25">
+                        {{  'مرحبا ' ~ app.user.username   }} {{ ' ' }}
+                    </a>
+                    {% endif %}
                     {% if app.user %}
 
-                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
-                            {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
+                        <a href="{{ path('logout', { locale: 'ar' }) }}" class="flex-c-m p-lr-10 trans-04">
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
                         <a href="{{ path('login', { locale: 'ar'}) }}" class="flex-c-m p-lr-10 trans-04">
 
-                            <i class="fa fa-sign-in"></i>
+                            تسجيل الدخول
                         </a>
                     {% endif %}
 
@@ -75,7 +78,7 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li {% if page is defined and page == 'home.ar' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('home', { locale: 'ar' }) }}">الصفحة الرئيسية</a>
+                            <a href="{{ path('home', { locale: 'ar' }) }}">الرئيسية</a>
                         </li>
 
                         <li {% if page is defined and page == 'about.us.ar' %} class="active-menu" {% endif %}>
@@ -83,7 +86,7 @@
                         </li>
 
                         <li {% if page is defined and page == 'products.ar' %} class="active-menu" {% endif %}>
-                            <a href="{{ path('products', { locale: 'ar' }) }}">المنتجات</a>
+                            <a href="{{ path('products', { locale: 'ar' }) }}">الأقسام</a>
                         </li>
 
 
@@ -135,15 +138,15 @@
         <ul class="topbar-mobile">
             <li>
                 <div class="left-top-bar text-right">
-                    التوصيل المجاني للطلب فوق 20 {{ currency_ar }}
+                    التوصيل المجاني للطلب 20 {{ currency_ar }} أو أكثر
                 </div>
             </li>
 
             <li>
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        المساعدة والأسئلة الشائعة
-                    </a>
+{#                    <a href="#" class="flex-c-m p-lr-10 trans-04">#}
+{#                        المساعدة والأسئلة الشائعة#}
+{#                    </a>#}
 
                     {% if app.user %}
                         <a href="{{ path('account', { locale: 'ar' }) }}" class="flex-c-m p-lr-10 trans-04">
@@ -151,18 +154,21 @@
                         </a>
                     {% else %}
                         <a href="{{ path('register', { locale: 'ar'}) }}" class="flex-c-m p-lr-10 trans-04">
-                            تسجيل
+                            مستخدم جديد
                         </a>
                     {% endif %}
 
                     <a href="{{ path('home', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                         الإنجليزية
                     </a>
-
+                    {% if app.user %}
+                        <a href="{{ path('account', { locale: 'ar' }) }}" class="flex-c-m trans-04 p-lr-25">
+                            {{  'مرحبا ' ~ app.user.username   }} {{ ' ' }}
+                        </a>
+                    {% endif %}
                     {% if app.user %}
 
-                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
-                            {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
+                        <a href="{{ path('logout', { locale: 'ar' }) }}" class="flex-c-m p-lr-10 trans-04">
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
@@ -178,7 +184,7 @@
 
         <ul class="main-menu-m text-right">
             <li>
-                <a href="{{ path('home', { locale: 'ar' }) }}">الصفحة الرئيسية</a>
+                <a href="{{ path('home', { locale: 'ar' }) }}">الرئيسية</a>
             </li>
 
             <li>
@@ -186,7 +192,7 @@
             </li>
 
             <li>
-                <a href="{{ path('products', { locale: 'ar' }) }}">التصنيفات</a>
+                <a href="{{ path('products', { locale: 'ar' }) }}">الأقسام</a>
             </li>
 
             <li>
@@ -242,7 +248,7 @@
                                     {{ cartItem.catalog.product.nameAr|upper }}
                                 </a>
                                 <span class="header-cart-item-info">
-                                    {% if cartItem.catalog.product.discountPrice != null %}
+                                    {% if cartItem.catalog.product.discountPrice != 0 %}
 								        {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') ~ 'x' ~ cartItem.quantity }}  {{ currency_ar }}
                                     {% else %}
                                         {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') ~ 'x' ~ cartItem.quantity }} {{ currency_ar }}
@@ -253,7 +259,7 @@
 							</span>
                             </div>
                         </li>
-                        {% if cartItem.catalog.product.discountPrice != null %}
+                        {% if cartItem.catalog.product.discountPrice != 0 %}
                             {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice) %}
                         {% else %}
                             {% set total = total + (cartItem.quantity * cartItem.catalog.product.price) %}
@@ -275,13 +281,13 @@
 
                 <div class="header-cart-buttons flex-w w-full">
                     <a  href="{{ path('cart', { locale: 'ar' }) }}"
-                            class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10" >
-                        عرض عربة
+                            class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-l-8 m-b-10" >
+                          عرض عربة التسوق
                     </a>
 
                     <a {% if cart|length != 0 %} href="{{ path('remove.cart', {locale:'ar', route: page}) }}" {% endif %}
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10" {% if cart|length == 0 %} disabled="true" {% endif %}>
-                        إفراغ
+                         إخلاء عربة التسوق
                     </a>
                 </div>
             </div>
@@ -307,13 +313,13 @@
                 <ul class="header-cart-wrapitem w-full">
                     {% for cartItem in wishlist %}
                         <li class="header-cart-item flex-w flex-t m-b-12">
-                            <a class="header-cart-item-img" href="{{ path('delete.wishlist', {id: cartItem.product.id, route:page}) }}">
+                            <a class="header-cart-item-img" href="{{ path('delete.wishlist', {id: cartItem.product.id, route:page, locale: 'ar'}) }}">
                                 <img src="{{ vich_uploader_asset(cartItem.product.images.first, 'imageFile') | imagine_filter('small') }} "
                                      alt="{{ cartItem.product.name }}">
                             </a>
 
                             <div class="header-cart-item-txt p-t-8">
-                                <a href="{{ path('product.ar', {'slug': cartItem.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04  text-right">
+                                <a href="{{ path('product', {'slug': cartItem.product.slug, locale: 'ar' }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04  text-right">
                                     {{ cartItem.product.nameAr }}
                                 </a>
                             </div>
@@ -345,39 +351,23 @@
         <div class="row">
             <div class="col-sm-6 col-lg-4 p-b-50">
                 <h4 class="stext-301 cl0 p-b-30 text-right">
-                    فئات
+                    الأقسام
                 </h4>
 
                 <ul>
-                    <li class="p-b-10 text-right">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            نساء
-                        </a>
-                    </li>
-
-                    <li class="p-b-10 text-right">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            رجال
-                        </a>
-                    </li>
-
-                    <li class="p-b-10 text-right">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            أحذية
-                        </a>
-                    </li>
-
-                    <li class="p-b-10 text-right">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            أحذية
-                        </a>
-                    </li>
+                    {% for category in categories  %}
+                        <li class="p-b-10 text-right">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                {{ category.nameAr }}
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
 
             <div class="col-sm-6 col-lg-4 p-b-50 text-right">
                 <h4 class="stext-301 cl0 p-b-30">
-                    ابقى على تواصل
+                    اتصل بنا
                 </h4>
 
                 <p class="stext-107 cl7 size-201">
@@ -394,7 +384,7 @@
                     </a>
 
                     <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                        <i class="fa fa-pinterest-p"></i>
+                        <i class="fa fa-youtube"></i>
                     </a>
                 </div>
             </div>
@@ -413,7 +403,7 @@
 
                     <div class="p-t-18">
                         <button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
-                            الإشتراك
+                            إشتراك
                         </button>
                     </div>
                 </form>

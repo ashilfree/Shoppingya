@@ -145,7 +145,8 @@
             <button type="button" class="btn btn-link field-collection-delete-button"
                     title="{{ 'action.remove_item'|trans({}, 'EasyAdminBundle') }}"
                     onclick="this.closest('.form-group').remove(); return false;">
-                <i class="fas fa-times"></i>
+                <i class="fa fa-times"></i>
+                Remove
             </button>
         {% endif %}
     </div>
@@ -230,9 +231,9 @@
             <a class="ea-vich-file-name" href="{{ asset(download_uri) }}">
                 <i class="fa fa-fw {{ extension_icons[file_extension] ?? 'fa-file-o' }}"></i>
                 <img width="200" src="{{ asset(download_uri) }}" alt="{{ download_title }}">
-
             </a>
-        {% endif %}
+            {{ form_widget(form.file, { 'attr': { class:'invisible'}, vich: true}) }}
+        {% else %}
 
         {% set file_upload_js %}
             var newFile = document.getElementById('{{ form.file.vars.id }}').files[0];
@@ -245,7 +246,7 @@
             {# the container element is needed to allow customizing the <input type="file" /> #}
             <div class="btn btn-secondary input-file-container">
                 <i class="fa fa-fw fa-upload"></i> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
-                {{ form_widget(form.file, { 'attr': { 'onchange': file_upload_js }, vich: true}) }}
+                {{ form_widget(form.file, { 'attr': { class:'', 'onchange': file_upload_js }, vich: true}) }}
             </div>
 
             {% if form.delete is defined %}
@@ -253,6 +254,7 @@
             {% endif %}
         </div>
         <div class="small" id="{{ form.file.vars.id }}_new_file_name"></div>
+        {% endif %}
     </div>
 {% endblock %}
 

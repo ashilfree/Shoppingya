@@ -33,6 +33,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/assets/css/scrollspyNav.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/plugins/select2/select2.min.css') }}">
         <link href="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
+        <script src="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
         <!-- END PAGE LEVEL STYLES -->
     {% endblock head_javascript %}
 {% block content_title %}
@@ -57,7 +58,7 @@
             {{ form_row(new_form.title, {'attr': {'class': 'form-control', 'placeholder':'Title'}}) }}
         </div>
         <div class="col">
-            {{ form_row(new_form.titleAr, {'attr': {'class': 'form-control', 'placeholder':'العنوان'}}) }}
+            {{ form_row(new_form.titleAr, {'attr': {'class': 'form-control text-right', 'placeholder':'العنوان'}}) }}
         </div>
     </div>
     <div class="row mb-4">
@@ -65,7 +66,7 @@
             {{ form_row(new_form.description1, {'attr': {'class': 'form-control', 'placeholder':'Description 1'}}) }}
         </div>
         <div class="col">
-            {{ form_row(new_form.descriptionAr1, {'attr': {'class': 'form-control', 'placeholder':'الوصف 1'}}) }}
+            {{ form_row(new_form.descriptionAr1, {'attr': {'class': 'form-control text-right', 'placeholder':'الوصف 1'}}) }}
         </div>
     </div>
     <div class="row mb-4">
@@ -73,7 +74,7 @@
             {{ form_row(new_form.description2, {'attr': {'class': 'form-control', 'placeholder':'Description 2'}}) }}
         </div>
         <div class="col">
-            {{ form_row(new_form.descriptionAr2, {'attr': {'class': 'form-control', 'placeholder':'الوصف 2'}}) }}
+            {{ form_row(new_form.descriptionAr2, {'attr': {'class': 'form-control text-right', 'placeholder':'الوصف 2'}}) }}
         </div>
     </div>
     <div class="row mb-4">
@@ -81,7 +82,7 @@
             {{ form_row(new_form.description3, {'attr': {'class': 'form-control', 'placeholder':'Description 3'}}) }}
         </div>
         <div class="col">
-            {{ form_row(new_form.descriptionAr3, {'attr': {'class': 'form-control', 'placeholder':'الوصف 3'}}) }}
+            {{ form_row(new_form.descriptionAr3, {'attr': {'class': 'form-control text-right', 'placeholder':'الوصف 3'}}) }}
         </div>
     </div>
     <div class="row mb-4">
@@ -89,7 +90,7 @@
             {{ form_row(new_form.word, {'attr': {'class': 'form-control', 'placeholder':'Word'}}) }}
         </div>
         <div class="col">
-            {{ form_row(new_form.wordAr, {'attr': {'class': 'form-control', 'placeholder':'الكلمة'}}) }}
+            {{ form_row(new_form.wordAr, {'attr': {'class': 'form-control text-right', 'placeholder':'الكلمة'}}) }}
         </div>
     </div>
     <div class="row mb-4">
@@ -97,7 +98,7 @@
             {{ form_row(new_form.word_honor, {'attr': {'class': 'form-control', 'placeholder':'Word Owner'}}) }}
         </div>
         <div class="col">
-            {{ form_row(new_form.word_honor_ar, {'attr': {'class': 'form-control', 'placeholder':' صاحب الكلمة'}}) }}
+            {{ form_row(new_form.word_honor_ar, {'attr': {'class': 'form-control text-right', 'placeholder':' صاحب الكلمة'}}) }}
         </div>
     </div>
         {{ form_end(new_form) }}
@@ -198,8 +199,8 @@
     <script src="{{ asset('assets/admin/assets/js/scrollspyNav.js') }}"></script>
     <script src="{{ asset('assets/admin/plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/admin/plugins/select2/custom-select2.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
-    <script type="text/javascript">
-      var firstUpload = new FileUploadWithPreview('myFirstImage')
-    </script>
+{#    <script src="{{ asset('assets/admin/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>#}
+{#    <script type="text/javascript">#}
+{#      var firstUpload = new FileUploadWithPreview('myFirstImage')#}
+{#    </script>#}
 {% endblock %}

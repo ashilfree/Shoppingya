@@ -7,6 +7,7 @@ use App\Classes\Mailer;
 use App\Classes\WishList;
 use App\Entity\Customer;
 use App\Form\CustomerRegisterType;
+use App\Repository\CategoryRepository;
 use App\Security\CustomerConfirmationService;
 use App\Security\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,17 +36,23 @@ class MainSecurityController extends AbstractController
      * @var WishList
      */
     private $wishlist;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
     /**
      * MainSecurityController constructor.
      * @param AuthenticationUtils $authenticationUtils
      * @param Cart $cart
+     * @param CategoryRepository $categoryRepository
      * @param WishList $wishlist
      * @param Mailer $mailer
      */
     public function __construct(
         AuthenticationUtils $authenticationUtils,
         Cart $cart,
+        CategoryRepository $categoryRepository,
         WishList $wishlist,
         Mailer $mailer
     )
@@ -56,6 +63,7 @@ class MainSecurityController extends AbstractController
 
         $this->cart = $cart;
         $this->wishlist = $wishlist;
+        $this->categoryRepository = $categoryRepository;
     }
 
 
@@ -75,7 +83,8 @@ class MainSecurityController extends AbstractController
                 'last_username' => $lastUsername,
                 'error' => $error,
                 'cart' => $this->cart->getFull($this->cart->get()),
-                'wishlist' => $this->wishlist->getFull()
+                'wishlist' => $this->wishlist->getFull(),
+                'categories' => $this->categoryRepository->findAll(),
             ]);
     }
 
@@ -105,13 +114,14 @@ class MainSecurityController extends AbstractController
             // maybe set a "flash" success message for the user
 //            $this->addFlash('success', 'Your account has been registered.');
             //send mail to customer
-            $this->mailer->sendConfirmationEmail($customer);
+            $this->mailer->sendConfirmationEmail($customer, $locale);
             //return $this->redirectToRoute('login');
             $path = ($locale == "en") ? 'authentication/check-email-register.html.twig' : 'authentication/check-email-registerAr.html.twig';
             return $this->render($path, [
                 'cart' => $this->cart->getFull($this->cart->get()),
                 'wishlist' => $this->wishlist->getFull(),
                 'page'=> 'register',
+                'categories' => $this->categoryRepository->findAll(),
             ]);
         }
         $path = ($locale == "en") ? 'authentication/register.html.twig' : 'authentication/registerAr.html.twig';
@@ -120,34 +130,40 @@ class MainSecurityController extends AbstractController
             'form'=>$form->createView(),
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
     /**
+     * @param string $locale
      * @param string $token
      * @param CustomerConfirmationService $customerConfirmationService
      * @return RedirectResponse
-     * @Route("/confirm-customer/{token}", name="default.confirm.token")
+     * @Route("/{locale}/confirm-customer/{token}", name="default.confirm.token", defaults={"locale"="en"})
      */
     public function confirmCustomer(
+        string $locale,
         string $token,
         CustomerConfirmationService $customerConfirmationService
     ): RedirectResponse
     {
         $customerConfirmationService->confirmCustomer($token);
-        return $this->redirectToRoute('confirmation');
+        return $this->redirectToRoute('confirmation', ['locale' => $locale]);
     }
 
     /**
-     * @Route("/confirmation", name="confirmation")
+     * @Route("/{locale}/confirmation", name="confirmation", defaults={"locale"="en"})
+     * @param $locale
      * @return Response
      */
-    public function confirmation(): Response
+    public function confirmation($locale): Response
     {
-        return $this->render('authentication/confirmation.html.twig', [
+        $path = ($locale == "en") ? 'authentication/confirmation.html.twig' : 'authentication/confirmationAr.html.twig';
+        return $this->render($path, [
             'page' => 'confirmation',
             'cart' => $this->cart->getFull($this->cart->get()),
             'wishlist' => $this->wishlist->getFull(),
+            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 }

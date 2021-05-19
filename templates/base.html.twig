@@ -28,9 +28,9 @@
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        Help & FAQs
-                    </a>
+{#                    <a href="#" class="flex-c-m trans-04 p-lr-25">#}
+{#                        Help & FAQs#}
+{#                    </a>#}
 
                     {% if app.user %}
                         <a href="{{ path('account', { locale: 'en' }) }}" class="flex-c-m trans-04 p-lr-25">
@@ -38,24 +38,28 @@
                         </a>
                     {% else %}
                         <a href="{{ path('register', { locale: 'en' }) }}" class="flex-c-m trans-04 p-lr-25">
-                            Register
+                            Signup
                         </a>
                     {% endif %}
 
                     <a href="{{ path('home', { locale: 'ar' }) }}" class="flex-c-m trans-04 p-lr-25">
                         AR
                     </a>
-
                     {% if app.user %}
 
-                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
-                            {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
+                    <a href="{{ path('account', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
+                        {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
+                    </a>
+                    {% endif %}
+                    {% if app.user %}
+
+                        <a href="{{ path('logout', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
                         <a href="{{ path('login', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
 
-                            <i class="fa fa-sign-in"></i>
+                            Login
                         </a>
                     {% endif %}
 
@@ -141,9 +145,9 @@
 
             <li>
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        Help & FAQs
-                    </a>
+{#                    <a href="#" class="flex-c-m p-lr-10 trans-04">#}
+{#                        Help & FAQs#}
+{#                    </a>#}
 
                     {% if app.user %}
                         <a href="{{ path('account', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
@@ -151,24 +155,28 @@
                         </a>
                     {% else %}
                         <a href="{{ path('register', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
-                            Register
+                            Signup
                         </a>
                     {% endif %}
 
                     <a href="{{ path('home' , { locale: 'ar' }) }}" class="flex-c-m p-lr-10 trans-04">
                         AR
                     </a>
-
                     {% if app.user %}
 
-                        <a href="{{ path('logout') }}" class="flex-c-m p-lr-10 trans-04">
+                        <a href="{{ path('account', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                             {{ 'Hello ' ~ app.user.username }} {{ ' ' }}
+                        </a>
+                    {% endif %}
+                    {% if app.user %}
+
+                        <a href="{{ path('logout', { locale: 'en' }) }}" class="flex-c-m p-lr-10 trans-04">
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
                         <a href="{{ path('login', { locale: 'en' }) }}" class="flex-c-m p-lr-10 p-t-5 trans-04">
 
-                            <i class="fa fa-sign-in"></i>
+                            Login
                         </a>
                     {% endif %}
 
@@ -242,7 +250,7 @@
                                     {{ cartItem.catalog.product.name|upper }}
                                 </a>
                                 <span class="header-cart-item-info">
-                                    {% if cartItem.catalog.product.discountPrice != null %}
+                                    {% if cartItem.catalog.product.discountPrice != 0 %}
 								        {{ cartItem.quantity }} x {{ (cartItem.catalog.product.discountPrice / 100) |number_format(2, '.', ',') }} KWD
                                     {% else %}
                                         {{ cartItem.quantity }} x {{ (cartItem.catalog.product.price / 100) |number_format(2, '.', ',') }} KWD
@@ -253,7 +261,7 @@
 							</span>
                             </div>
                         </li>
-                        {% if cartItem.catalog.product.discountPrice != null %}
+                        {% if cartItem.catalog.product.discountPrice != 0 %}
                             {% set total = total + (cartItem.quantity * cartItem.catalog.product.discountPrice) %}
                         {% else %}
                             {% set total = total + (cartItem.quantity * cartItem.catalog.product.price) %}
@@ -307,13 +315,13 @@
                 <ul class="header-cart-wrapitem w-full">
                     {% for cartItem in wishlist %}
                         <li class="header-cart-item flex-w flex-t m-b-12">
-                            <a class="header-cart-item-img" href="{{ path('delete.wishlist', {id: cartItem.product.id, route:page}) }}">
+                            <a class="header-cart-item-img" href="{{ path('delete.wishlist', {id: cartItem.product.id, route:page, locale: 'en'}) }}">
                                 <img src="{{ vich_uploader_asset(cartItem.product.images.first, 'imageFile') | imagine_filter('small') }} "
                                      alt="{{ cartItem.product.name }}">
                             </a>
 
                             <div class="header-cart-item-txt p-t-8">
-                                <a href="{{ path('product', {'slug': cartItem.product.slug }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
+                                <a href="{{ path('product', {'slug': cartItem.product.slug, locale: 'en' }) }}" class="header-cart-item-name m-b-6 hov-cl1 trans-04">
                                     {{ cartItem.product.name|upper }}
                                 </a>
                             </div>
@@ -327,7 +335,7 @@
 
             <div class="w-full">
                 <div class="header-cart-buttons flex-w w-full align-items-center">
-                    <a {% if wishlist|length != 0 %} href="{{ path('remove.wishlist', {route: page}) }}" {% endif %}
+                    <a {% if wishlist|length != 0 %} href="{{ path('remove.wishlist', {route: page, locale: 'en'}) }}" {% endif %}
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10" {% if wishlist|length == 0 %} disabled="true" {% endif %}>
                         Clear List
                     </a>
@@ -349,29 +357,13 @@
                 </h4>
 
                 <ul>
-                    <li class="p-b-10">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            Women
-                        </a>
-                    </li>
-
-                    <li class="p-b-10">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            Men
-                        </a>
-                    </li>
-
-                    <li class="p-b-10">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            Shoes
-                        </a>
-                    </li>
-
-                    <li class="p-b-10">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                            Watches
-                        </a>
-                    </li>
+                    {% for category in categories  %}
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
 
@@ -394,7 +386,7 @@
                     </a>
 
                     <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                        <i class="fa fa-pinterest-p"></i>
+                        <i class="fa fa-youtube"></i>
                     </a>
                 </div>
             </div>

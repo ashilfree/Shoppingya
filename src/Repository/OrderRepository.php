@@ -175,6 +175,7 @@ class OrderRepository extends ServiceEntityRepository
             ->where('o.createdAt < :date')
             ->setParameter('date', $date)
             ->andWhere("o.marking like '%waiting%'")
+            ->orWhere("o.marking like '%in_payment%'")
             ->orderBy('o.id', 'DESC')
             ->getQuery()
             ->getResult()

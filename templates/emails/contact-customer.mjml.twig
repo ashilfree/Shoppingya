@@ -1,0 +1,72 @@
+{# mail/example.mjml.twig #}
+{% block email_content %}
+    {% mjml %}
+		<mjml>
+			<mj-body background-color="#d6dde5">
+				<mj-section background-color="#E4E4E4">
+					<mj-column width="50%">
+						<mj-image href="https://mjml.io" src="https://shoppinga.genesistech-dz.com/media/images/icons/logo-01.png" alt="foodshack logo" width="200" align="center" padding="10px"></mj-image>
+					</mj-column>
+				</mj-section>
+				<mj-section background-color="#fff" padding-bottom="50px" padding-top="50px">
+					<mj-column>
+						<mj-text align="center" color="#247705" padding-bottom="0px" padding-top="0" >
+							<p style="font-size: 20px;font-weight: bold;">CONTACT US</p>
+						</mj-text>
+						<mj-text align="center" color="#020202" font-size="13px" padding-left="25px" padding-right="25px" padding-bottom="0px" padding-top="0">
+							<p style="font-size: 15px;font-weight: bold;">Dear customer,</p>
+							<p style="font-size: 15px;font-weight: bold;">We thank you for contacting us,</p>
+							<p style="font-size: 15px;font-weight: bold;">a response will be given as soon as possible</p>
+						</mj-text>
+
+					</mj-column>
+				</mj-section>
+				<mj-section background-color="#222" padding-bottom="20px" padding-top="20px">
+					<mj-column>
+						<mj-text align="center" color="#fff" font-size="13px" padding-left="25px" padding-right="25px" padding-bottom="0px" padding-top="0">
+							<p style="font-size: 15px;font-weight: bold;">CATEGORIES</p>
+						</mj-text>
+						<mj-text align="center" color="#fff" font-size="11px">
+							<p>Women</p>
+							<p>Men</p>
+							<p>Shoes</p>
+							<p>Watches</p>
+						</mj-text>
+					</mj-column>
+{#					<mj-column>#}
+{#						<mj-text align="center" color="#fff" font-size="13px" padding-left="25px" padding-right="25px" padding-bottom="0px" padding-top="0">#}
+{#							<p style="font-size: 15px;font-weight: bold;">HELP</p>#}
+{#						</mj-text>#}
+{#						<mj-text align="center" color="#fff" font-size="11px">#}
+{#							<p>Track Order</p>#}
+{#							<p>Returns</p>#}
+{#							<p>Shipping</p>#}
+{#							<p>FAQs</p>#}
+{#						</mj-text>#}
+{#					</mj-column>#}
+					<mj-column>
+						<mj-text align="center" color="#fff" font-size="13px" padding-left="25px" padding-right="25px" padding-bottom="0px" padding-top="0">
+							<p style="font-size: 15px;font-weight: bold;">GET IN TOUCH</p>
+						</mj-text>
+						<mj-text align="center" color="#fff" font-size="10px" padding-left="25px" padding-right="25px" padding-bottom="0px" padding-top="0">
+							<p style="font-size: 10px;font-weight: bold;">Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on (+1) 96 716 6879</p>
+						</mj-text>
+					</mj-column>
+				</mj-section>
+				<mj-section background-color="#E4E4E4" padding-bottom="20px" padding-top="0">
+					<mj-column>
+						<mj-social padding-top="20px">
+							<mj-social-element name="facebook" href="[[SHORT_PERMALINK]]"></mj-social-element>
+							<mj-social-element name="twitter" href="[[SHORT_PERMALINK]]"></mj-social-element>
+							<mj-social-element name="youtube" href="[[SHORT_PERMALINK]]"></mj-social-element>
+						</mj-social>
+						<mj-text align="center" color="#020202" font-size="13px" padding-left="25px" padding-right="25px" padding-bottom="0px" padding-top="0">
+							<p><a href="https://mjml.io" style="text-decoration: none; color: inherit;">© 2021 SHOPPINGA COMPANY. All rights reserved.</a></p>
+						</mj-text>
+					</mj-column>
+				</mj-section>
+				<mj-section padding-bottom="20px" padding-top="0px"></mj-section>
+			</mj-body>
+		</mjml>
+	{% endmjml %}
+{% endblock %}

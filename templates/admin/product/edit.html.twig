@@ -60,89 +60,89 @@
         {{ form_start(edit_form) }}
         <div class="row mb-4">
             <div class="col">
-                {{ form_widget(edit_form.name, {'attr': {'class': 'form-control', 'placeholder':'Name'}}) }}
+                {{ form_row(edit_form.name, {'attr': {'class': 'form-control', 'placeholder':'Name'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.nameAr, {'attr': {'class': 'form-control', 'placeholder':'اسم'}}) }}
+                {{ form_row(edit_form.slug, {'attr': {'class': 'form-control', 'placeholder':'Slug'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.slug, {'attr': {'class': 'form-control', 'placeholder':'Slug'}}) }}
+                {{ form_row(edit_form.nameAr, {'attr': {'class': 'form-control text-right', 'placeholder':'اسم'}}) }}
             </div>
         </div>
         <div class="row mb-4">
             <div class="col">
-                {{ form_widget(edit_form.price, {'attr': {'placeholder':'Price'}}) }}
+                {{ form_row(edit_form.price, {'attr': {'placeholder':'Price'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.tags, {'attr': {'placeholder':'Tags'}}) }}
+                {{ form_row(edit_form.tags, {'attr': {'placeholder':'Tags'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.togs, {'attr': {'placeholder':'Tags'}}) }}
+                {{ form_row(edit_form.togs, {'attr': {'class': 'form-control text-right','placeholder':'Tags'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.category, {'attr': {'class': 'basic'}}) }}
+                {{ form_row(edit_form.category, {'attr': {'class': 'basic'}}) }}
             </div>
         </div>
         <div class="row mb-4">
             <div class="col">
-                {{ form_widget(edit_form.discountPrice, {'attr': {'placeholder':'Discount'}}) }}
+                {{ form_row(edit_form.discountPrice, {'attr': {'placeholder':'Discount'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.weight, {'attr': {'class': 'form-control', 'placeholder':'Weight'}}) }}
+                {{ form_row(edit_form.weight, {'attr': {'class': 'form-control', 'placeholder':'Weight'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.materials, {'attr': {'class': 'form-control', 'placeholder':'Materials'}}) }}
+                {{ form_row(edit_form.materials, {'attr': {'class': 'form-control', 'placeholder':'Materials'}}) }}
             </div>
             <div class="col">
-                {{ form_widget(edit_form.materialsAr, {'attr': {'class': 'form-control', 'placeholder':'المواد'}}) }}
+                {{ form_row(edit_form.materialsAr, {'attr': {'class': 'form-control text-right', 'placeholder':'المواد'}}) }}
             </div>
         </div>
         <div class="statbox widget box box-shadow m-b-5">
-            <div class="widget-header">
-                <div class="row">
-                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4> Description </h4>
-                    </div>
-                </div>
-            </div>
+{#            <div class="widget-header">#}
+{#                <div class="row">#}
+{#                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">#}
+{#                        <h4> Description </h4>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
             <div class="widget-content widget-content-area">
-                {{ form_widget(edit_form.description) }}
+                {{ form_row(edit_form.description) }}
             </div>
         </div>
         <div class="statbox widget box box-shadow m-b-5">
-            <div class="widget-header">
-                <div class="row">
-                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4> وصف </h4>
-                    </div>
-                </div>
-            </div>
+{#            <div class="widget-header">#}
+{#                <div class="row">#}
+{#                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">#}
+{#                        <h4> وصف </h4>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
             <div class="widget-content widget-content-area">
-                {{ form_widget(edit_form.descriptionAr) }}
+                {{ form_row(edit_form.descriptionAr, {'attr': {'class': 'text-right'}}) }}
             </div>
         </div>
         <div class="statbox widget box box-shadow">
-            <div class="widget-header">
-                <div class="row">
-                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4> Long Description </h4>
-                    </div>
-                </div>
-            </div>
+{#            <div class="widget-header">#}
+{#                <div class="row">#}
+{#                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">#}
+{#                        <h4> Long Description </h4>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
             <div class="widget-content widget-content-area">
-                {{ form_widget(edit_form.longDescription) }}
+                {{ form_row(edit_form.longDescription) }}
             </div>
         </div>
         <div class="statbox widget box box-shadow">
-            <div class="widget-header">
-                <div class="row">
-                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4> وصف طويل </h4>
-                    </div>
-                </div>
-            </div>
+{#            <div class="widget-header">#}
+{#                <div class="row">#}
+{#                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">#}
+{#                        <h4> وصف طويل </h4>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
             <div class="widget-content widget-content-area">
-                {{ form_widget(edit_form.longDescriptionAr) }}
+                {{ form_row(edit_form.longDescriptionAr, {'attr': {'class': 'text-right'}}) }}
             </div>
         </div>
         <div class="statbox widget box box-shadow">
@@ -274,6 +274,11 @@
         }
         .field-collection-item.field-collection-item-complex{
             padding: 20px;
+        }
+        .field-collection.form-group.processed{
+            padding:10px;
+            margin-top: 10px;
+            background-color:#fff;
         }
     </style>
 

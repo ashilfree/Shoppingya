@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 
-use App\Classes\Cart;
 use App\Classes\WishList;
-use App\Repository\GovernorateRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -32,7 +29,7 @@ class WishListController extends AbstractController
     public function add($locale, $id): Response
     {
         $this->wishlist->add($id);
-        return $this->redirectToRoute('products', ['label' => $locale]);
+        return $this->redirectToRoute('products', ['locale' => $locale]);
     }
 
     /**

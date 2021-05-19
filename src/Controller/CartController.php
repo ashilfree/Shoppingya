@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Cart;
 use App\Classes\WishList;
+use App\Repository\CategoryRepository;
 use App\Repository\GovernorateRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,13 +25,18 @@ class CartController extends AbstractController
      * @var WishList
      */
     private $wishlist;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
 
-    public function __construct(Cart $cart, WishList $wishlist, GovernorateRepository $governorateRepository)
+    public function __construct(Cart $cart, CategoryRepository $categoryRepository, WishList $wishlist, GovernorateRepository $governorateRepository)
     {
         $this->cart = $cart;
         $this->governorateRepository = $governorateRepository;
         $this->wishlist = $wishlist;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -45,7 +51,9 @@ class CartController extends AbstractController
             $path = ($locale == "en") ? 'cart/empty-cart.html.twig' : 'cart/empty-cartAr.html.twig';
             return $this->render($path, [
                 'cart' => $cart,
+                'page' => 'cart',
                 'wishlist' => $this->wishlist->getFull(),
+                'categories' => $this->categoryRepository->findAll(),
             ]);
         }else {
             $path = ($locale == "en") ? 'cart/index.html.twig' : 'cart/indexAr.html.twig';
@@ -54,7 +62,8 @@ class CartController extends AbstractController
                 'wishlist' => $this->wishlist->getFull(),
                 'page' => 'cart',
                 'delivery' => $this->cart->getDelivery(),
-                'governorates' => $this->governorateRepository->findAll()
+                'governorates' => $this->governorateRepository->findAll(),
+                'categories' => $this->categoryRepository->findAll(),
             ]);
         }
     }
@@ -94,7 +103,7 @@ class CartController extends AbstractController
     public function remove($locale, $route): Response
     {
         $this->cart->remove();
-        return $this->redirectToRoute($route, ["locale" => $locale]);
+        return $this->redirectToRoute('cart', ["locale" => $locale]);
     }
 
     /**

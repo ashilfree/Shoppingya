@@ -47,12 +47,12 @@ class ProductCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name'),
-            TextField::new('nameAr'),
+            TextField::new('nameAr', 'الاسم')->addCssClass('text-right'),
             SlugField::new('slug')->setTargetFieldName('name'),
             MoneyField::new('price')->setCurrency('KWD'),
             MoneyField::new('discountPrice')->setCurrency('KWD'),
             TextareaField::new('description'),
-            TextareaField::new('descriptionAr'),
+            TextareaField::new('descriptionAr', 'الوصف')->onlyOnForms()->addCssClass('text-right'),
             TagField::new('tags', TagType::class)->onlyOnForms(),
             TagField::new('togs', TogType::class)->onlyOnForms(),
             AssociationField::new('category'),
@@ -62,10 +62,10 @@ class ProductCrudController extends AbstractCrudController
                 ->setEntryType(CatalogType::class)
                 ->onlyOnForms(),
             TextEditorField::new('longDescription')->onlyOnForms(),
-            TextEditorField::new('longDescriptionAr')->onlyOnForms(),
+            TextEditorField::new('longDescriptionAr', 'الوصف الطويل')->onlyOnForms()->addCssClass('text-right'),
             NumberField::new('weight')->onlyOnForms(),
             TextField::new('materials')->onlyOnForms(),
-            TextField::new('materialsAr')->onlyOnForms(),
+            TextField::new('materialsAr', 'المواد المطلوبة')->onlyOnForms()->addCssClass('text-right'),
         ];
     }
 

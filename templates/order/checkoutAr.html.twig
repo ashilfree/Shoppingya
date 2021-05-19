@@ -40,37 +40,27 @@
                 <h2>تفاصيل الفاتورة</h2>
                 <div class="row">
                     <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="lname">اسم العائلة</label>
-                            {{ form_widget(form.shippingLastName, {'attr': {'class': 'form-control', 'placeholder':'اسمك الاخير'}}) }}
-                        </div>
-                        <div class="col-md-6">
-                            <label for="fname">الاسم الأول</label>
-                            {{ form_widget(form.shippingFirstName, {'attr': {'class': 'form-control', 'placeholder':'اسمك الأول'}}) }}
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="fname">عنوان</label>
-                            {{ form_widget(form.shippingAddress, {'id': 'address', 'attr': {'class': 'form-control text-right', 'placeholder':'أدخل عنوانك'}}) }}
-                            {{ form_widget(form.shippingLat,{'id': 'lat'}) }}
-                            {{ form_widget(form.shippingLng, {'id': 'lng'}) }}
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="companyname">البلدة / المدينة</label>
-                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'البلدة أو المدينة'}}) }}
+                        <div class="col">
+                            <label for="fname">الاسم الكامل</label>
+                            {{ form_widget(form.shippingFullName, {'attr': {'class': 'form-control', 'placeholder':'اسمك الأول'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="stateprovince">الولاية / المقاطعة</label>
-                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'مقاطعة الولاية'}}) }}
+                    <div class="col">
+
+                            <label for="fname">العنوان</label>
+                            {{ form_widget(form.shippingAddress, {'attr': {'class': 'form-control text-right', 'placeholder':'أدخل عنوانك'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="col-md-6">
+
+                            <label for="companyname">المدينة</label>
+                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'البلدة أو المدينة'}}) }}
                         </div>
                         <div class="col-md-6">
-                            <label for="lname">الرمز البريدي</label>
-                            {{ form_widget(form.shippingPostalCode, {'id': 'postalCode', 'attr': {'class': 'form-control', 'placeholder':'الرمز البريدي'}}) }}
+                            <label for="stateprovince">المقاطعة</label>
+                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'مقاطعة الولاية'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -97,7 +87,7 @@
                             {% for productCart in cart2order %}
                                 <li>
                                         <span>
-                                         {% if productCart.catalog.product.discountPrice != null %}
+                                         {% if productCart.catalog.product.discountPrice != 0 %}
                                              {{ (productCart.quantity * productCart.catalog.product.discountPrice/100) |number_format(2, '.', ',')~ currency_ar}}
                                          {% else %}
                                              {{ (productCart.quantity * productCart.catalog.product.price/100) |number_format(2, '.', ',')~ currency_ar}}
@@ -105,7 +95,7 @@
                                     </span>
                                     <span>{{' ¤ ' ~ productCart.quantity }} x {{ productCart.catalog.product.nameAr }}</span>
                                 </li>
-                                {% if productCart.catalog.product.discountPrice != null %}
+                                {% if productCart.catalog.product.discountPrice != 0 %}
                                 {% set total = total + ((productCart.quantity * productCart.catalog.product.discountPrice)/100) %}
                                 {% else %}
                                 {% set total = total + ((productCart.quantity * productCart.catalog.product.price)/100) %}
@@ -113,7 +103,7 @@
                             {% endfor %}
                         </ul>
                     </li>
-                    <li><span>{{ total ~currency_ar }}</span> <span>المجموع الفرعي</span> </li>
+                    <li><span>{{ total |number_format(2, '.', ',')  ~currency_ar }}</span> <span>المجموع الفرعي</span> </li>
                     <li><span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency_ar}}</span><span>توصيل</span> </li>
                     <li><span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency_ar }}</span><span>الطلب الكلي</span> </li>
                 </ul>
@@ -123,7 +113,7 @@
                     <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                         التالي
                     </button>
-                    <a href="{{ path('back.to.cart', { locale: 'en' }) }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                    <a href="{{ path('back.to.cart', { locale: 'ar' }) }}" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                         العودة إلى عربة التسوق
                     </a>
                 </div>

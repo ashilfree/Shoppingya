@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseAr.html.twig' %}
 
 {% block body %}
 
@@ -6,10 +6,10 @@
     <section class="solid_banner_area">
         <div class="container">
             <div class="solid_banner_inner">
-                <h3>My Account</h3>
+                <h3>My Address</h3>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="track.html">My Account</a></li>
+                    <li><a>My Address</a></li>
                 </ul>
             </div>
         </div>
@@ -23,7 +23,7 @@
             <div class="dash">
                 <div class="container">
                     <div class="row">
-                        {% include 'account/side_bar.html.twig' %}
+                        {% include 'account/side_barAr.html.twig' %}
                         <div class="col-lg-9 col-md-12">
                             <h1 class="dash__h1 u-s-m-b-30">Order Details</h1>
                             <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
@@ -75,7 +75,7 @@
 
                                                             <span class="timeline-circle"></span></div>
 
-                                                        <span class="timeline-text">Shipped</span>
+                                                        <span class="timeline-text">In delivering</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
@@ -120,8 +120,8 @@
                                 <div class="col-lg-6">
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-3">
-                                            <h2 class="dash__h2 u-s-m-b-8">Shipping Address</h2>
-                                            <h2 class="dash__h2 u-s-m-b-8">{{ order.shippingFirstName ~' '~ order.shippingLastName }}</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">Delivery Address</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">{{ order.shippingFullName }}</h2>
 
                                             <span class="dash__text-2">{{ order.shippingAddress}} - {{ order.shippingCity}}  - {{ order.shippingProvince}} </span>
 
@@ -140,7 +140,7 @@
                                                 <div class="manage-o__text-2 u-c-secondary">{{ (order.total/100)|number_format(2, '.', ',') }} {{ currency }}</div>
                                             </div>
                                             <div class="dash-l-r u-s-m-b-8">
-                                                <div class="manage-o__text-2 u-c-secondary">Shipping Fee</div>
+                                                <div class="manage-o__text-2 u-c-secondary">Delivery Fee</div>
                                                 <div class="manage-o__text-2 u-c-secondary">{{ (order.deliveryPrice/100)|number_format(2, '.', ',') }} {{ currency }}</div>
                                             </div>
                                             <div class="dash-l-r u-s-m-b-8">

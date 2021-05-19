@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Order;
+use App\Entity\PaymentMethods;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -15,11 +17,7 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', hiddenType::class)
-            ->add('shippingFirstName', TextType::class, [
-                'label'=>false
-            ])
-            ->add('shippingLastName', TextType::class, [
+            ->add('shippingFullName', TextType::class, [
                 'label'=>false
             ])
             ->add('shippingAddress', TextType::class, [
@@ -29,9 +27,6 @@ class OrderType extends AbstractType
                 'label'=>false
             ])
             ->add('shippingProvince', TextType::class, [
-                'label'=>false
-            ])
-            ->add('shippingPostalCode', TextType::class, [
                 'label'=>false
             ])
             ->add('shippingEmail', EmailType::class, [

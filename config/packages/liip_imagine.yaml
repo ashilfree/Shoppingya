@@ -39,3 +39,11 @@ liip_imagine:
         thumbnail:
           size: [ 50, 50 ]
           mode: outbound
+    my_rotate:
+      filters:
+        rotate:
+          angle: 0
+    my_flip:
+      filters:
+        flip:
+          axis: x

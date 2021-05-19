@@ -1,11 +1,11 @@
 {% extends 'baseAr.html.twig' %}
-{% block javascript %}
-    <script src="https://js.stripe.com/v3/"></script>
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 {% endblock %}
 {% block body %}
 {% set total = null %}
     {% for orderDetail in cart2order %}
-     {% if orderDetail.catalog.product.discountPrice != null %}
+     {% if orderDetail.catalog.product.discountPrice != 0 %}
         {% set total = total + ((orderDetail.quantity * orderDetail.catalog.product.discountPrice)) %}
         {% else %}
         {% set total = total + ((orderDetail.quantity * orderDetail.catalog.product.price)) %}
@@ -62,8 +62,8 @@
                     <div class="details_item">
                         <h4>معلومات الفواتير</h4>
                         <ul class="list">
-                            <li><a href="#"><span>اسم</span> : {{ order.shippingFirstName }}</a></li>
-                            <li><a href="#"><span>اسم العائلة</span> : {{ order.shippingLastName }}</a></li>
+                            <li><a href="#"><span>اسم</span> : {{ order.shippingFullName }}</a></li>
+
                             <li><a href="#"><span>بريد إلكتروني</span> : {{ order.shippingEmail }}</a></li>
                             <li><a href="#"><span>هاتف </span> : {{ order.shippingPhone }}</a></li>
                         </ul>
@@ -76,135 +76,341 @@
                             <li><a href="#"><span>شارع</span> : {{ order.shippingAddress }}</a></li>
                             <li><a href="#"><span>مدينة</span> : {{ order.shippingCity }}</a></li>
                             <li><a href="#"><span>محافظة</span> : {{ order.shippingProvince }}</a></li>
-                            <li><a href="#"><span>الرمز البريدي </span> : {{ order.shippingPostalCode }}</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="order_details_table text-right">
-                <h2>تفاصيل الطلب</h2>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">المنتج</th>
-                            <th scope="col">الحجم</th>
-                            <th scope="col">كمية</th>
-                            <th scope="col">مجموع</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+            <div class="row">
+                 <div class="order_details_table col-md-8 text-right">
+                    <h2>تفاصيل الطلب</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">المنتج</th>
+                                <th scope="col">الحجم</th>
+                                <th scope="col">كمية</th>
+                                <th scope="col">مجموع</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        {% for orderDetail in cart2order %}
+                            {% for orderDetail in cart2order %}
+                                <tr>
+                                    <td>
+                                        <p>{{ orderDetail.catalog.product.nameAr }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ orderDetail.catalog.size }}</p>
+                                    </td>
+                                    <td>
+                                        <h5> {{ orderDetail.quantity }} X </h5>
+                                    </td>
+                                    <td>
+                                        <p>
+                                        {% if orderDetail.catalog.product.discountPrice != 0 %}
+                                        {{ orderDetail.catalog.product.discountPrice * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency_ar }}
+                                        {% else %}
+                                         {{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency_ar }}
+                                        {% endif %}
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             <tr>
                                 <td>
-                                    <p>{{ orderDetail.catalog.product.nameAr }}</p>
+                                    <h4>المجموع الفرعي</h4>
                                 </td>
                                 <td>
-                                    <p>{{ orderDetail.catalog.size }}</p>
+                                    <h5></h5>
                                 </td>
                                 <td>
-                                    <h5> {{ orderDetail.quantity }} X </h5>
-                                </td>
-                                <td>
-                                    <p>
-                                    {% if orderDetail.catalog.product.discountPrice != null %}
-                                    {{ orderDetail.catalog.product.discountPrice * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency_ar }}
-                                    {% else %}
-                                     {{ orderDetail.catalog.product.price * orderDetail.quantity /100|number_format(2, '.', ',') ~ currency_ar }}
-                                    {% endif %}
-                                    </p>
+                                    <p>{{ (total)/100|number_format(2, '.', ',') ~ currency_ar }}</p>
                                 </td>
                             </tr>
-                        {% endfor %}
-                        <tr>
-                            <td>
-                                <h4>المجموع الفرعي</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>{{ (total)/100|number_format(2, '.', ',') ~ currency_ar }}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>توصيل</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p> {{ (order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency_ar }}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>مجموع</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>{{ (total + order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency_ar }}</p>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            <tr>
+                                <td>
+                                    <h4>توصيل</h4>
+                                </td>
+                                <td>
+                                    <h5></h5>
+                                </td>
+                                <td>
+                                    <p> {{ (order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency_ar }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h4>مجموع</h4>
+                                </td>
+                                <td>
+                                    <h5></h5>
+                                </td>
+                                <td>
+                                    <p>{{ (total + order.deliveryPrice)/100|number_format(2, '.', ',') ~ currency_ar }}</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4 m-t-75">
+                    {{ form_start(payment_method_form, {action: path('my.fatoorah.create.session', { id: order.id , locale: 'ar' }), 'attr': {'onsubmit': 'setFormSubmitting()'}}) }}
+                     <div class="p-t-15 p-all-30 text-right" style="background: #e5ecee;">
+                        <span class="stext-112 cl8">
+                            طريقة الدفع او السداد
+                        </span>
+                         <div class="payment-type">
+
+                             <div class="types flex justify-space-between">
+                                 <div class="type type1 selected">
+                                     <div class="logo">
+                                         <i class="fas fa-handshake"></i>
+                                     </div>
+                                     <div class="text">
+                                         <p>الدفع عند الاستلام</p>
+                                     </div>
+                                 </div>
+                                 <div class="type type2">
+                                     <div class="logo">
+                                         <i class="far fa-credit-card"></i>
+                                     </div>
+                                     <div class="text">
+                                         <p>دفع مع بطاقة الائتمان</p>
+                                     </div>
+                                 </div>
+
+                             </div>
+                         </div>
+                        <div class="select-wrapper m-b-15 m-t-15" style="display: none">
+
+{#                            <select class="js-select2" name="payment" required="required">#}
+{#                                <option value="">Select a payment method...</option>#}
+{#                                {% for paymentMethod in paymentMethods %}#}
+{#                                    <option#}
+
+{#                                            value="{{ paymentMethod.id }}">{{ paymentMethod.name }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#                            <div class="dropDownSelect2"></div>#}
+
+                            {{ form_widget(payment_method_form.paymentMethod, {'attr': {'class': 'select','placeholder':'اختر بطاقة ائتمان *'}}) }}
+
+                        </div>
+
+                    </div>
+                        <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-t-30" data-id="{{ order.id }}" data-locale="{{ locale }}">
+                            ضع طلبية
+                        </button>
+                    {{ form_end(payment_method_form) }}
+                        <a href="{{ path('order', { locale: 'ar' }) }}" onclick="setFormSubmitting();" class="flex-c-m stext-101 cl2 size-119 w-full bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                            عودة
+                        </a>
                 </div>
             </div>
 
         </div>
-        <div class="row">
-                <div class="col-md-12 p-all-40">
-                        <a id="checkout-button" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                            ضع طلبية
-                        </a>
-                        {{ form_start(form, {action: path('order', { locale: 'ar' })}) }}
-                        {{ form_row(form.id) }}
-                        <button type="submit" class="flex-c-m stext-101 cl2 size-119 w-full bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                            عودة
-                        </button>
 
-                        {{ form_end(form, {'render_rest': false}) }}
-                </div>
-            </div>
     </section>
 
-
+</div>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
+        <script type="text/javascript">
         // Create an instance of the Stripe object with your publishable API key
-        var stripe = Stripe("pk_test_51IU51mLg5TZnbiRrqWBt7NVQhhSsMbzK33P5nDrDkEZbMhZyO3NCThWs6mX7T5AxV8jSptmcd639iYqJYzUJBgWn00qv2gkIyj");
+        // var stripe = Stripe("pk_test_51IU51mLg5TZnbiRrqWBt7NVQhhSsMbzK33P5nDrDkEZbMhZyO3NCThWs6mX7T5AxV8jSptmcd639iYqJYzUJBgWn00qv2gkIyj");
         var checkoutButton = document.getElementById("checkout-button");
-        checkoutButton.addEventListener("click", function () {
-            fetch("/order/create-session/{{ order.id }}", {
-                method: "POST",
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (session) {
-                    if(session.error == 'order'){
-                        window.location.replace({{ path('order') }});
-                    }else{
-                        return stripe.redirectToCheckout({ sessionId: session.id });
-                    }
-                })
-                .then(function (result) {
-                    // If redirectToCheckout fails due to a browser or network
-                    // error, you should display the localized error message to your
-                    // customer using error.message.
-                    if (result.error) {
-                        alert(result.error.message);
-                    }
-                })
-                .catch(function (error) {
-                    console.error("Error:", error);
-                });
-        });
+        {#checkoutButton.addEventListener("click", function () {#}
+
+        {#    alert($('.js-select2').select2('data'))#}
+        {#    fetch("/{{ locale }}/order/create-session/{{ order.id }}", {#}
+        {#      method: 'POST', // or 'PUT'#}
+        {#      headers: {#}
+        {#        'Content-Type': 'application/json',#}
+        {#      },#}
+        {#      body: JSON.stringify(data)#}
+        {#    })#}
+        {#        .then(function (response) {#}
+        {#            return response.json();#}
+        {#        })#}
+        {#        .then(function (session) {#}
+        {#            if(session.error === 'order'){#}
+        {#                window.location.replace("/{{ locale }}/order/{{ order.id }}");#}
+        {#            }else{#}
+        {#                // return stripe.redirectToCheckout({ sessionId: session.id });#}
+        {#            }#}
+        {#        })#}
+        {#        .then(function (result) {#}
+        {#            // If redirectToCheckout fails due to a browser or network#}
+        {#            // error, you should display the localized error message to your#}
+        {#            // customer using error.message.#}
+        {#            if (result.error) {#}
+        {#                alert(result.error.message);#}
+        {#            }#}
+        {#        })#}
+        {#        .catch(function (error) {#}
+        {#            console.error("Error:", error);#}
+        {#        });#}
+        {#});#}
+        var formSubmitting = false;
+        var setFormSubmitting = function() { formSubmitting = true; };
+
+        window.onload = function() {
+            window.addEventListener("beforeunload", function (e) {
+                if (formSubmitting) {
+                    return undefined;
+                }
+
+                var confirmationMessage = 'It looks like you have been editing something. '
+                    + 'If you leave before saving, your changes will be lost.';
+
+                (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+            });
+        };
     </script>
+    <script>
+        let type1 = document.querySelector('.type1');
+        let type2 = document.querySelector('.type2');
+
+        type1.addEventListener('click', function(){
+            this.classList.add('selected');
+            this.nextElementSibling.classList.remove('selected');
+            document.querySelector('.select-wrapper').style.display = 'none';
+            document.querySelector('#payment_method_paymentMethod').required = false;
+            document.querySelector('#payment_method_paymentMethod').selectedIndex = null;
+
+        })
+        type2.addEventListener('click', function(){
+            this.classList.add('selected');
+            this.previousElementSibling.classList.remove('selected');
+            document.querySelector('.select-wrapper').style.display = 'block';
+            document.querySelector('#payment_method_paymentMethod').required = true;
+        })
+        // let getSiblings = function (e) {
+        //     // for collecting siblings
+        //     let siblings = [];
+        //     // if no parent, return no sibling
+        //     if(!e.parentNode) {
+        //         return siblings;
+        //     }
+        //     // first child of the parent node
+        //     let sibling  = e.parentNode.firstChild;
+        //     // collecting siblings
+        //     while (sibling) {
+        //         if (sibling.nodeType === 1 && sibling !== e) {
+        //             siblings.push(sibling);
+        //         }
+        //         sibling = sibling.nextSibling;
+        //     }
+        //     return siblings;
+        // };
+    </script>
+    <style>
+        .card-body .payment-type .types {
+            margin: 25px 0;
+        }
+        .flex.justify-space-between {
+            justify-content: space-between;
+        }
+        .flex {
+            display: flex;
+            flex-direction: row wrap;
+            align-items: center;
+        }
+        .payment-type .types .type.selected {
+            border-color: #D97591;
+            background: rgba(64,179,255,0.1);
+        }
+
+        .payment-type .types .type {
+            width: 45%;
+            position: relative;
+            background: #f2f4f7;
+            border: 2px solid #e8ebed;
+            padding: 25px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.5s ease;
+
+        }
+
+        .payment-type .types .type.selected .logo {
+            color: #D97591;
+        }
+
+        .payment-type .types .type .logo {
+            font-size: 48px;
+            color: #8a959c;
+            justify-content: center;
+        }
+        .payment-type .types .type .logo, .card .card-body .payment-type .types .type p {
+            transition: all 0.5s ease;
+        }
+        .payment-type .types .type.selected p {
+            color: #28333b;
+        }
+        .payment-type .types .type p {
+            margin-bottom: 0;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #8a959c;
+        }
+        .payment-type .types .type .logo, .card .card-body .payment-type .types .type p {
+            transition: all 0.5s ease;
+        }
+        .payment-type .types .type.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            height: 40px;
+            width: 40px;
+            top: -21px;
+            left: -21px;
+            background: #fff;
+            border: 2px solid #D97591;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .select-wrapper::after {
+            color: black;
+            content: "▾";
+            margin-right: 10px;
+            pointer-events: none;
+            position: absolute;
+            left: 10px;
+            top: 7px;
+            font-size: 20px;
+        }
+
+        .select {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            background: white;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            padding: 12px;
+            width: 100%;
+            font-size: 18px;
+        }
+        .select:focus {
+            color: black;
+        }
+        .select::-ms-expand {
+            display: none;
+        }
+    </style>
 {% endblock %}
