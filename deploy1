@@ -1,3 +1,0 @@
-#!/bin/sh
-rsync -av ./ genesjz7@genesistech-dz.com:~/public_html/shoppinga
-#ssh genesjz7@genesistech-dz.com 'cd ~/public_html/tekoop && php bin/console cache:clear'
