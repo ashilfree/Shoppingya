@@ -228,7 +228,7 @@ export default class Filter {
                 if(!size)
                     break;
                 if(document.dir == 'rtl'){
-                    $('.js-select2').append("<option value='" + catalog + "' > الحجم " + size + "</option>");
+                    $('.js-select2').append("<option value='" + catalog + "' > المقاس " + size + "</option>");
                 }else{
                     $('.js-select2').append("<option value='" + catalog + "' > Size " + size + "</option>");
                 }

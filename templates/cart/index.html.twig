@@ -173,7 +173,7 @@
 									</span>
                                 <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
                                     <select class="js-select2" name="delivery" required="required">
-                                        <option value="">Select a region...</option>
+                                        <option value="">Select a governorate...</option>
                                         {% for governorate in governorates %}
                                             <option {% if delivery is defined and delivery == governorate.price %}  selected {% endif %}
                                                     value="{{ governorate.price }}">{{ governorate.name }}</option>
@@ -232,7 +232,7 @@
 
                         <a {% if delivery is null or delivery == 0 %} href="javascript:void(0)" {% else %} href="{{ path('order', { locale: 'en' }) }}" {% endif %}
                                 class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04" {% if delivery is null or delivery == 0 %} disabled {% endif %}
-                                data-toggle="tooltip" data-placement="top" title="Calculate Shipping">
+                                data-toggle="tooltip" data-placement="top">
                             Proceed to Checkout
                         </a>
                     </div>

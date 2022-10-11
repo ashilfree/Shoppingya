@@ -48,7 +48,9 @@ class LoginListener
 
     public function onKernelResponse(ResponseEvent $event)
     {
-        $locale = $this->session->get('locale','en');
-        $event->setResponse(new RedirectResponse($this->router->generate('home', ['locale' => $locale])));
+        if($event->getRequest()->getPathInfo() != "/admin/login"){
+            $locale = $this->session->get('locale','en');
+            $event->setResponse(new RedirectResponse($this->router->generate('home', ['locale' => $locale])));
+        }
     }
 }

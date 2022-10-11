@@ -1,4 +1,4 @@
-{% extends 'baseAr.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
@@ -6,10 +6,10 @@
     <section class="solid_banner_area">
         <div class="container">
             <div class="solid_banner_inner">
-                <h3>My Address</h3>
+                <h3>My Orders</h3>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a>My Address</a></li>
+                    <li><a>My Orders</a></li>
                 </ul>
             </div>
         </div>
@@ -23,7 +23,7 @@
             <div class="dash">
                 <div class="container">
                     <div class="row">
-                        {% include 'account/side_barAr.html.twig' %}
+                        {% include 'account/side_bar.html.twig' %}
                         <div class="col-lg-9 col-md-12">
                             <h1 class="dash__h1 u-s-m-b-30">Order Details</h1>
                             <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
@@ -33,7 +33,7 @@
                                             <div class="manage-o__text-2 u-c-secondary">Order
                                                 #{{ order.reference }}</div>
                                             <div class="manage-o__text u-c-silver">Placed
-                                                on {{ order.createdAt|date("F jS \\a\\t g:ia") }}</div>
+                                                on {{ order.createdAt|date("F jS") }}</div>
                                         </div>
                                         <div>
                                             <div class="manage-o__text-2 u-c-silver">Total:
@@ -47,22 +47,17 @@
                             <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                 <div class="dash__pad-2">
                                     <div class="manage-o">
-                                        <div class="manage-o__header u-s-m-b-30">
-                                            <div class="manage-o__icon"><i class="fa fa-box u-s-m-r-5"></i>
-
-                                                <span class="manage-o__text">Package 1</span></div>
-                                        </div>
                                         <div class="dash-l-r">
-                                            <div class="manage-o__text u-c-secondary">Delivered on 26 Oct 2016</div>
+                                            <div class="manage-o__text u-c-secondary">{{ order.status|capitalize }}</div>
                                             <div class="manage-o__icon"><i class="fa fa-truck u-s-m-r-5"></i>
 
-                                                <span class="manage-o__text">Standard</span></div>
+                                                <span class="manage-o__text"></span></div>
                                         </div>
                                         <div class="manage-o__timeline">
                                             <div class="timeline-row">
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <div class="timeline-step">
-                                                        <div class="timeline-l-i timeline-l-i--finish">
+                                                        <div class="timeline-l-i {% if order.status == 'Processing' or order.status == 'In delivering' or order.status == 'Delivered' %} timeline-l-i--finish {% endif %}">
 
                                                             <span class="timeline-circle"></span></div>
 
@@ -71,7 +66,7 @@
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <div class="timeline-step">
-                                                        <div class="timeline-l-i timeline-l-i--finish">
+                                                        <div class="timeline-l-i {% if order.status == 'In delivering' or order.status == 'Delivered' %} timeline-l-i--finish {% endif %}">
 
                                                             <span class="timeline-circle"></span></div>
 
@@ -80,7 +75,7 @@
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <div class="timeline-step">
-                                                        <div class="timeline-l-i">
+                                                        <div class="timeline-l-i {% if order.status == 'Delivered' %} timeline-l-i--finish {% endif %}">
 
                                                             <span class="timeline-circle"></span></div>
 

@@ -34,11 +34,10 @@
         </div>
     </div>
     <!-- Check Out -->
-    {{ form_start(form, {action: path('order.recap', { locale: 'en', errors: false }), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+    {{ form_start(form, { 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
         <div class="col-md-7">
             <div class="colorlib-form">
                 <h2>Billing Details</h2>
-
                 <div class="row">
                     <div class="form-group">
                         <div class="col">
@@ -66,10 +65,12 @@
                         <div class="col-md-6">
                             <label for="email">E-mail Address</label>
                             {{ form_widget(form.shippingEmail, {'attr': {'class': 'form-control', 'placeholder':'Your Email'}}) }}
+                            {{ form_errors(form.shippingEmail) }}
                         </div>
                         <div class="col-md-6">
                             <label for="Phone">Phone Number</label>
-                            {{ form_row(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'Your Phone'}}) }}
+                            {{ form_widget(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'Your Phone'}}) }}
+                            {{ form_errors(form.shippingPhone) }}
                         </div>
                         {{ form_rest(form) }}
                     </div>

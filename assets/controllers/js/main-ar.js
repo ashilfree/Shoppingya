@@ -325,7 +325,7 @@
             if(!size)
                 break;
 
-            $('#product_cart_size').append("<option value='" + i + "' > الحجم " + size + "</option>");
+            $('#product_cart_size').append("<option value='" + i + "' > المقاس " + size + "</option>");
             i++;
         }
 

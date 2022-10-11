@@ -39,6 +39,9 @@ framework:
                 in_delivering:
                     from: paid
                     to: in_delivering
+                in_delivering2:
+                    from: pay_en_delivery
+                    to: in_delivering
                 delivery_done:
                     from: in_delivering
                     to: delivered
@@ -47,4 +50,7 @@ framework:
                     to: canceled
                 order_canceled2:
                     from: in_payment
+                    to: canceled
+                order_canceled3:
+                    from: pay_en_delivery
                     to: canceled

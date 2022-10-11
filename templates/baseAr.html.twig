@@ -17,7 +17,7 @@
 <body class="animsition js-body">
 
 <!-- Header -->
-<header {% if page is defined and page != 'home.ar' %} class="header-v4" {% endif %}>
+<header {% if page is defined and page != 'home' %} class="header-v4" {% endif %}>
     <!-- Header desktop -->
     <div class="container-menu-desktop">
         <!-- Topbar -->
@@ -77,20 +77,20 @@
                 <!-- Menu desktop -->
                 <div class="menu-desktop">
                     <ul class="main-menu">
-                        <li {% if page is defined and page == 'home.ar' %} class="active-menu" {% endif %}>
+                        <li {% if page is defined and page == 'home' %} class="active-menu" {% endif %}>
                             <a href="{{ path('home', { locale: 'ar' }) }}">الرئيسية</a>
                         </li>
 
-                        <li {% if page is defined and page == 'about.us.ar' %} class="active-menu" {% endif %}>
+                        <li {% if page is defined and page == 'about.us' %} class="active-menu" {% endif %}>
                             <a href="{{ path('about.us', { locale: 'ar' }) }}">عن الشركة</a>
                         </li>
 
-                        <li {% if page is defined and page == 'products.ar' %} class="active-menu" {% endif %}>
+                        <li {% if page is defined and page == 'products' %} class="active-menu" {% endif %}>
                             <a href="{{ path('products', { locale: 'ar' }) }}">الأقسام</a>
                         </li>
 
 
-                        <li {% if page is defined and page == 'contact.us.ar' %} class="active-menu" {% endif %}>
+                        <li {% if page is defined and page == 'contact.us' %} class="active-menu" {% endif %}>
                             <a href="{{ path('contact.us', { locale: 'ar' }) }}">اتصل بنا</a>
                         </li>
                     </ul>
@@ -172,9 +172,8 @@
                             <i class="fa fa-sign-out"></i>
                         </a>
                     {% else %}
-                        <a href="{{ path('login', { locale: 'ar'}) }}" class="flex-c-m p-lr-10 p-t-5 trans-04">
-
-                            <i class="fa fa-sign-in"></i>
+                        <a href="{{ path('login', { locale: 'ar'}) }}" class="flex-c-m p-lr-10 trans-04">
+                            تسجيل الدخول
                         </a>
                     {% endif %}
 
@@ -255,7 +254,7 @@
                                     {% endif %}
 							</span>
                                 <span class="header-cart-item-info">
-								الحجم: <b> {{ cartItem.catalog.size }} </b>
+								المقاس: <b> {{ cartItem.catalog.size }} </b>
 							</span>
                             </div>
                         </li>

@@ -74,7 +74,7 @@ export default class Global {
                     }else{
                         e.preventDefault();
                         if(document.dir === 'rtl'){
-                            swal("من فضلك", "اختر حجما !", "info");
+                            swal("من فضلك", "اختر المقاس المناسب !", "info");
                         }else{
                             swal("PLZ", "Select a size !", "info");
                         }
@@ -106,7 +106,7 @@ export default class Global {
                     }else{
                         e.preventDefault();
                         if(document.dir === 'rtl'){
-                            swal("من فضلك", "اختر حجما !", "info");
+                            swal("من فضلك", "اختر المقاس المناسب !", "info");
                         }else{
                             swal("PLZ", "Select a size !", "info");
                         }
@@ -148,7 +148,7 @@ export default class Global {
 
             e.preventDefault();
             let discount = $(this).data('discount');
-            if(discount === '0.00 KWD' || discount === '0.00 دينار كويتي'){
+            if(discount === '0.00 KWD' || discount === '0.00 د.ك'){
                 $('#price-block1').css('display','none')
                 $('#price-block2').css('display','block')
             }else{
@@ -189,7 +189,7 @@ export default class Global {
                     if(!size)
                         break;
 
-                    $('.js-select2').append("<option value='" + catalog + "' data-quantity='" + quantity + "'> الحجم " + size + "</option>");
+                    $('.js-select2').append("<option value='" + catalog + "' data-quantity='" + quantity + "'> المقاس " + size + "</option>");
                     i++;
                 }
             }

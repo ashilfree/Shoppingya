@@ -198,10 +198,10 @@
 {#                            <div class="dropDownSelect2"></div>#}
 
                             {{ form_widget(payment_method_form.paymentMethod, {'attr': {'class': 'select', 'placeholder':'Choose a Credit Card *'}}) }}
-
                         </div>
 
                     </div>
+                    {{ form_row(payment_method_form._token) }}
                         <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-t-30" data-id="{{ order.id }}" data-locale="{{ locale }}">
                             Place an order
                         </button>
@@ -274,7 +274,7 @@
     <script>
         let type1 = document.querySelector('.type1');
         let type2 = document.querySelector('.type2');
-
+        document.querySelector('.select').firstChild.textContent = 'Choose a payment method';
         type1.addEventListener('click', function(){
             this.classList.add('selected');
             this.nextElementSibling.classList.remove('selected');

@@ -54,7 +54,8 @@ class ListenerForAnyRequest
             $route = $event->getRequest()->attributes->get('_route');
             if($route !== '_wdt') {
                 $refererPathInfo = Request::create($event->getRequest()->headers->get('referer'))->getPathInfo();
-                if (($refererPathInfo == '/en/order/recap' && $route !== 'order' && $route !== 'my.fatoorah.create.session') || ($refererPathInfo == '/en/order' && $route !== 'order.recap' && $route != 'order')) {
+                $isPath = ($refererPathInfo == '/en/order' || $refererPathInfo == '/ar/order');
+                if (($isPath && $route != 'order' && $route !== 'my.fatoorah.create.session')) {
                     if ($this->session->get('orderId')) {
                         $oldOrder = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
                         if($this->transaction->check($oldOrder, 'order_canceled2'))

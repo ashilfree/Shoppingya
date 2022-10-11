@@ -64,7 +64,7 @@
                                                     </div>
                                                 </a>
                                             </td>
-                                            <td class="column-2">{{ cartItem.catalog.product.nameAr|upper }} <br> الحجم
+                                            <td class="column-2">{{ cartItem.catalog.product.nameAr|upper }} <br> المقاس
                                                 : {{ cartItem.catalog.size }} </td>
                                             <td class="column-3">
                                                 {% if cartItem.catalog.product.discountPrice != 0 %}
@@ -122,7 +122,7 @@
                             <div>
                                 <a href="{{ path('remove.cart', {locale: 'ar', route: page}) }}"
                                    class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                                    مسح السلة
+                                    إخلاء عربة التسوق
                                 </a>
                             </div>
                         </div>
@@ -195,7 +195,7 @@
                         <div class="flex-w flex-t p-t-27">
                             <div class="size-208">
 								<span class="mtext-101 cl2">
-									رسوم التوصيل:
+									 التوصيل:
 								</span>
                             </div>
 
@@ -232,7 +232,7 @@
 
                         <a {% if delivery is null or delivery == 0 %} href="javascript:void(0)" {% else %} href="{{ path('order', {locale: 'ar'}) }}" {% endif %}
                                 class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04" {% if delivery is null or delivery == 0 %} disabled {% endif %}
-                                data-toggle="tooltip" data-placement="top" title="Calculate Shipping">
+                                data-toggle="tooltip" data-placement="top">
                             انتقل إلى خيارات الدفع
                         </a>
                     </div>

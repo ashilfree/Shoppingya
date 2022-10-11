@@ -66,6 +66,7 @@ class OrderValidateController extends AbstractController
     public function success($reference): Response
     {
         $locale = $this->session->get("locale");
+        /** @var Order $order */
 	    $order = $this->entityManager->getRepository(Order::class)->findOneBy(['reference' => $reference]);
 		if(!$order || $order->getCustomer() != $this->getUser()){
 			return $this->redirectToRoute('home');
@@ -75,6 +76,7 @@ class OrderValidateController extends AbstractController
             $this->session->clear();
 			$this->transaction->applyWorkFlow($order, 'checkout');
             $order->setPaidAt(new \DateTime());
+            $order->setIsPaid(1);
 			$this->entityManager->flush();
             $this->mailer->sendSuccessOrderEmail($order);
 		}

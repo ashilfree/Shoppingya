@@ -24,7 +24,7 @@ class Catalog
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="catalogs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $product;
 

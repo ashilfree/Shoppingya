@@ -32,10 +32,10 @@
                                         <div>
                                             <div class="manage-o__text-2 u-c-secondary">الطلب
                                                 #{{ order.reference }}</div>
-                                            <div class="manage-o__text u-c-silver">تم وضعها {{ order.createdAt|date("F jS \\a\\t g:ia") }}</div>
+                                            <div class="manage-o__text u-c-silver">تم وضع الطلب في {{ order.createdAt|date("F jS") }}</div>
                                         </div>
                                         <div>
-                                            <div class="manage-o__text-2 u-c-silver">مجموع:
+                                            <div class="manage-o__text-2 u-c-silver">الاجمالي:
 
                                                 <span class="manage-o__text-2 u-c-secondary">{{ ((order.total+order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency_ar }}</span>
                                             </div>
@@ -46,22 +46,17 @@
                             <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                 <div class="dash__pad-2">
                                     <div class="manage-o">
-                                        <div class="manage-o__header u-s-m-b-30">
-                                            <div class="manage-o__icon"><i class="fa fa-box u-s-m-r-5"></i>
-
-                                                <span class="manage-o__text">العبوة 1</span></div>
-                                        </div>
                                         <div class="dash-l-r">
-                                            <div class="manage-o__text u-c-secondary">تم التسليم 26 Oct 2016</div>
+                                            <div class="manage-o__text u-c-secondary">{{ order.statusAr }}</div>
                                             <div class="manage-o__icon"><i class="fa fa-truck u-s-m-r-5"></i>
 
-                                                <span class="manage-o__text">قياسي</span></div>
+                                                <span class="manage-o__text"></span></div>
                                         </div>
                                         <div class="manage-o__timeline">
                                             <div class="timeline-row">
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <div class="timeline-step">
-                                                        <div class="timeline-l-i timeline-l-i--finish">
+                                                        <div class="timeline-l-i {% if order.status == 'Processing' or order.status == 'In delivering' or order.status == 'Delivered' %} timeline-l-i--finish {% endif %}">
 
                                                             <span class="timeline-circle"></span></div>
 
@@ -70,7 +65,7 @@
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <div class="timeline-step">
-                                                        <div class="timeline-l-i timeline-l-i--finish">
+                                                        <div class="timeline-l-i {% if order.status == 'In delivering' or order.status == 'Delivered' %} timeline-l-i--finish {% endif %}">
 
                                                             <span class="timeline-circle"></span></div>
 
@@ -79,7 +74,7 @@
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <div class="timeline-step">
-                                                        <div class="timeline-l-i">
+                                                        <div class="timeline-l-i {% if order.status == 'Delivered' %} timeline-l-i--finish {% endif %}">
 
                                                             <span class="timeline-circle"></span></div>
 
@@ -119,7 +114,7 @@
                                 <div class="col-lg-6">
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-3">
-                                            <h2 class="dash__h2 u-s-m-b-8">عنوان الشحن</h2>
+                                            <h2 class="dash__h2 u-s-m-b-8">عنوان التسليم</h2>
                                             <h2 class="dash__h2 u-s-m-b-8">{{ order.shippingFullName}}</h2>
 
                                             <span class="dash__text-2">{{ order.shippingAddress}} - {{ order.shippingCity}}  - {{ order.shippingProvince}} </span>
@@ -135,7 +130,7 @@
                                         <div class="dash__pad-3">
                                             <h2 class="dash__h2 u-s-m-b-8">إجمالي الملخص</h2>
                                             <div class="dash-l-r u-s-m-b-8">
-                                                <div class="manage-o__text-2 u-c-secondary">المجموع الفرعي</div>
+                                                <div class="manage-o__text-2 u-c-secondary">المجموع </div>
                                                 <div class="manage-o__text-2 u-c-secondary">{{ (order.total/100)|number_format(2, '.', ',') }} {{ currency_ar }}</div>
                                             </div>
                                             <div class="dash-l-r u-s-m-b-8">
@@ -143,7 +138,7 @@
                                                 <div class="manage-o__text-2 u-c-secondary">{{ (order.deliveryPrice/100)|number_format(2, '.', ',') }} {{ currency_ar }}</div>
                                             </div>
                                             <div class="dash-l-r u-s-m-b-8">
-                                                <div class="manage-o__text-2 u-c-secondary">مجموع</div>
+                                                <div class="manage-o__text-2 u-c-secondary">الاجمالي</div>
                                                 <div class="manage-o__text-2 u-c-secondary">{{ ((order.total+order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency_ar }}</div>
                                             </div>
                                         </div>

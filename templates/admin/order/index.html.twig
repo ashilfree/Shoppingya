@@ -96,12 +96,16 @@
                                     {% endif %}
 
                                     {% for field in entity.fields %}
-
-                                        {% if field.label == 'Marking' %}
+                                        {% if field.label == 'Status' %}
 
                                             <td class="{{ field.property == sort_field_name ? 'sorted' }} text-left {{ field.cssClass }}"
                                                 dir="{{ ea.i18n.textDirection }}">
-                                                <span class="shadow-none badge {% if entity.instance.status == 'canceled' %} badge-danger {% elseif entity.instance.status == 'delivered' %} badge-primary {% else %} badge-primary {% endif %}">{{ entity.instance.status }}</span>
+                                                <span class="shadow-none badge {% if entity.instance.status == 'canceled' %} badge-danger {% elseif entity.instance.status == 'Delivered' %} badge-primary {% else %} badge-warning {% endif %}">{{ entity.instance.status }}</span>
+                                            </td>
+                                        {% elseif field.label == 'Is Paid' %}
+                                            <td class="{{ field.property == sort_field_name ? 'sorted' }} text-left {{ field.cssClass }}"
+                                                dir="{{ ea.i18n.textDirection }}">
+                                                <span class="shadow-none badge {% if entity.instance.isPaid %} badge-primary {% else %} badge-danger {% endif %}">{% if entity.instance.isPaid %} PAID {% else %} NOT PAID {% endif %}</span>
                                             </td>
                                         {% else %}
                                             <td class="{{ field.property == sort_field_name ? 'sorted' }} text-left {{ field.cssClass }}"
@@ -367,7 +371,7 @@
                 e.getElementsByTagName("th")[0].innerHTML='<label class="new-control new-checkbox checkbox-outline-primary m-auto">\n<input type="checkbox" class="new-control-input chk-parent select-customers-info" id="customer-all-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>'
             },
             columnDefs:[ {
-                targets:0, width:"30px", className:"", orderable:!1, render:function(e, a, t, n) {
+                width:"30px", className:"", render:function(e, a, t, n) {
                     return'<label class="new-control new-checkbox checkbox-outline-primary  m-auto">\n<input type="checkbox" class="new-control-input child-chk select-customers-info" id="customer-all-info">\n<span class="new-control-indicator"></span><span style="visibility:hidden">c</span>\n</label>'
                 }
             }],
@@ -379,7 +383,8 @@
                 "sLengthMenu": "Results :  _MENU_",
             },
             "lengthMenu": [5, 10, 20, 50],
-            "pageLength": 5
+            "pageLength": 10,
+            "order": [[ 0, "desc" ]]
         });
 
         multiCheck(c2);

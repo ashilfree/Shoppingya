@@ -78,12 +78,12 @@ class MyFatoorahController extends AbstractController
         $form = $this->createForm(PaymentMethodType::class, $order);
         $form->handleRequest($request);
         $payment = $order->getPaymentMethod();
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
         if($payment){
             if (!$order || !$this->transaction->check($order, 'proceed_checkout'))
                 return new JsonResponse(["error" => 'order']);
             $this->transaction->applyWorkFlow($order, 'proceed_checkout');
-        $YOUR_DOMAIN = 'https://shoppinga.genesistech-dz.com';
+        $YOUR_DOMAIN = 'https://shoppingya.com';
 //                $YOUR_DOMAIN = 'https://127.0.0.1:8000';
                 //Fill POST fields array
                 $ipPostFields = ['InvoiceAmount' => ($order->getTotal() + $order->getDeliveryPrice()) / 100, 'CurrencyIso' => 'KWD'];
@@ -106,7 +106,7 @@ class MyFatoorahController extends AbstractController
                     'Street' => '', //optional
                     'HouseBuildingNo' => '', //optional
                     'Address' => $order->getShippingAddress(), //optional
-                    'AddressInstructions' => $order->getShippingCity() . '-' . $order->getShippingProvince() . '-' . $order->getShippingPostalCode(), //optional
+                    'AddressInstructions' => $order->getShippingCity() . '-' . $order->getShippingProvince(), //optional
                 );
 
                 //Fill invoice item array
@@ -131,7 +131,7 @@ class MyFatoorahController extends AbstractController
                     'InvoiceValue' => (($order->getTotal() + $order->getDeliveryPrice()) / 100),
                     'CallBackUrl' => $YOUR_DOMAIN . '/' . $locale . '/order/thank/' . $order->getReference(),
                     'ErrorUrl' => $YOUR_DOMAIN . '/' . $locale . '/order/error/' . $order->getReference(),
-                    'CustomerName' => $order->getShippingFirstName() . ' ' . $order->getShippingLastName(),
+                    'CustomerName' => $order->getShippingFullName(),
                     'DisplayCurrencyIso' => 'KWD',
                     'MobileCountryCode' => '+965',
                     'CustomerMobile' => $order->getShippingPhone(),
@@ -164,6 +164,7 @@ class MyFatoorahController extends AbstractController
             $this->session->clear();
             $this->transaction->applyWorkFlow($order, 'pay_en_delivery');
             $order->setOrderedAt(new \DateTime());
+            $order->setPaymentMethod("PAY EN DELIVERY");
             $this->mailer->sendSuccessOrderEmail($order);
             $this->entityManager->flush();
             $path = ($locale == "en") ? 'order/order-complete.html.twig' : 'order/order-completeAr.html.twig';
@@ -176,7 +177,7 @@ class MyFatoorahController extends AbstractController
             ]);
         }
         }
-            return $this->redirectToRoute('order.recap');
+            return $this->redirectToRoute('order');
 
     }
 

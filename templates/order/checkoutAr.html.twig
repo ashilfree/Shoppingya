@@ -34,15 +34,15 @@
         </div>
     </div>
     <!-- Check Out -->
-    {{ form_start(form, {action: path('order.recap', { locale: 'ar' }), 'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
+    {{ form_start(form, {'attr': {'class': 'row p-t-75 p-b-85', 'onsubmit': 'setFormSubmitting()'}}) }}
         <div class="col-md-7 text-right">
             <div class="colorlib-form">
                 <h2>تفاصيل الفاتورة</h2>
                 <div class="row">
                     <div class="form-group">
                         <div class="col">
-                            <label for="fname">الاسم الكامل</label>
-                            {{ form_widget(form.shippingFullName, {'attr': {'class': 'form-control', 'placeholder':'اسمك الأول'}}) }}
+                            <label for="fname">اسم بالكامل</label>
+                            {{ form_widget(form.shippingFullName, {'attr': {'class': 'form-control', 'placeholder':'اسم بالكامل'}}) }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -53,24 +53,27 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="stateprovince">المحافظة</label>
+                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'المحافظة'}}) }}
+                        </div>
                     <div class="col-md-6">
 
-                            <label for="companyname">المدينة</label>
-                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'البلدة أو المدينة'}}) }}
+                            <label for="companyname">المنطقة</label>
+                            {{ form_widget(form.shippingCity, {'id': 'city', 'attr': {'class': 'form-control', 'placeholder':'المنطقة'}}) }}
                         </div>
-                        <div class="col-md-6">
-                            <label for="stateprovince">المقاطعة</label>
-                            {{ form_widget(form.shippingProvince, {'id': 'province', 'attr': {'class': 'form-control', 'placeholder':'مقاطعة الولاية'}}) }}
-                        </div>
+
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label for="email">عنوان بريد الكتروني</label>
-                            {{ form_widget(form.shippingEmail, {'attr': {'class': 'form-control', 'placeholder':'بريدك الالكتروني'}}) }}
-                        </div>
-                        <div class="col-md-6">
                             <label for="Phone">رقم الهاتف</label>
                             {{ form_widget(form.shippingPhone, {'attr': {'class': 'form-control', 'placeholder':'هاتفك'}}) }}
+                            {{ form_errors(form.shippingPhone) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email">عنوان بريد الكتروني</label>
+                            {{ form_widget(form.shippingEmail, {'attr': {'class': 'form-control', 'placeholder':'بريدك الالكتروني'}}) }}
+                            {{ form_errors(form.shippingEmail) }}
                         </div>
                         {{ form_rest(form) }}
                     </div>
@@ -103,9 +106,9 @@
                             {% endfor %}
                         </ul>
                     </li>
-                    <li><span>{{ total |number_format(2, '.', ',')  ~currency_ar }}</span> <span>المجموع الفرعي</span> </li>
-                    <li><span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency_ar}}</span><span>توصيل</span> </li>
-                    <li><span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency_ar }}</span><span>الطلب الكلي</span> </li>
+                    <li><span>{{ total |number_format(2, '.', ',')  ~currency_ar }}</span> <span>المجموع</span> </li>
+                    <li><span>{{ (delivery2order/100) |number_format(2, '.', ',') ~ currency_ar}}</span><span>التوصيل</span> </li>
+                    <li><span>{{ (total + (delivery2order/100)) |number_format(2, '.', ',') ~ currency_ar }}</span><span>الإجمالي</span> </li>
                 </ul>
             </div>
             <div class="row">

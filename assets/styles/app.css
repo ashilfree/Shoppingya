@@ -187,7 +187,7 @@ a[disabled] {
 }
 
 .order_d_inner .details_item .list li a span {
-    width: 145px;
+    /*width: 145px;*/
     display: inline-block;
     color: #777777;
 }

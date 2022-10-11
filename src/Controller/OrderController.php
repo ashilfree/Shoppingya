@@ -71,13 +71,13 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/{locale}/order/{errors}", name="order", defaults={"locale"="en", "errors"= false})
+     * @Route("/{locale}/order", name="order", defaults={"locale"="en"})
      * @param $locale
-     * @param $errors
+     * @param Transaction $transaction
      * @param Request $request
      * @return Response
      */
-    public function index($locale, $errors, Request $request): Response
+    public function index($locale, Transaction $transaction, Request $request): Response
     {
 
         if (!empty($this->cart->get())) {
@@ -95,50 +95,15 @@ class OrderController extends AbstractController
         if ($user) {
             $order->setShippingEmail($user->getEmail());
             $order->setShippingFullName($user->getFullName());
-            $order->setShippingPhone($user->getPhone());
-            $order->setShippingAddress($user->getAddress());
-            $order->setShippingCity($user->getRegion());
-            $order->setShippingProvince($user->getGovernorate());
+            $order->setShippingPhone($user->getPhone()??'');
+            $order->setShippingAddress($user->getAddress()??'');
+            $order->setShippingCity($user->getRegion()??'');
+            $order->setShippingProvince($user->getGovernorate()??'');
         }
         if ($this->session->get('orderId')) {
             $order = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
         }
         $form = $this->createForm(OrderType::class, $order);
-        $path = ($locale == "en") ? 'order/checkout.html.twig' : 'order/checkoutAr.html.twig';
-        return $this->render($path, [
-            'form' => $form->createView(),
-            'cart' => $this->cart->getFull($this->cart->get()),
-            'wishlist' => $this->wishlist->getFull(),
-            'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
-            'delivery' => $this->cart->getDelivery(),
-            'delivery2order' => $this->cart->getDelivery2Order(),
-            'page' => 'checkout',
-            'categories' => $this->categoryRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/{locale}/order/recap", name="order.recap", defaults={"locale"="en"})
-     * @param $locale
-     * @param Request $request
-     * @param Transaction $transaction
-     * @return Response
-     */
-    public function add($locale, Request $request, Transaction $transaction): Response
-    {
-
-        if ($this->session->get('orderId')) {
-            $order = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
-        } else {
-            $order = new Order();
-            if ($this->cart->checkStock()) {
-                $this->cart->decreaseStock();
-            } else {
-                return $this->redirectToRoute('back.to.cart', ['locale' => $locale]);
-            }
-        }
-        $form = $this->createForm(OrderType::class, $order);
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -155,7 +120,7 @@ class OrderController extends AbstractController
                 $this->entityManager->persist($order);
                 $total = 0.0;
                 foreach ($this->cart->getFull($this->cart->getCart2Order()) as $product) {
-                    $subTotal = $product['quantity'] * $product['catalog']->getProduct()->getPrice();
+
                     $orderDetail = new OrderDetails();
                     $orderDetail->setMyOrder($order);
                     $orderDetail->setProduct($product['catalog']->getProduct()->getName());
@@ -163,12 +128,14 @@ class OrderController extends AbstractController
                     $orderDetail->setQuantity($product['quantity']);
                     $discount = $product['catalog']->getProduct()->getDiscountPrice();
                     $price = ($discount != null || $discount != 0) ? $discount : $product['catalog']->getProduct()->getPrice();
+                    $subTotal = $product['quantity'] * $price;
                     $orderDetail->setPrice($price);
                     $orderDetail->setTotal($subTotal);
                     $this->entityManager->persist($orderDetail);
                     $total += $subTotal;
                 }
                 $order->setTotal($total);
+                $order->setIsPaid(false);
             }
 
             $this->entityManager->flush();
@@ -189,12 +156,98 @@ class OrderController extends AbstractController
                 ]
             );
 
-        }elseif (!$form->isValid()){
-            return $this->redirectToRoute('order', ['locale' => $locale, 'errors' => true]);
-        }else{
-            return $this->redirectToRoute('cart', ['locale' => $locale]);
         }
+        $path = ($locale == "en") ? 'order/checkout.html.twig' : 'order/checkoutAr.html.twig';
+        return $this->render($path, [
+            'form' => $form->createView(),
+            'cart' => $this->cart->getFull($this->cart->get()),
+            'wishlist' => $this->wishlist->getFull(),
+            'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
+            'delivery' => $this->cart->getDelivery(),
+            'delivery2order' => $this->cart->getDelivery2Order(),
+            'page' => 'checkout',
+            'categories' => $this->categoryRepository->findAll(),
+        ]);
     }
+
+//    /**
+//     * @Route("/{locale}/order/recap", name="order.recap", defaults={"locale"="en"})
+//     * @param $locale
+//     * @param Request $request
+//     * @param Transaction $transaction
+//     * @return Response
+//     */
+//    public function add($locale, Request $request, Transaction $transaction): Response
+//    {
+//
+//        if ($this->session->get('orderId')) {
+//            $order = $this->entityManager->getRepository(Order::class)->find($this->session->get('orderId'));
+//        } else {
+//            $order = new Order();
+//            if ($this->cart->checkStock()) {
+//                $this->cart->decreaseStock();
+//            } else {
+//                return $this->redirectToRoute('back.to.cart', ['locale' => $locale]);
+//            }
+//        }
+//        $form = $this->createForm(OrderType::class, $order);
+//
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//
+//            if ($order->getId() == null) {
+//                $date = new \DateTime();
+//                /** @var Customer $user */
+//                $user = $this->getUser();
+//                $reference = $date->format('Ymd') . '-' . uniqid();
+//                $order->setReference($reference);
+//                $order->setCustomer($user);
+//                $order->setCreatedAt($date);
+//                $order->setDeliveryPrice($this->cart->getDelivery2Order());
+//                $transaction->applyWorkFlow($order, 'create_order');
+//                $this->entityManager->persist($order);
+//                $total = 0.0;
+//                foreach ($this->cart->getFull($this->cart->getCart2Order()) as $product) {
+//                    $subTotal = $product['quantity'] * $product['catalog']->getProduct()->getPrice();
+//                    $orderDetail = new OrderDetails();
+//                    $orderDetail->setMyOrder($order);
+//                    $orderDetail->setProduct($product['catalog']->getProduct()->getName());
+//                    $orderDetail->setSize($product['catalog']->getSize());
+//                    $orderDetail->setQuantity($product['quantity']);
+//                    $discount = $product['catalog']->getProduct()->getDiscountPrice();
+//                    $price = ($discount != null || $discount != 0) ? $discount : $product['catalog']->getProduct()->getPrice();
+//                    $orderDetail->setPrice($price);
+//                    $orderDetail->setTotal($subTotal);
+//                    $this->entityManager->persist($orderDetail);
+//                    $total += $subTotal;
+//                }
+//                $order->setTotal($total);
+//            }
+//
+//            $this->entityManager->flush();
+//            $paymentMethodForm = $this->createForm(PaymentMethodType::class, $order);
+//            $this->session->set('orderId', $order->getId());
+//            $path = ($locale == "en") ? 'order/checkout-two.html.twig' : 'order/checkout-twoAr.html.twig';
+//            return $this->render($path, [
+//                    'cart' => $this->cart->getFull($this->cart->get()),
+//                    'wishlist' => $this->wishlist->getFull(),
+//                    'cart2order' => $this->cart->getFull($this->cart->getCart2Order()),
+//                    'order' => $order,
+//                    'page' => 'order.recap',
+//                    'form' => $this->createForm(OrderType::class, $order)->createView(),
+//                    'payment_method_form' => $paymentMethodForm->createView(),
+//                    'locale' => $locale,
+//                    'paymentMethods' => $this->entityManager->getRepository(PaymentMethods::class)->findAll(),
+//                    'categories' => $this->categoryRepository->findAll(),
+//                ]
+//            );
+//
+//        }elseif (!$form->isValid()){
+//            return $this->redirectToRoute('order', ['locale' => $locale, 'errors' => true]);
+//        }else{
+//            return $this->redirectToRoute('cart', ['locale' => $locale]);
+//        }
+//    }
 
     /**
      * @Route("/{locale}/order/back-to-cart", name="back.to.cart", defaults={"locale"="en"})

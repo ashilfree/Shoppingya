@@ -39,7 +39,7 @@
                                                             <div class="manage-o__text-2 u-c-secondary">الطلب
                                                                 #{{ order.reference }}
                                                             </div>
-                                                            <div class="manage-o__text u-c-silver">تم وضعها {{ order.createdAt|date("F jS \\a\\t g:ia") }}
+                                                            <div class="manage-o__text u-c-silver">تم وضع الطلب في {{ order.createdAt|date("F jS") }}
 
                                                             </div>
                                                         </div>
@@ -54,7 +54,7 @@
                                                 </div>
                                                 <div class="text-right">
 
-                                                    <span class="manage-o__badge badge--{{ order.status }}">{{ order.status|capitalize }}</span>
+                                                    <span class="manage-o__badge badge--{{ order.status }}">{{ order.statusAr }}</span>
                                                 </div>
                                                 {% for orderDetail in order.orderDetails %}
                                                     <div class="manage-o__description">
@@ -76,24 +76,24 @@
                                                             </div>
                                                             <div>
 
-                                                                <span class="manage-o__text-2 u-c-silver">مجموع العناصر:
+                                                                <span class="manage-o__text-2 u-c-silver">المجموع:
 
-                                                                    <span class="manage-o__text-2 u-c-secondary">{{ (orderDetail.total/100)|number_format(2, '.', ',') }} {{ currency }}</span> </span>
+                                                                    <span class="manage-o__text-2 u-c-secondary">{{ (orderDetail.total/100)|number_format(2, '.', ',') }} {{ currency_ar }}</span> </span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 {% endfor %}
                                                 <div class="text-right m-t-20">
 
-                                                                <span class="manage-o__text-2 u-c-silver">توصيل:
+                                                                <span class="manage-o__text-2 u-c-silver">تكلفة التوصيل:
 
-                                                                    <span class="manage-o__text-2 u-c-secondary">{{ ((order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency }}</span> </span>
+                                                                    <span class="manage-o__text-2 u-c-secondary">{{ ((order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency_ar }}</span> </span>
                                                 </div>
                                                 <div class="text-right">
 
-                                                                <span class="manage-o__text-2 u-c-silver">مجموع:
+                                                                <span class="manage-o__text-2 u-c-silver">الاجمالي:
 
-                                                                    <span class="manage-o__text-2 u-c-secondary">{{ ((order.total+order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency }}</span> </span>
+                                                                    <span class="manage-o__text-2 u-c-secondary">{{ ((order.total+order.deliveryPrice)/100)|number_format(2, '.', ',') }} {{ currency_ar }}</span> </span>
                                                 </div>
                                             </div>
                                         {% endfor %}

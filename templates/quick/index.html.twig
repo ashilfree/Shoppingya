@@ -1,0 +1,861 @@
+<section class="form-box" >
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12 form-wizard">
+
+                <!-- Form Wizard -->
+                <form role="form" action="" method="post">
+
+                    <h3>Place Order</h3>
+                    <p>Fill all form field to go next step</p>
+
+                    <!-- Form progress -->
+                    <div class="form-wizard-steps form-wizard-tolal-steps-4">
+                        <div class="form-wizard-progress">
+                            <div class="form-wizard-progress-line" data-now-value="12.25" data-number-of-steps="4" style="width: 12.25%;"></div>
+                        </div>
+                        <!-- Step 1 -->
+                        <div class="form-wizard-step active">
+                            <div class="form-wizard-step-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                            <p>Stock Type and Approver</p>
+                        </div>
+                        <!-- Step 1 -->
+
+                        <!-- Step 2 -->
+                        <div class="form-wizard-step">
+                            <div class="form-wizard-step-icon"><i class="fa fa-home" aria-hidden="true"></i></div>
+                            <p>Available HO Stock</p>
+                        </div>
+                        <!-- Step 2 -->
+
+                        <!-- Step 3 -->
+                        <div class="form-wizard-step">
+                            <div class="form-wizard-step-icon"><i class="fa fa-list" aria-hidden="true"></i></div>
+                            <p>Selected Line Items</p>
+                        </div>
+                        <!-- Step 3 -->
+
+                        <!-- Step 4 -->
+                        <div class="form-wizard-step">
+                            <div class="form-wizard-step-icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+                            <p>Place Order</p>
+                        </div>
+                        <!-- Step 4 -->
+                    </div>
+                    <!-- Form progress -->
+
+
+                    <!-- Form Step 1 -->
+                    <fieldset>
+
+                        <h4>Provide Details: <span>Step 1 - 4</span></h4>
+
+                        <!-- Select type Stock Type-->
+                        <div class="form-group">
+                            <label>Product <span>*</span></label>
+                            <select class="form-control required" id="stockType"
+                                    name="stockType" onchange='CheckStockType(this.value);'>
+                                <option value="">Select Product</option>
+                                {% for product in products %}
+                                <option value="{{ product.id }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+{#                        <!-- Text input Customer Name-->#}
+                        <div id="Site" style='display: none;'>
+                            <div class="form-group">
+                                <label>Size <span>*</span></label>
+                                <select class="form-control" id="Site1"
+                                        name="customer">
+
+                                </select>
+                            </div>
+                        </div>
+
+{#                        <!-- Text input Technician-->#}
+{#                        <div id="Boot" style='display: none;'>#}
+{#                            <div class="form-group">#}
+{#                                <label>Technician <span>*</span></label>#}
+{#                                <select class="form-control" name="technicianUserName" id="technicianUserName">#}
+{#                                    <option value="">Select Technician</option>#}
+{#                                    <option value="Jay Star">Jay Star</option>#}
+{#                                    <option value="Marry Bass">Marry Bass</option>#}
+
+{#                                </select>#}
+{#                            </div>#}
+{#                        </div>#}
+
+                        <!-- Text input Approver-->
+                        <div class="form-group">
+                            <label>Image <span>*</span></label>
+                            <div class="imageWrapper">
+                                <img class="image" src="http://via.placeholder.com/700x500">
+                            </div>
+                        </div>
+
+
+                        <div class="form-wizard-buttons">
+                            <button type="button" class="btn btn-next">Next</button>
+                        </div>
+                    </fieldset>
+                    <!-- Form Step 1 -->
+
+                    <!-- Form Step 2 -->
+                    <fieldset>
+
+                        <h4>Select Head Office Stock to Order : <span>Step 2 - 4</span></h4>
+
+
+                        </legend>
+                        <table id="stockForOrder" data-toggle="table"
+                               data-show-refresh="true"
+                               data-show-toggle="true" data-search="true"
+                               data-select-item-name="toolbar1" data-pagination="true"
+                               data-sort-name="partno" data-sort-order="desc">
+                            <thead>
+                            <tr>
+                                <th data-field="partno" data-sortable="true">Part
+                                    No</th>
+                                <th data-field="description" data-sortable="true">Description</th>
+                                <th data-field="modelno" data-sortable="true">Model
+                                    No</th>
+                                <th data-field="customer" data-sortable="true">Available
+                                    QTY</th>
+                                <th data-field="provideqty" data-sortable="true">Provide
+                                    QTY</th>
+                                <th data-field="action" data-sortable="true">Action</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td> CLT-KSKE90</td>
+                                <td> Yellow Part</td>
+                                <td> CLT-KES,CLT-KERE</td>
+                                <td><input type="text"
+                                           id="CLT-KSKE90_avaliableQuantity"
+                                           name="avaliableQuantity" class="form-control"
+                                           readonly="readonly" value="3"></td>
+                                <td><input type="text"
+                                           id="CLT-KSKE90_quantity" name="quantity"
+                                           class="form-control required"
+                                           onblur="compareQuantity(this, 3)"
+                                           value="" /></td>
+                                <td><input class="addLineItem" type="button"
+                                           value="Add"></td>
+                            </tr>
+
+                            <tr>
+                                <td> PT-KKDJ0</td>
+                                <td>Black Toner</td>
+                                <td>CLT-SM</td>
+                                <td><input type="text"
+                                           id="PT-KKDJ0_avaliableQuantity"
+                                           name="avaliableQuantity" class="form-control"
+                                           readonly="readonly" value="2"></td>
+                                <td><input type="text"
+                                           id="PT-KKDJ0_quantity" name="quantity"
+                                           class="form-control required"
+                                           onblur="compareQuantity(this, 2)"
+                                           value="" /></td>
+                                <td><input class="addLineItem" type="button"
+                                           value="Add"></td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
+                        <div class="form-wizard-buttons">
+                            <button type="button" class="btn btn-previous">Previous</button>
+                            <button type="button" class="btn btn-next">Next</button>
+                        </div>
+                    </fieldset>
+                    <!-- Form Step 2 -->
+
+                    <!-- Form Step 3 -->
+                    <fieldset>
+
+                        <h4>Selected Order Line Items: <span>Step 3 - 4</span></h4>
+                        <table id="toOrder" class="table table-striped table-bordered table-hover table-condensed"
+                               data-show-refresh="true" data-show-toggle="true"
+                               data-search="true" data-select-item-name="toolbar1"
+                               data-pagination="true" data-sort-name="partno"
+                               data-sort-order="desc">
+                            <thead>
+                            <tr>
+                                <th data-field="partno" data-sortable="true">Part
+                                    No</th>
+                                <th data-field="description" data-sortable="true">Description</th>
+                                <th data-field="modelno" data-sortable="true">Model
+                                    No</th>
+                                <th data-field="customer" data-sortable="true">Available
+                                    QTY</th>
+                                <th data-field="qtyprovide" data-sortable="true">
+                                    QTY Provide</th>
+                                <th data-field="action" data-sortable="true">Action</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+                        <br/>
+                        <div class="form-wizard-buttons">
+                            <button type="button" class="btn btn-previous">Previous</button>
+                            <button type="button" class="btn btn-next">Next</button>
+                        </div>
+
+
+
+                    </fieldset>
+                    <!-- Form Step 3 -->
+
+                    <!-- Form Step 4 -->
+                    <fieldset>
+
+                        <h4>Place Order: <span>Step 4 - 4</span></h4>
+                        <div style="clear:both;"></div>
+                        <p>You are about to place an order, are you sure you want to place the order?
+                            You can go back to see if all infomation are correct.
+                            <br/>
+
+                            <!-- grap part Number and Quantity Entered upon user click place order button and send them -->
+                            <input type="text" id="quantityList" name="quantityList"
+                                   class="form-control" value="" /> <input type="text"
+                                                                           id="partNumberList" name="partNumberList" class="form-control"
+                                                                           value="" />
+
+                        <div class="form-wizard-buttons">
+                            <button type="button" class="btn btn-previous">Previous</button>
+
+                            <div class="center" align="center">
+                                <div class="form-group row">
+                                    <div class="col-sm-offset-2 col-sm-8">
+                                        <br> <br> <input type="submit" value="Place Order"
+                                                         class="orderSubmit btn-primary btn-block btn-lg" tabindex="9"
+                                                         id="putorder" name="putorder"
+                                                         onclick="return confirm('Are you sure you want to place order?');" disabled="disabled" >
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </fieldset>
+                    <!-- Form Step 4 -->
+
+                </form>
+                <!-- Form Wizard -->
+            </div>
+        </div>
+
+    </div>
+</section>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .form-box {
+
+        padding-top: 40px;
+        padding-bottom: 40px;
+        width:100%;
+    }
+
+    .form-wizard {
+        padding: 25px;
+        background: #fff;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        box-shadow: 0px 0px 6px 3px #777;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        font-weight: 300;
+        color: #888;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .form-wizard strong { font-weight: 500; }
+
+    .form-wizard a, .form-wizard a:hover, .form-wizard a:focus {
+        color: #0315ea;
+        text-decoration: none;
+        -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+    }
+
+    .form-wizard h1, .form-wizard h2 {
+        margin-top: 10px;
+        font-size: 38px;
+        font-weight: 100;
+        color: #555;
+        line-height: 50px;
+    }
+
+    .form-wizard h3 {
+        font-size: 25px;
+        font-weight: 300;
+        color: #0315ea;
+        line-height: 30px;
+        margin-top: 0;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+    .form-wizard h4 {
+        float:left;
+        font-size: 20px;
+        font-weight: 300;
+        color: #0315ea;
+        line-height: 26px;
+        width:100%;
+    }
+    .form-wizard h4  span{
+        float:right;
+        font-size: 18px;
+        font-weight: 300;
+        color: #555;
+        line-height: 26px;
+    }
+
+    .form-wizard table tr th{font-weight:normal;}
+
+    .form-wizard img { max-width: 100%; }
+
+    .form-wizard ::-moz-selection { background: #0315ea; color: #fff; text-shadow: none; }
+    .form-wizard ::selection { background: #0315ea; color: #fff; text-shadow: none; }
+
+
+
+    .form-control option:hover, .form-control option:checked  {
+        box-shadow: 0 0 10px 100px #0315ea inset;
+    }
+
+    .form-control:focus {
+        outline: 0;
+        background: #fff;
+        border: 1px solid #ccc;
+        -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+    }
+
+    .form-control:-moz-placeholder { color: #888; }
+    .form-control:-ms-input-placeholder { color: #888; }
+    .form-control::-webkit-input-placeholder { color: #888; }
+
+    .form-wizard label { font-weight: 300; }
+    .form-wizard label span { color:red; }
+
+
+
+    .form-wizard .btn:hover {
+        background:#0315ea;
+        color: #fff;
+    }
+    .form-wizard .btn:active {
+        outline: 0;
+        background:#0315ea;
+        color: #fff;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .form-wizard .btn:focus,
+    .form-wizard .btn:active:focus,
+    .form-wizard .btn.active:focus {
+        outline: 0;
+        background:#0315ea;
+        color: #fff;
+    }
+
+    .form-wizard .btn.btn-next,
+    .form-wizard .btn.btn-next:focus,
+    .form-wizard .btn.btn-next:active:focus,
+    .form-wizard .btn.btn-next.active:focus {
+        background: #0315ea;
+    }
+
+    .form-wizard .btn.btn-submit,
+    .form-wizard .btn.btn-submit:focus,
+    .form-wizard .btn.btn-submit:active:focus,
+    .form-wizard .btn.btn-submit.active:focus {
+        background: #0315ea;
+    }
+
+    .form-wizard .btn.btn-previous,
+    .form-wizard .btn.btn-previous:focus,
+    .form-wizard .btn.btn-previous:active:focus,
+    .form-wizard .btn.btn-previous.active:focus {
+        background: #bbb;
+    }
+
+    .form-wizard .success h3{
+        color: #4F8A10;
+        text-align: center;
+        margin: 20px auto !important;
+    }
+    .form-wizard .success .success-icon {
+        color: #4F8A10;
+        font-size: 100px;
+        border: 5px solid #4F8A10;
+        border-radius: 100px;
+        text-align: center !important;
+        width: 110px;
+        margin: 25px auto;
+    }
+    .form-wizard .progress-bar {
+        background-color: #0315ea;
+    }
+
+    .form-wizard-steps{
+        margin:auto;
+        overflow: hidden;
+        position: relative;
+        margin-top: 20px;
+    }
+    .form-wizard-step{
+        padding-top:10px !important;
+        border:2px solid #fff;
+        background:#ccc;
+        -ms-transform: skewX(-30deg); /* IE 9 */
+        -webkit-transform: skewX(-30deg); /* Safari */
+        transform: skewX(-30deg); /* Standard syntax */
+    }
+    .form-wizard-step.active{
+        background:#0315ea;
+    }
+    .form-wizard-step.activated{
+        background:#0315ea;
+    }
+    .form-wizard-progress {
+        position: absolute;
+        top: 36px;
+        left: 0;
+        width: 100%;
+        height: 0px;
+        background: #0315ea;
+    }
+    .form-wizard-progress-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0px;
+        background: #0315ea;
+    }
+
+    .form-wizard-tolal-steps-3 .form-wizard-step {
+        position: relative;
+        float: left;
+        width: 33.33%;
+        padding: 0 5px;
+    }
+    .form-wizard-tolal-steps-4 .form-wizard-step {
+        position: relative;
+        float: left;
+        width: 25%;
+        padding: 0 5px;
+    }
+    .form-wizard-tolal-steps-5 .form-wizard-step {
+        position: relative;
+        float: left;
+        width: 20%;
+        padding: 0 5px;
+    }
+
+    .form-wizard-step-icon {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-top: 4px;
+        background: #ddd;
+        font-size: 16px;
+        color: #777;
+        line-height: 40px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+        -ms-transform: skewX(30deg); /* IE 9 */
+        -webkit-transform: skewX(30deg); /* Safari */
+        transform: skewX(30deg); /* Standard syntax */
+    }
+    .form-wizard-step.activated .form-wizard-step-icon {
+        background: #0315ea;
+        border: 1px solid #fff;
+        color: #fff;
+        line-height: 38px;
+    }
+    .form-wizard-step.active .form-wizard-step-icon {
+        background: #fff;
+        border: 1px solid #fff;
+        color: #0315ea;
+        line-height: 38px;
+    }
+
+    .form-wizard-step p {
+        color: #fff;
+        -ms-transform: skewX(30deg); /* IE 9 */
+        -webkit-transform: skewX(30deg); /* Safari */
+        transform: skewX(30deg); /* Standard syntax */
+    }
+    .form-wizard-step.activated p { color: #fff; }
+    .form-wizard-step.active p { color: #fff; }
+
+    .form-wizard fieldset {
+        display: none;
+        text-align: left;
+        border:0px !important
+    }
+
+    .form-wizard-buttons { text-align: right; }
+
+    .form-wizard .input-error { border-color: red;}
+
+    /** image uploader **/
+    .image-upload a[data-action] {
+        cursor: pointer;
+        color: #555;
+        font-size: 18px;
+        line-height: 24px;
+        transition: color 0.2s;
+    }
+    .image-upload a[data-action] i {
+        width: 1.25em;
+        text-align: center;
+    }
+    .image-upload a[data-action]:hover {
+        color: #0315ea;
+    }
+    .image-upload a[data-action].disabled {
+        opacity: 0.35;
+        cursor: default;
+    }
+    .image-upload a[data-action].disabled:hover {
+        color: #555;
+    }
+    .settings_wrap{
+        margin-top:20px;
+    }
+    .image_picker .settings_wrap {
+        overflow: hidden;
+        position: relative;
+    }
+    .image_picker .settings_wrap .drop_target,
+    .image_picker .settings_wrap .settings_actions {
+        float: left;
+    }
+    .image_picker .settings_wrap .drop_target {
+        margin-right: 18px;
+    }
+    .image_picker .settings_wrap .settings_actions {
+        float: left;
+        margin-top: 100px;
+        margin-left: 20px;
+    }
+    .settings_actions.vertical a {
+        display: block;
+    }
+    .drop_target {
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 250px;
+        height: 250px;
+        background: #f2f2f2;
+        border-radius: 100%;
+        margin: 0 auto 25px auto;
+        overflow: hidden;
+        border: 8px solid #E0E0E0;
+    }
+    .drop_target input[type="file"] {
+        visibility: hidden;
+    }
+    .drop_target::before {
+        content: 'Drop Hear';
+        font-family: FontAwesome;
+        position: absolute;
+        display: block;
+        width: 100%;
+        line-height: 220px;
+        text-align: center;
+        font-size: 40px;
+        color: rgba(0, 0, 0, 0.3);
+        transition: color 0.2s;
+    }
+    .drop_target:hover,
+    .drop_target.dropping {
+        background: #f80;
+        border-top-color: #cc6d00;
+    }
+    .drop_target:hover:before,
+    .drop_target.dropping:before {
+        color: rgba(0, 0, 0, 0.6);
+    }
+    .drop_target .image_preview {
+        width: 100%;
+        height: 100%;
+        background: no-repeat center;
+        background-size: contain;
+        position: relative;
+        z-index: 2;
+    }
+    .center {
+        padding-left: 30%;
+        padding-right: 10%;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+<script>
+
+    "use strict";
+    function scroll_to_class(element_class, removed_height) {
+        var scroll_to = $(element_class).offset().top - removed_height;
+        if($(window).scrollTop() != scroll_to) {
+            $('.form-wizard').stop().animate({scrollTop: scroll_to}, 0);
+        }
+    }
+
+    function bar_progress(progress_line_object, direction) {
+        var number_of_steps = progress_line_object.data('number-of-steps');
+        var now_value = progress_line_object.data('now-value');
+        var new_value = 0;
+        if(direction == 'right') {
+            new_value = now_value + ( 100 / number_of_steps );
+        }
+        else if(direction == 'left') {
+            new_value = now_value - ( 100 / number_of_steps );
+        }
+        progress_line_object.attr('style', 'width: ' + new_value + '%;').data('now-value', new_value);
+    }
+
+    jQuery(document).ready(function() {
+
+        /*
+            Form
+        */
+        $('.form-wizard fieldset:first').fadeIn('slow');
+
+        $('.form-wizard .required').on('focus', function() {
+            $(this).removeClass('input-error');
+        });
+
+        // next step
+        $('.form-wizard .btn-next').on('click', function() {
+            var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+            // navigation steps / progress steps
+            var current_active_step = $(this).parents('.form-wizard').find('.form-wizard-step.active');
+            var progress_line = $(this).parents('.form-wizard').find('.form-wizard-progress-line');
+
+            // fields validation
+            parent_fieldset.find('.required').each(function() {
+                if( $(this).val() == "" ) {
+                    $(this).addClass('input-error');
+                    next_step = false;
+                }
+                else {
+                    $(this).removeClass('input-error');
+                }
+            });
+            // fields validation
+
+            if( next_step ) {
+                parent_fieldset.fadeOut(400, function() {
+                    // change icons
+                    current_active_step.removeClass('active').addClass('activated').next().addClass('active');
+                    // progress bar
+                    bar_progress(progress_line, 'right');
+                    // show next step
+                    $(this).next().fadeIn();
+                    // scroll window to beginning of the form
+                    scroll_to_class( $('.form-wizard'), 20 );
+                });
+            }
+
+        });
+
+        // previous step
+        $('.form-wizard .btn-previous').on('click', function() {
+            // navigation steps / progress steps
+            var current_active_step = $(this).parents('.form-wizard').find('.form-wizard-step.active');
+            var progress_line = $(this).parents('.form-wizard').find('.form-wizard-progress-line');
+
+            $(this).parents('fieldset').fadeOut(400, function() {
+                // change icons
+                current_active_step.removeClass('active').prev().removeClass('activated').addClass('active');
+                // progress bar
+                bar_progress(progress_line, 'left');
+                // show previous step
+                $(this).prev().fadeIn();
+                // scroll window to beginning of the form
+                scroll_to_class( $('.form-wizard'), 20 );
+            });
+        });
+
+        // submit
+        $('.form-wizard').on('submit', function(e) {
+
+            // fields validation
+            $(this).find('.required').each(function() {
+                if( $(this).val() == "" ) {
+                    e.preventDefault();
+                    $(this).addClass('input-error');
+                }
+                else {
+                    $(this).removeClass('input-error');
+                }
+            });
+            // fields validation
+
+        });
+
+
+    });
+
+
+    //Compare available quantity with entered quantity
+    function compareQuantity(element, availableQuantity) {
+
+        if (availableQuantity > element.value) {
+            console.log("True,", element.value + " is less than "
+                + availableQuantity);
+            console.log("Place an Order");
+        }
+        if (element.value == '' || element.value == 0) {
+            alert("Part is out of stock");
+            element.value = null;
+        } else if (element.value == '' || element.value == '') {
+            alert("Quantity can not be empty or cant not be zero. Please enter quantity which is less than available quantity");
+            element.value = null;
+            console.log(element.value);
+        } else if (availableQuantity < element.value) {
+            alert("Your order quantity can not be greater than available quantity. Please enter less quantity");
+            element.value = null;
+            console.log("False,", availableQuantity + " is small than "
+                + element.value);
+            console.log("You can not place an order, enter less quantity");
+            console.log("Enter value between 1 till " + element.value
+                + " not more than " + availableQuantity);
+        }
+    }
+    //End Compare available quantity with entered quantity
+    function removeOptions(selectElement) {
+        var i, L = selectElement.options.length - 1;
+        for(i = L; i >= 0; i--) {
+            selectElement.remove(i);
+        }
+    }
+    /* --Stock type Selection-- */
+    async function CheckStockType(val) {
+        console.log(val)
+        let url = '/quick/check-product/' + val;
+        const request = new Request(url);
+        const response = await fetch(request);
+        if (response.status >= 200 && response.status < 300) {
+            const data = await response.json();
+            console.log(data['image']);
+            var element = document.getElementById('Site');
+
+            // <option value="">Select Size</option>
+            if(data['catalogs'].length === 0){
+                element.style.display = 'none';
+                alert('EMPTY');
+            }else{
+                document.querySelector('.image').src = data['image'];
+                removeOptions(document.getElementById('Site1'));
+                var option = document.createElement("option");
+                option.value = "";
+                option.text = "Select Size";
+                document.getElementById('Site1').appendChild(option);
+                // document.getElementById('Site1').append('<option value="">Select Size</option>')
+                data['catalogs'].forEach(function(item, index, array) {
+                    var option = document.createElement("option");
+                    option.value = item[0];
+                    option.text = item[1];
+                    document.getElementById('Site1').appendChild(option);
+                    console.log(item[0])
+                })
+                element.style.display = 'block';
+            }
+        } else {
+            console.error(response);
+        }
+    }/* --Stock type Selection-- */
+
+    //Order available head office stock-->
+    var row;
+    var partNumberList = [];
+    var quantityList = [];
+    //move selected line items to table 2
+    $('#stockForOrder').on('click', '.addLineItem', function() {
+
+        var quantity;
+        row = $(this).closest("tr").clone();
+        quantity = $(this).closest('tr').find('td:eq(4)').find('input').val();
+        console.log("Check the grapped quantity on table of Selected Line Items to Order : ",quantity);
+
+        if(quantity == '' || quantity == 0){
+            alert("Quantity can not be zero.\n Please enter quantity which is less than available quantity");
+        }
+        if (quantity > 0){
+            var items = [];
+            row = $(this).closest("tr").clone();
+            var partNumber = $(this).closest('tr').find('td:eq(0)').text();
+            var quantity = $(this).closest('tr').find('td:eq(4)').find('input').val();
+            document.getElementById("quantityList").value = quantityList;
+            document.getElementById("partNumberList").value = partNumberList;
+
+            items.push(row);
+            row.appendTo($("#toOrder"));
+            //debugger;
+            $(this).closest('tr').remove();
+            $('input[type="button"]', row).removeClass('AddNew').addClass('RemoveRow').val('Remove');
+        }
+    });
+    //remove selected line items from table 1 to table 2
+    $('#toOrder').on('click', '.RemoveRow', function(){
+        //debugger;
+        row = $(this).closest("tr").clone();
+        row.appendTo($("#stockForOrder"));
+        $(this).closest('tr').remove();
+        $('input[type="button"]', row).removeClass('RemoveRow').addClass('addLineItem').val('Add');
+    });
+
+    //send selected items when user clicks submit button
+    $('#putorder').on('click', function(){
+        var row;
+        $('#toOrder tr').each(function(row, tr){
+            partNumberList[row]=[$(tr).find('td:eq(0)').text()];
+            quantityList[row]=[$(this).closest('tr').find('td:eq(4)').find('input').val()];
+        });
+        partNumberList.shift();
+        quantityList.shift();
+        document.getElementById("quantityList").value = quantityList;
+        document.getElementById("partNumberList").value = partNumberList;
+    });
+
+    $(document).ready(function(){
+        $('.orderSubmit').attr('disabled',true);
+
+        $('input[name$=quantity]').change(function(){
+            if($(this).val().length !=0){
+                $('.orderSubmit').attr('disabled', false);
+                console.log("Something Entered");
+            }
+            else
+            {
+                $('.orderSubmit').attr('disabled', true);
+                console.log("Nothing Entered");
+            }
+        })
+    });
+</script>

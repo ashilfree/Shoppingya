@@ -126,6 +126,11 @@ class Order
      */
     private $cancelled_at;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPaid;
+
 
     public function __construct()
     {
@@ -234,6 +239,11 @@ class Order
             $total += $product->getPrice() * $product->getQuantity();
         }
         return $total;
+    }
+
+    public function getTotalOrder()
+    {
+        return ($this->getTotal() + $this->getDeliveryPrice());
     }
 
     public function getInvoiceId(): ?string
@@ -349,26 +359,87 @@ class Order
         $status = '';
         switch ($this->marking) {
             case 'waiting':
+            case 'in_payment':
                 $status = 'waiting';
                 break;
-            case 'in_payment':
-                $status = 'in_payment';
-                break;
             case 'paid':
-                $status = 'paid';
+            case 'pay_en_delivery':
+                $status = 'Processing';
                 break;
             case 'checkout_canceled':
+            case 'canceled':
                 $status = 'canceled';
                 break;
             case 'in_delivering':
-                $status = 'in_delivering';
+                $status = 'In delivering';
                 break;
             case 'delivered':
-                $status = 'delivered';
+                $status = 'Delivered';
                 break;
-            case 'canceled':
-                $status = 'canceled';
+        }
+        return $status;
+    }
 
+    public function canChange(): ?string
+    {
+        $status = '';
+        switch ($this->marking) {
+            case 'waiting':
+            case 'in_payment':
+            case 'checkout_canceled':
+            case 'canceled':
+            case 'delivered':
+                $status = '';
+                break;
+            case 'paid':
+            case 'pay_en_delivery':
+                $status = 'In Delivering';
+                break;
+            case 'in_delivering':
+                $status = 'Delivered';
+                break;
+        }
+        return $status;
+    }
+
+    public function canCancelled(): string
+    {
+        $status = '';
+        if($this->marking == 'pay_en_delivery')
+            $status = 'Canceled';
+        return $status;
+    }
+
+    public function canPrint(): string
+    {
+        $status = '';
+        if($this->marking == 'in_delivering' || $this->marking == 'delivered')
+            $status = 'Delivery Invoice';
+        return $status;
+    }
+
+    public function getStatusAr(): ?string
+    {
+        $status = '';
+        switch ($this->marking) {
+            case 'waiting':
+            case 'in_payment':
+                $status = 'الانتظار';
+                break;
+            case 'paid':
+            case 'pay_en_delivery':
+                $status = 'الطلب تحت المعالجة';
+                break;
+            case 'checkout_canceled':
+            case 'canceled':
+                $status = 'ملغى';
+                break;
+            case 'in_delivering':
+                $status = 'في طريق التسليم';
+                break;
+            case 'delivered':
+                $status = 'تم التسليم';
+                break;
         }
         return $status;
     }
@@ -454,5 +525,17 @@ class Order
     public function setPaymentMethod($paymentMethod): void
     {
         $this->paymentMethod = $paymentMethod;
+    }
+
+    public function getIsPaid(): bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): self
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
     }
 }

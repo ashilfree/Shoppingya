@@ -4,6 +4,6 @@ mjml:
     options:
         binary: '%kernel.project_dir%/node_modules/.bin/mjml'
         node: null # default: null
-#        node: '/home2/genesjz7/.nvm/versions/node/v12.21.0/bin/node' # default:
+#        node: '/home3/shoppkc0/.nvm/versions/node/v14.17.0/bin/node' # default:
         minify: true # default: false
         validation_level: skip

@@ -1,0 +1,74 @@
+<html>
+<head>Receipt of Purchase
+</head>
+<body>
+
+<div style="text-align: left;border-top:1px solid #000;">
+    <div style="font-size: 24px;color: #666;">INVOICE</div>
+</div>
+<table style="line-height: 1.5;">
+    <tr><td><b>#{{ order.reference }}</b>
+        </td>
+        <td style="text-align:right;"><b>Receiver:</b></td>
+    </tr>
+    <tr>
+        <td><b>Date:</b> {{ order.createdAt|date("F jS") }}</td>
+        <td style="text-align:right;">{{ order.shippingFullName }}</td>
+    </tr>
+    <tr>
+        <td><b>In Delivering Due:</b>{{ order.inDeliveringAt|date("F jS") }}
+        </td>
+        <td style="text-align:right;">Phone: {{ order.shippingPhone }}</td>
+    </tr>
+    <tr>
+        <td>
+            {% if order.isPaid == true %}
+                <h1 style="color:green">PAID</h1>
+            {% else %}
+                <h1 style="color:red"> NOT PAID</h1>
+            {% endif %}
+        </td>
+        <td style="text-align:right;">
+            {{ order.shippingAddress }} <br />
+            {{ order.shippingCity ~'-'~ order.shippingProvince }}
+        </td>
+    </tr>
+</table>
+
+<div></div>
+<div style="border-bottom:1px solid #000;">
+    <table style="line-height: 2;font-size:15px">
+        <tr style="font-weight: bold;border:1px solid #cccccc;background-color:#f2f2f2;">
+            <td style="border:1px solid #cccccc;width:180px;">Product</td>
+            <td style="border:1px solid #cccccc;width:80px;">Size</td>
+            <td style = "text-align:right;border:1px solid #cccccc;width:80px">Price</td>
+            <td style = "text-align:right;border:1px solid #cccccc;width:80px;">Quantity</td>
+            <td style = "text-align:right;border:1px solid #cccccc;">Subtotal</td>
+        </tr>
+        {% for orderDetail in order.orderDetails %}
+        <tr> <td style="border:1px solid #cccccc;">{{ orderDetail.product|upper }}</td>
+            <td style = "text-align:right; border:1px solid #cccccc;">{{ orderDetail.size }}</td>
+            <td style = "text-align:right; border:1px solid #cccccc;">{{ orderDetail.price/100 |number_format(2, '.', ',')~ currency }}</td>
+            <td style = "text-align:right; border:1px solid #cccccc;">{{ orderDetail.quantity }}</td>
+            <td style = "text-align:right; border:1px solid #cccccc;">{{ orderDetail.total/100 |number_format(2, '.', ',')~ currency }}</td>
+        </tr>
+        {% endfor %}
+        <tr style = "font-weight: bold;">
+            <td></td><td></td><td></td>
+            <td style = "text-align:right;">Delivery </td>
+            <td style = "text-align:right;">{{ order.deliveryPrice/100 |number_format(2, '.', ',')~ currency }}</td>
+        </tr>
+        <tr style = "font-weight: bold;">
+            <td></td><td></td><td></td>
+            <td style = "text-align:right;">Total </td>
+            <td style = "text-align:right;">{{ (order.total + order.deliveryPrice)/100 |number_format(2, '.', ',')~ currency }}</td>
+        </tr>
+    </table></div>
+<p><u>Contact Us</u>:<br/>
+    Address: Al-nassar tower,floor 10.<br/>
+             kuwait city - kuwait<br/>
+    Email: info@shoppinga.com<br/>
+    Tel: 23141434<br/>
+</p>
+</body>
+</html>

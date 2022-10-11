@@ -60,7 +60,7 @@
                 </div>
                 <div class="col-lg-4 text-right">
                     <div class="details_item">
-                        <h4>معلومات الفواتير</h4>
+                        <h4>معلومات الفاتورة</h4>
                         <ul class="list">
                             <li><a href="#"><span>اسم</span> : {{ order.shippingFullName }}</a></li>
 
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-lg-4 text-right">
                     <div class="details_item">
-                        <h4>عنوان وصول الفواتير</h4>
+                        <h4>عنوان وصول الطلب</h4>
                         <ul class="list">
                             <li><a href="#"><span>شارع</span> : {{ order.shippingAddress }}</a></li>
                             <li><a href="#"><span>مدينة</span> : {{ order.shippingCity }}</a></li>
@@ -88,7 +88,7 @@
                             <thead>
                             <tr>
                                 <th scope="col">المنتج</th>
-                                <th scope="col">الحجم</th>
+                                <th scope="col">المقاس</th>
                                 <th scope="col">كمية</th>
                                 <th scope="col">مجموع</th>
                             </tr>
@@ -119,7 +119,7 @@
                             {% endfor %}
                             <tr>
                                 <td>
-                                    <h4>المجموع الفرعي</h4>
+                                    <h4>المجموع</h4>
                                 </td>
                                 <td>
                                     <h5></h5>
@@ -130,7 +130,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h4>توصيل</h4>
+                                    <h4>التوصيل</h4>
                                 </td>
                                 <td>
                                     <h5></h5>
@@ -141,7 +141,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h4>مجموع</h4>
+                                    <h4>الإجمالي</h4>
                                 </td>
                                 <td>
                                     <h5></h5>
@@ -157,9 +157,9 @@
                 <div class="col-md-4 m-t-75">
                     {{ form_start(payment_method_form, {action: path('my.fatoorah.create.session', { id: order.id , locale: 'ar' }), 'attr': {'onsubmit': 'setFormSubmitting()'}}) }}
                      <div class="p-t-15 p-all-30 text-right" style="background: #e5ecee;">
-                        <span class="stext-112 cl8">
-                            طريقة الدفع او السداد
-                        </span>
+                        <h2 class="p-b-15">
+                            طريقة الدفع
+                        </h2>
                          <div class="payment-type">
 
                              <div class="types flex justify-space-between">
@@ -176,7 +176,7 @@
                                          <i class="far fa-credit-card"></i>
                                      </div>
                                      <div class="text">
-                                         <p>دفع مع بطاقة الائتمان</p>
+                                         <p>الدفع الالكتروني</p>
                                      </div>
                                  </div>
 
@@ -200,7 +200,7 @@
 
                     </div>
                         <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-t-30" data-id="{{ order.id }}" data-locale="{{ locale }}">
-                            ضع طلبية
+                            استكمال الطلب
                         </button>
                     {{ form_end(payment_method_form) }}
                         <a href="{{ path('order', { locale: 'ar' }) }}" onclick="setFormSubmitting();" class="flex-c-m stext-101 cl2 size-119 w-full bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
@@ -273,7 +273,7 @@
     <script>
         let type1 = document.querySelector('.type1');
         let type2 = document.querySelector('.type2');
-
+        document.querySelector('.select').firstChild.textContent = 'اختيار طريقة الدفع';
         type1.addEventListener('click', function(){
             this.classList.add('selected');
             this.nextElementSibling.classList.remove('selected');
