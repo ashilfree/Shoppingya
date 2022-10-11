@@ -1,3 +1,0 @@
-#!/bin/sh
-rsync  -av -e "ssh -i codeguard_sftp" ./ shoppkc0@shoppingya.com:~/public_html --include=public/build --include=public/.htaccess  --exclude-from=.gitignore --exclude=".*"  --exclude=.env
-#ssh shoppkc0@shoppingya.com 'cd ~/public_html/main && php bin/console cache:clear'
